@@ -17,7 +17,7 @@ class DomainUuidType extends Type
 {
     public function getName(): string
     {
-        return str_replace('\\', '.', get_class($this));
+        return str_replace('\\', '_', get_class($this));
     }
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
