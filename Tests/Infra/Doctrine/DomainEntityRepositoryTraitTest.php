@@ -137,7 +137,7 @@ final class DomainEntityRepositoryTraitTest extends TestCase
     {
         $em = $this->createEntityManager($entities);
 
-        return new class($em) {
+        return new class($em, TestEntity::class) {
             use DomainEntityRepositoryTrait {
                 doFind as public;
                 doFindByFields as public;
@@ -149,7 +149,6 @@ final class DomainEntityRepositoryTraitTest extends TestCase
                 createQueryBuilder as public;
             }
 
-            private $class = TestEntity::class;
             private $alias = 'test_entity';
             private $idFields = ['id'];
         };

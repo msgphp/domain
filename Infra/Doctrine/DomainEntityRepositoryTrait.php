@@ -18,10 +18,12 @@ use MsgPhp\Domain\Exception\EntityNotFoundException;
 trait DomainEntityRepositoryTrait
 {
     private $em;
+    private $class;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, string $class)
     {
         $this->em = $em;
+        $this->class = $class;
     }
 
     private function doFind($id, ...$idN)

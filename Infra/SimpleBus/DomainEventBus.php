@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infra\MessageBus;
+namespace MsgPhp\Domain\Infra\SimpleBus;
 
-use MsgPhp\Domain\CommandBusInterface;
+use MsgPhp\Domain\EventBusInterface;
 use SimpleBus\Message\Bus\MessageBus;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class DomainCommandBus implements CommandBusInterface
+final class DomainEventBus implements EventBusInterface
 {
     private $messageBus;
 

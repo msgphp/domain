@@ -14,10 +14,12 @@ use MsgPhp\Domain\Exception\EntityNotFoundException;
 trait DomainEntityRepositoryTrait
 {
     private $memory;
+    private $class;
 
-    public function __construct(array $memory)
+    public function __construct(array $memory, string $class)
     {
         $this->memory = $memory;
+        $this->class = $class;
     }
 
     private function doFind($id, ...$idN)
@@ -113,7 +115,6 @@ trait DomainEntityRepositoryTrait
 
     private function createResultSet(int $offset = null, int $limit = null, callable $filter = null): DomainEntityCollection
     {
-        // @todo $filter as first arg
         $memory = null == $filter ? $this->memory : array_values(array_filter($this->memory, $filter));
 
         if (null !== $offset || null !== $limit) {
