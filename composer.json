@@ -9,6 +9,7 @@
             "email": "franssen.roland@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "MsgPhp\\Domain\\": ""
