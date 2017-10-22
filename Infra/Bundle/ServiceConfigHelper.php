@@ -6,34 +6,38 @@ namespace MsgPhp\Domain\Infra\Bundle;
 
 use MsgPhp\Domain\{CommandBusInterface, EventBusInterface};
 use MsgPhp\Domain\Infra\SimpleBus\{DomainCommandBus, DomainEventBus};
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
 final class ServiceConfigHelper
 {
-    public static function configureSimpleBus(ContainerConfigurator $container): void
+    public static function configureSimpleBus(ContainerBuilder $container): void
     {
-        static $configured = false;
+        if (!$container->has(CommandBusInterface::class)) {
+            if (!$container->has(DomainCommandBus::class)) {
+                $container->register(DomainCommandBus::class)
+                    ->setPublic(false)
+                    ->addArgument(new Reference('command_bus'))
+                ;
+            }
 
-        if ($configured) {
-            return;
+            $container->setAlias(CommandBusInterface::class, new Alias(DomainCommandBus::class, false));
         }
 
-        $container->services()
-            ->defaults()
-                ->private()
-            ->set(DomainCommandBus::class)
-                ->args([ref('command_bus')])
-            ->alias(CommandBusInterface::class, DomainCommandBus::class)
-            ->set(DomainEventBus::class)
-                ->args([ref('event_bus')])
-            ->alias(EventBusInterface::class, DomainEventBus::class)
-        ;
+        if (!$container->has(EventBusInterface::class)) {
+            if (!$container->has(DomainEventBus::class)) {
+                $container->register(DomainEventBus::class)
+                    ->setPublic(false)
+                    ->addArgument(new Reference('event_bus'))
+                ;
+            }
 
-        $configured = true;
+            $container->setAlias(EventBusInterface::class, new Alias(DomainEventBus::class, false));
+        }
     }
 
     private function __construct()
