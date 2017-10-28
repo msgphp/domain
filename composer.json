@@ -16,6 +16,9 @@
         },
         "exclude-from-classmap": ["/Tests/"]
     },
+    "require": {
+        "php": "^7.1.0"
+    },
     "require-dev": {
         "doctrine/collections": "^1.5",
         "doctrine/dbal": "^2.6",
