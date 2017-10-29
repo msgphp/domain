@@ -8,6 +8,7 @@ A core domain layer providing basic utilities for other domain layers.
 
 - Common entity fields
 - Generic entity collection
+- Generic entity factory
 - Generic domain exceptions
 - Generic domain identifier
 - Generic domain command & event bus

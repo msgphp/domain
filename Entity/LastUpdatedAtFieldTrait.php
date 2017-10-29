@@ -9,9 +9,9 @@ namespace MsgPhp\Domain\Entity;
  */
 trait LastUpdatedAtFieldTrait
 {
-    private $lastUpdatedAt;
+    protected $lastUpdatedAt;
 
-    public function getLastUpdatedAt(): \DateTime
+    public function getLastUpdatedAt(): \DateTimeInterface
     {
         if (null === $this->lastUpdatedAt) {
             throw new \LogicException('Update date is not set.');

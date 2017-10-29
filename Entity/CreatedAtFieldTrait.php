@@ -11,7 +11,7 @@ trait CreatedAtFieldTrait
 {
     private $createdAt;
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): \DateTimeInterface
     {
         if (null === $this->createdAt) {
             throw new \LogicException('Creation date is not set.');

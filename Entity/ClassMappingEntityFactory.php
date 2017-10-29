@@ -1,0 +1,111 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MsgPhp\Domain\Entity;
+
+use MsgPhp\Domain\DomainIdInterface;
+use MsgPhp\Domain\Exception\UnknownEntityException;
+
+/**
+ * @author Roland Franssen <franssen.roland@gmail.com>
+ */
+final class ClassMappingEntityFactory implements EntityFactoryInterface
+{
+    private $mapping;
+    private $idMapping;
+    private static $reflectionCache = [];
+
+    public function __construct(array $mapping, array $idMapping)
+    {
+        $this->mapping = array_change_key_case(array_combine($values = array_values($mapping), $values) + $mapping, \CASE_LOWER);
+        $this->idMapping = array_change_key_case($idMapping, \CASE_LOWER);
+    }
+
+    public function create(string $entity, array $context = [])
+    {
+        if (!isset($this->mapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
+            throw new UnknownEntityException($entity);
+        }
+
+        $class = $this->mapping[$lcEntity];
+
+        return new $class(...$this->getConstructorArguments($class, $context));
+    }
+
+    public function identify(string $entity, $id): DomainIdInterface
+    {
+        if (!isset($this->idMapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
+            throw new UnknownEntityException($entity);
+        }
+
+        return $this->create($this->idMapping[$lcEntity], [$id]);
+    }
+
+    public function nextIdentity(string $entity): DomainIdInterface
+    {
+        if (!isset($this->idMapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
+            throw new UnknownEntityException($entity);
+        }
+
+        return $this->create($this->idMapping[$lcEntity]);
+    }
+
+    private function getConstructorArguments(string $class, array $context)
+    {
+        if (!isset(self::$reflectionCache[$lcClass = ltrim(strtolower($class), '\\')])) {
+            $reflection = new \ReflectionClass($class);
+
+            if (null === ($constructor = $reflection->getConstructor()) || !$constructor->isPublic()) {
+                return self::$reflectionCache[$lcClass] = [];
+            }
+
+            self::$reflectionCache[$lcClass] = array_map(function (\ReflectionParameter $param) {
+                return [
+                    strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1_\\2', '\\1_\\2'), $param->getName())),
+                    $param->isDefaultValueAvailable() || $param->allowsNull(),
+                    $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null,
+                    null !== ($type = $param->getType()) && !$type->isBuiltin()
+                        ? ('self' === strtolower($name = $type->getName())
+                            ? $param->getClass()->getName()
+                            : $name)
+                        : null,
+                ];
+            }, $constructor->getParameters());
+        }
+
+        $arguments = [];
+
+        foreach (self::$reflectionCache[$lcClass] as $i => $argument) {
+            list($key, $hasDefault, $default, $type) = $argument;
+
+            if (array_key_exists($key, $context)) {
+                $value = $context[$key];
+                $hasContext = true;
+            } elseif (array_key_exists($i, $context)) {
+                $value = $context[$i];
+                $hasContext = true;
+            } else {
+                $value = $default;
+                $hasContext = false;
+            }
+
+            if (!$hasContext && !$hasDefault) {
+                throw new \LogicException(sprintf('No value available for constructor argument #%d in class "%s".', $i, $class));
+            }
+
+            if (null !== $type && $hasContext && !is_object($value)) {
+                try {
+                    $arguments[] = $this->create($type, (array) $value);
+
+                    continue;
+                } catch (UnknownEntityException $e) {
+                }
+            }
+
+            $arguments[] = $value;
+        }
+
+        return $arguments;
+    }
+}
