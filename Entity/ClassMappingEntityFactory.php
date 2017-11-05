@@ -14,12 +14,14 @@ final class ClassMappingEntityFactory implements EntityFactoryInterface
 {
     private $mapping;
     private $idMapping;
+    private $factory;
     private static $reflectionCache = [];
 
-    public function __construct(array $mapping, array $idMapping)
+    public function __construct(array $mapping, array $idMapping, EntityFactoryInterface $factory = null)
     {
         $this->mapping = array_change_key_case(array_combine($values = array_values($mapping), $values) + $mapping, \CASE_LOWER);
         $this->idMapping = array_change_key_case($idMapping, \CASE_LOWER);
+        $this->factory = $factory;
     }
 
     public function create(string $entity, array $context = [])
@@ -96,7 +98,7 @@ final class ClassMappingEntityFactory implements EntityFactoryInterface
 
             if (null !== $type && $hasContext && !is_object($value)) {
                 try {
-                    $arguments[] = $this->create($type, (array) $value);
+                    $arguments[] = ($this->factory ?? $this)->create($type, (array) $value);
 
                     continue;
                 } catch (UnknownEntityException $e) {
