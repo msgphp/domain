@@ -11,7 +11,9 @@ use MsgPhp\Domain\DomainIdInterface;
  */
 interface EntityFactoryInterface
 {
-    /** @return object */
+    /**
+     * @return object
+     */
     public function create(string $entity, array $context = []);
     public function identify(string $entity, $id): DomainIdInterface;
     public function nextIdentity(string $entity): DomainIdInterface;

@@ -19,19 +19,19 @@ final class ServiceConfigHelper
 {
     public static function configureEntityFactory(ContainerBuilder $container, array $mapping, array $idMapping): void
     {
-        if (!$container->has(EntityFactoryInterface::class)) {
-            if (!$container->hasDefinition('msgphp.entity_factory')) {
-                $container->register('msgphp.entity_factory', ClassMappingEntityFactory::class)
-                    ->setArgument('$mapping', $mapping)
-                    ->setArgument('$idMapping', $idMapping)
-                ;
-            } else {
-                ($def = $container->getDefinition('msgphp.entity_factory.inner'))
-                    ->setArgument('$mapping', $def->getArgument('$mapping') + $mapping)
-                    ->setArgument('$idMapping', $def->getArgument('$mapping') + $idMapping)
-                ;
-            }
+        if (!$container->hasDefinition('msgphp.entity_factory')) {
+            $container->register('msgphp.entity_factory', ClassMappingEntityFactory::class)
+                ->setArgument('$mapping', $mapping)
+                ->setArgument('$idMapping', $idMapping)
+            ;
+        } else {
+            ($def = $container->getDefinition('msgphp.entity_factory.inner'))
+                ->setArgument('$mapping', $def->getArgument('$mapping') + $mapping)
+                ->setArgument('$idMapping', $def->getArgument('$idMapping') + $idMapping)
+            ;
+        }
 
+        if (!$container->has(EntityFactoryInterface::class)) {
             $container->setAlias(EntityFactoryInterface::class, new Alias('msgphp.entity_factory', false));
         }
     }

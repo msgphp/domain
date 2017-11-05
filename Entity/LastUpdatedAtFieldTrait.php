@@ -13,10 +13,6 @@ trait LastUpdatedAtFieldTrait
 
     public function getLastUpdatedAt(): \DateTimeInterface
     {
-        if (null === $this->lastUpdatedAt) {
-            throw new \LogicException('Update date is not set.');
-        }
-
         return $this->lastUpdatedAt;
     }
 }
