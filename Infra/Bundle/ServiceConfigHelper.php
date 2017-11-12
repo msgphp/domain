@@ -21,8 +21,7 @@ final class ServiceConfigHelper
     {
         if (!$container->hasDefinition('msgphp.entity_factory')) {
             $container->register('msgphp.entity_factory', ChainEntityFactory::class)
-                ->setArgument('$factories', new TaggedIteratorArgument('msgphp.entity_factory'))
-            ;
+                ->setArgument('$factories', new TaggedIteratorArgument('msgphp.entity_factory'));
         }
 
         if (!$container->has(EntityFactoryInterface::class)) {
@@ -33,33 +32,37 @@ final class ServiceConfigHelper
             ->setArgument('$mapping', $mapping)
             ->setArgument('$idMapping', $idMapping)
             ->setArgument('$factory', new Reference('msgphp.entity_factory'))
-            ->addTag('msgphp.entity_factory')
-        ;
+            ->addTag('msgphp.entity_factory');
     }
 
-    public static function configureSimpleBus(ContainerBuilder $container): void
+    public static function configureSimpleCommandBus(ContainerBuilder $container): void
     {
-        if (!$container->has(CommandBusInterface::class)) {
-            if (!$container->has(DomainCommandBus::class)) {
-                $container->register(DomainCommandBus::class)
-                    ->setPublic(false)
-                    ->addArgument(new Reference('command_bus'))
-                ;
-            }
-
-            $container->setAlias(CommandBusInterface::class, new Alias(DomainCommandBus::class, false));
+        if ($container->has(CommandBusInterface::class)) {
+            return;
         }
 
-        if (!$container->has(EventBusInterface::class)) {
-            if (!$container->has(DomainEventBus::class)) {
-                $container->register(DomainEventBus::class)
-                    ->setPublic(false)
-                    ->addArgument(new Reference('event_bus'))
-                ;
-            }
-
-            $container->setAlias(EventBusInterface::class, new Alias(DomainEventBus::class, false));
+        if (!$container->has(DomainCommandBus::class)) {
+            $container->register(DomainCommandBus::class)
+                ->setPublic(false)
+                ->addArgument(new Reference('command_bus'));
         }
+
+        $container->setAlias(CommandBusInterface::class, new Alias(DomainCommandBus::class, false));
+    }
+
+    public static function configureSimpleEventBus(ContainerBuilder $container): void
+    {
+        if ($container->has(EventBusInterface::class)) {
+            return;
+        }
+
+        if (!$container->has(DomainEventBus::class)) {
+            $container->register(DomainEventBus::class)
+                ->setPublic(false)
+                ->addArgument(new Reference('event_bus'));
+        }
+
+        $container->setAlias(EventBusInterface::class, new Alias(DomainEventBus::class, false));
     }
 
     private function __construct()
