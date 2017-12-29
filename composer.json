@@ -24,7 +24,8 @@
         "doctrine/orm": "^2.5",
         "ramsey/uuid": "^3.7",
         "simple-bus/message-bus": "^3.0",
-        "symfony/phpunit-bridge": "^3.4|^4.0"
+        "symfony/phpunit-bridge": "^3.4|^4.0",
+        "symfony/var-dumper": "^3.4|^4.0"
     },
     "config": {
         "preferred-install": {
