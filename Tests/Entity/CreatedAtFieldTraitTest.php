@@ -18,7 +18,7 @@ final class CreatedAtFieldTraitTest extends TestCase
 
     private function getObject($value)
     {
-        return new class ($value) {
+        return new class($value) {
             use CreatedAtFieldTrait;
 
             public function __construct($value)

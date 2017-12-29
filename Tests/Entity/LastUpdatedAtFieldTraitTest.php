@@ -18,7 +18,7 @@ final class LastUpdatedAtFieldTraitTest extends TestCase
 
     private function getObject($value)
     {
-        return new class ($value) {
+        return new class($value) {
             use LastUpdatedAtFieldTrait;
 
             public function __construct($value)
