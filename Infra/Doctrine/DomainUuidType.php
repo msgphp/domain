@@ -6,8 +6,7 @@ namespace MsgPhp\Domain\Infra\Doctrine;
 
 use MsgPhp\Domain\Infra\Uuid\DomainId;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\{ConversionException, Type};
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
@@ -44,11 +43,7 @@ class DomainUuidType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (null === $value) {
-            return null;
-        }
-
-        if (is_string($value)) {
+        if (null === $value || is_string($value)) {
             return $value;
         }
 
