@@ -24,11 +24,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Infra/Doctrine/Type/*Type.php</directory>
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>
-                <file>./Entity/LastUpdatedAtFieldTrait.php</file>
-                <file>./Entity/CreatedAtFieldTrait.php</file>
                 <file>./Infra/Bundle/ServiceConfigHelper.php</file>
             </exclude>
         </whitelist>
