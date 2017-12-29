@@ -2,7 +2,11 @@
 
 A core domain layer providing basic utilities for other domain layers.
 
-[![Build Status](https://travis-ci.org/msgphp/domain.svg?branch=master)](https://travis-ci.org/msgphp/domain)
+## Installation
+
+```bash
+composer require msgphp/domain
+```
 
 ## Features
 
