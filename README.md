@@ -1,6 +1,6 @@
-# MsgPhp Core Domain
+# Domain
 
-A core domain layer providing basic utilities for other domain layers.
+A base domain layer for other domain layers.
 
 ## Installation
 
@@ -17,3 +17,7 @@ composer require msgphp/domain
 - Generic domain identifier
 - Generic domain command & event bus
 - Common infrastructure
+
+## Contributing
+
+This repository is **READ ONLY**. Issues and pull requests should be submitted in the [main development repository](https://github.com/msgphp/msgphp).

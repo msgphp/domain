@@ -2,7 +2,8 @@
     "name": "msgphp/domain",
     "type": "library",
     "license": "MIT",
-    "description": "MsgPhp Base domain layer",
+    "description": "Base domain layer",
+    "keywords": ["entity"],
     "authors": [
         {
             "name": "Roland Franssen",
