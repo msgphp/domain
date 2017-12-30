@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\Doctrine\Mapping;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -20,17 +21,28 @@ class ObjectFieldMappingListener
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $event): void
     {
-        $metadata = $event->getClassMetadata();
+        $this->processClass($event->getClassMetadata());
+    }
 
-        if (in_array(CanBeEnabled::class, $metadata->getReflectionClass()->getTraitNames(), true)) {
-            if ($metadata->hasField('enabled')) {
-                return;
+    private function processFieldMapping(ClassMetadataInfo $metadata, array $fields): void
+    {
+        foreach ($fields as $field => $mapping) {
+            if (!$metadata->hasField($field)) {
+                $metadata->mapField(['fieldName' => $field] + $mapping);
             }
+        }
+    }
 
-            $metadata->mapField([
-                'fieldName' => 'enabled',
-                'type' => 'boolean',
-            ]);
+    private function processClass(ClassMetadataInfo $metadata, \ReflectionClass $class = null): void
+    {
+        $class = $class ?? $metadata->getReflectionClass();
+
+        if (isset($this->mapping[$name = $class->getName()])) {
+            $this->processFieldMapping($metadata, $this->mapping[$name]);
+        }
+
+        foreach ($class->getTraits() as $trait) {
+            $this->processClass($metadata, $trait);
         }
     }
 }

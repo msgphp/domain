@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\DependencyInjection;
 
+use Doctrine\ORM\Events as DoctrineEvents;
 use MsgPhp\Domain\{CommandBusInterface, EventBusInterface};
 use MsgPhp\Domain\Entity\{ChainEntityFactory, ClassMappingEntityFactory, EntityFactoryInterface};
+use MsgPhp\Domain\Infra\Doctrine\Mapping\ObjectFieldMappingListener;
 use MsgPhp\Domain\Infra\SimpleBus\{DomainCommandBus, DomainEventBus};
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
@@ -41,6 +43,12 @@ final class BundleServiceConfigHelper
 
     public static function configureDoctrineObjectFieldMapping(ContainerBuilder $container, string $class)
     {
+        if (!$container->has(ObjectFieldMappingListener::class)) {
+            $container->register(ObjectFieldMappingListener::class)
+                ->setPublic(false)
+                ->addTag('doctrine.event_listener', ['event' => DoctrineEvents::loadClassMetadata]);
+        }
+
         if (!$container->has($class)) {
             $container->register($class)
                 ->setPublic(false)
