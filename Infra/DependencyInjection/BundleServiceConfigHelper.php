@@ -41,7 +41,7 @@ final class BundleServiceConfigHelper
             ->addTag('msgphp.entity_factory');
     }
 
-    public static function configureDoctrineObjectFieldMapping(ContainerBuilder $container, string $class)
+    public static function configureDoctrineObjectFieldMapping(ContainerBuilder $container, string $class): void
     {
         if (!$container->has(ObjectFieldMappingListener::class)) {
             $container->register(ObjectFieldMappingListener::class)
