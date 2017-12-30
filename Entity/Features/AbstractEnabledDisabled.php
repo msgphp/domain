@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Entity\Features;
 
+use MsgPhp\Domain\Entity\Fields\EnabledField;
+
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  *
@@ -12,16 +14,7 @@ namespace MsgPhp\Domain\Entity\Features;
 trait AbstractEnabledDisabled
 {
     use AbstractUpdated;
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    public function isDisabled(): bool
-    {
-        return !$this->enabled;
-    }
+    use EnabledField;
 
     public function enable(): void
     {

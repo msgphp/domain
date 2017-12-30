@@ -12,12 +12,11 @@ final class AbstractEnabledDisabledTest extends TestCase
     /**
      * @dataProvider provideStates
      */
-    public function testObject($state): void
+    public function testObject(bool $state): void
     {
         $object = $this->getObject($state);
 
         $this->assertSame($state, $object->isEnabled());
-        $this->assertSame(!$state, $object->isDisabled());
 
         if ($state) {
             $object->disable();
@@ -26,7 +25,6 @@ final class AbstractEnabledDisabledTest extends TestCase
         }
 
         $this->assertSame(!$state, $object->isEnabled());
-        $this->assertSame($state, $object->isDisabled());
 
         if ($state) {
             $object->enable();
@@ -35,7 +33,6 @@ final class AbstractEnabledDisabledTest extends TestCase
         }
 
         $this->assertSame($state, $object->isEnabled());
-        $this->assertSame(!$state, $object->isDisabled());
     }
 
     public function provideStates(): iterable
@@ -49,11 +46,16 @@ final class AbstractEnabledDisabledTest extends TestCase
         return new class($value) {
             use AbstractEnabledDisabled;
 
-            private $enabled;
+            private static $defaultEnabled;
 
             public function __construct($value)
             {
-                $this->enabled = $value;
+                self::$defaultEnabled = $value;
+            }
+
+            protected static function isDefaultEnabled(): bool
+            {
+                return self::$defaultEnabled;
             }
         };
     }

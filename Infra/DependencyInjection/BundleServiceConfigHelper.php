@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infra\Bundle;
+namespace MsgPhp\Domain\Infra\DependencyInjection;
 
 use MsgPhp\Domain\{CommandBusInterface, EventBusInterface};
 use MsgPhp\Domain\Entity\{ChainEntityFactory, ClassMappingEntityFactory, EntityFactoryInterface};
@@ -14,8 +14,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @internal
  */
-final class ServiceConfigHelper
+final class BundleServiceConfigHelper
 {
     public static function configureEntityFactory(ContainerBuilder $container, array $mapping, array $idMapping): void
     {
@@ -35,6 +37,15 @@ final class ServiceConfigHelper
             ->setArgument('$idMapping', $idMapping)
             ->setArgument('$factory', new Reference('msgphp.entity_factory'))
             ->addTag('msgphp.entity_factory');
+    }
+
+    public static function configureDoctrineObjectFieldMapping(ContainerBuilder $container, string $class)
+    {
+        if (!$container->has($class)) {
+            $container->register($class)
+                ->setPublic(false)
+                ->addTag('msgphp.doctrine.object_field_mapping');
+        }
     }
 
     public static function configureSimpleCommandBus(ContainerBuilder $container): void

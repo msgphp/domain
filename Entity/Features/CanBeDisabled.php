@@ -11,5 +11,8 @@ trait CanBeDisabled
 {
     use AbstractEnabledDisabled;
 
-    private $enabled = true;
+    final protected static function isDefaultEnabled(): bool
+    {
+        return true;
+    }
 }
