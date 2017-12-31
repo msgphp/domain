@@ -9,8 +9,10 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @internal
  */
-class ObjectFieldMappingListener
+final class ObjectFieldMappingListener
 {
     private $mapping;
 
@@ -37,12 +39,12 @@ class ObjectFieldMappingListener
     {
         $class = $class ?? $metadata->getReflectionClass();
 
-        if (isset($this->mapping[$name = $class->getName()])) {
-            $this->processFieldMapping($metadata, $this->mapping[$name]);
-        }
-
         foreach ($class->getTraits() as $trait) {
             $this->processClass($metadata, $trait);
+        }
+
+        if (isset($this->mapping[$name = $class->getName()])) {
+            $this->processFieldMapping($metadata, $this->mapping[$name]);
         }
     }
 }

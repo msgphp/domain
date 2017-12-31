@@ -6,6 +6,8 @@ namespace MsgPhp\Domain\Entity;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @todo rename to Domain\DomainCollectionInterface
  */
 interface EntityCollectionInterface extends \Countable, \IteratorAggregate
 {

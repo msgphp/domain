@@ -8,6 +8,9 @@ use MsgPhp\Domain\DomainIdInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @todo extend from Domain\DomainObjectFactoryInterface(::create)
+ * @todo rename to Domain\DomainEntityFactoryInterface
  */
 interface EntityFactoryInterface
 {
