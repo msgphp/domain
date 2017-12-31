@@ -56,9 +56,7 @@ final class ClassMappingEntityFactory implements EntityFactoryInterface
     private function getConstructorArguments(string $class, array $context)
     {
         if (!isset(self::$reflectionCache[$lcClass = ltrim(strtolower($class), '\\')])) {
-            $reflection = new \ReflectionClass($class);
-
-            if (null === ($constructor = $reflection->getConstructor()) || !$constructor->isPublic()) {
+            if (null === ($constructor = (new \ReflectionClass($class))->getConstructor())) {
                 return self::$reflectionCache[$lcClass] = [];
             }
 

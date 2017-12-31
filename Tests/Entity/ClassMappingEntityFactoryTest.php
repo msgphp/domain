@@ -38,6 +38,19 @@ final class ClassMappingEntityFactoryTest extends TestCase
         $factory->create('Bar');
     }
 
+    public function testCreateWithUnknownNestedEntity(): void
+    {
+        $factory = new ClassMappingEntityFactory(['Foo' => KnownTestEntity::class], []);
+
+        $this->assertInstanceOf(KnownTestEntity::class, $factory->create('Foo'));
+        $this->assertInstanceOf(KnownTestEntity::class, $factory->create('Foo', ['unknown' => 'foo']));
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp(sprintf('/^Argument 1 passed to %s::__construct\(\) must be an instance of MsgPhp\\\Domain\\\Tests\\\Entity\\\UnknownTestEntity or null, integer given\b/', preg_quote(KnownTestEntity::class)));
+
+        $factory->create('Foo', [123]);
+    }
+
     public function testIdentify(): void
     {
         $factory = new ClassMappingEntityFactory(['FooId' => DomainId::class], ['Foo' => 'FooId']);
@@ -116,6 +129,22 @@ final class ClassMappingEntityFactoryTest extends TestCase
         $this->assertSame('a', $entity->a);
         $this->assertSame('b', $entity->b);
     }
+
+    public function testCreateWithoutConstructor(): void
+    {
+        $factory = new ClassMappingEntityFactory(['Foo' => EmptyTestEntity::class], []);
+
+        $this->assertInstanceOf(EmptyTestEntity::class, $factory->create('Foo', ['arg']));
+    }
+
+    public function testCreateWithPrivateConstructor(): void
+    {
+        $factory = new ClassMappingEntityFactory(['Foo' => PrivateTestEntity::class], []);
+
+        $this->expectException(\Error::class);
+
+        $factory->create('Foo', ['arg']);
+    }
 }
 
 class TestEntity
@@ -143,5 +172,23 @@ class NestedTestEntity
         $this->self = $self;
         $this->other = $other;
         $this->id = $id;
+    }
+}
+
+class EmptyTestEntity
+{
+}
+
+class PrivateTestEntity
+{
+    private function __construct()
+    {
+    }
+}
+
+class KnownTestEntity
+{
+    public function __construct(UnknownTestEntity $arg = null)
+    {
     }
 }

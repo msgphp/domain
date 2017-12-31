@@ -58,4 +58,28 @@ final class ChainEntityFactoryTest extends TestCase
 
         $factory->identify('some', 'id');
     }
+
+    public function testNextIdentity(): void
+    {
+        $factory1 = $this->createMock(EntityFactoryInterface::class);
+        $factory1->expects($this->any())
+            ->method('nextIdentity')
+            ->willThrowException(UnknownEntityException::create('some'));
+        $factory2 = $this->createMock(EntityFactoryInterface::class);
+        $factory2->expects($this->any())
+            ->method('nextIdentity')
+            ->willReturnCallback(function ($entity) { return new DomainId('next'); });
+        $factory = new ChainEntityFactory([$factory1, $factory2]);
+
+        $this->assertSame('next', $factory->nextIdentity('some')->toString());
+    }
+
+    public function testNextIdentityWithoutFactories(): void
+    {
+        $factory = new ChainEntityFactory([]);
+
+        $this->expectException(UnknownEntityException::class);
+
+        $factory->nextIdentity('some');
+    }
 }
