@@ -9,8 +9,6 @@ use MsgPhp\Domain\Exception\UnknownEntityException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @todo rename to Domain\ChainDomainEntityFactory + ChainDomainObjectFactoryTrait
  */
 final class ChainEntityFactory implements EntityFactoryInterface
 {

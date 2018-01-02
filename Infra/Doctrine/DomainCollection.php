@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\Doctrine;
 
 use Doctrine\Common\Collections\Collection;
-use MsgPhp\Domain\Entity\EntityCollectionInterface;
+use MsgPhp\Domain\DomainCollectionInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class DomainEntityCollection implements EntityCollectionInterface
+final class DomainCollection implements DomainCollectionInterface
 {
     private $collection;
 
@@ -44,7 +44,7 @@ final class DomainEntityCollection implements EntityCollectionInterface
         return $this->collection->last();
     }
 
-    public function filter(callable $filter): EntityCollectionInterface
+    public function filter(callable $filter): DomainCollectionInterface
     {
         return new self($this->collection->filter($filter));
     }

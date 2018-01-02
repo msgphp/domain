@@ -76,9 +76,9 @@ trait DomainEntityRepositoryTrait
         $this->em->flush();
     }
 
-    private function createResultSet(Query $query): DomainEntityCollection
+    private function createResultSet(Query $query): DomainCollection
     {
-        return new DomainEntityCollection(new ArrayCollection($query->getResult()));
+        return new DomainCollection(new ArrayCollection($query->getResult()));
     }
 
     private function createQueryBuilder(int $offset = null, int $limit = null): QueryBuilder

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\InMemory;
 
-use MsgPhp\Domain\Entity\EntityCollectionInterface;
+use MsgPhp\Domain\DomainCollectionInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class DomainEntityCollection implements EntityCollectionInterface
+final class DomainCollection implements DomainCollectionInterface
 {
     private $elements;
 
@@ -43,7 +43,7 @@ final class DomainEntityCollection implements EntityCollectionInterface
         return end($this->elements);
     }
 
-    public function filter(callable $filter): EntityCollectionInterface
+    public function filter(callable $filter): DomainCollectionInterface
     {
         return new self(array_filter($this->elements, $filter));
     }

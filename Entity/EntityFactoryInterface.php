@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Entity;
 
-use MsgPhp\Domain\DomainIdInterface;
+use MsgPhp\Domain\{DomainIdInterface, DomainObjectFactoryInterface};
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @todo extend from Domain\DomainObjectFactoryInterface(::create)
- * @todo rename to Domain\DomainEntityFactoryInterface
  */
-interface EntityFactoryInterface
+interface EntityFactoryInterface extends DomainObjectFactoryInterface
 {
-    /**
-     * @return object
-     */
-    public function create(string $entity, array $context = []);
+    public function identify(string $class, $id): DomainIdInterface;
 
-    public function identify(string $entity, $id): DomainIdInterface;
-
-    public function nextIdentity(string $entity): DomainIdInterface;
+    public function nextIdentity(string $class): DomainIdInterface;
 }

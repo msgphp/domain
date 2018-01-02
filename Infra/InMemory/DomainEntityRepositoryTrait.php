@@ -113,7 +113,7 @@ trait DomainEntityRepositoryTrait
         throw new \UnexpectedValueException(sprintf('Unknown field name "%s" for entity "%s"', $field, get_class($entity)));
     }
 
-    private function createResultSet(int $offset = null, int $limit = null, callable $filter = null): DomainEntityCollection
+    private function createResultSet(int $offset = null, int $limit = null, callable $filter = null): DomainCollection
     {
         $memory = null == $filter ? $this->memory : array_values(array_filter($this->memory, $filter));
 
@@ -121,6 +121,6 @@ trait DomainEntityRepositoryTrait
             $memory = array_slice($memory, $offset ?? 0, $limit);
         }
 
-        return new DomainEntityCollection($memory);
+        return new DomainCollection($memory);
     }
 }

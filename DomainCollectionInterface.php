@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Entity;
+namespace MsgPhp\Domain;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @todo rename to Domain\DomainCollectionInterface
  */
-interface EntityCollectionInterface extends \Countable, \IteratorAggregate
+interface DomainCollectionInterface extends \Countable, \IteratorAggregate
 {
     public function isEmpty(): bool;
 
