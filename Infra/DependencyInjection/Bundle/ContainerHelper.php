@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infra\DependencyInjection;
+namespace MsgPhp\Domain\Infra\DependencyInjection\Bundle;
 
 use Doctrine\ORM\Events as DoctrineEvents;
 use MsgPhp\Domain\{CommandBusInterface, EventBusInterface};
@@ -11,6 +11,8 @@ use MsgPhp\Domain\Infra\Doctrine\Mapping\ObjectFieldMappingListener;
 use MsgPhp\Domain\Infra\SimpleBus\{DomainCommandBus, DomainEventBus};
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -19,8 +21,24 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @internal
  */
-final class BundleServiceConfigHelper
+final class ContainerHelper
 {
+    public static function getBundles(ContainerBuilder $container): array
+    {
+        return array_flip($container->getParameter('kernel.bundles'));
+    }
+
+    public static function addCompilerPassOnce(ContainerBuilder $container, string $class, callable $initializer = null, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0): void
+    {
+        $passes = array_flip(array_map(function (CompilerPassInterface $pass) {
+            return get_class($pass);
+        }, $container->getCompiler()->getPassConfig()->getPasses()));
+
+        if (!isset($passes[$class])) {
+            $container->addCompilerPass(null === $initializer ? new $class() : $initializer(), $type, $priority);
+        }
+    }
+
     public static function configureEntityFactory(ContainerBuilder $container, array $mapping, array $idMapping): void
     {
         if (!$container->hasDefinition('msgphp.entity_factory')) {

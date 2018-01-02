@@ -21,7 +21,7 @@ class DomainId implements DomainIdInterface
 
     final public function equals(DomainIdInterface $id): bool
     {
-        return get_class($id) === get_class($this) ? $this->uuid->equals($id->uuid) : false;
+        return $id instanceof self && get_class($id) === get_class($this) ? $this->uuid->equals($id->uuid) : false;
     }
 
     final public function toString(): string

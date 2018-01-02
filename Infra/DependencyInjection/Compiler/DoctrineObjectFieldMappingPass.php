@@ -32,11 +32,11 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
         foreach ($this->findAndSortTaggedServices($this->tagName, $container) as $provider) {
             $definition = $container->findDefinition((string) $provider);
 
-            if (!$class = $definition->getClass()) {
+            if (!($class = $definition->getClass()) || !($r = $container->getReflectionClass($class))) {
                 throw new InvalidArgumentException(sprintf('Service "%s" must have a class set.', $provider));
             }
 
-            if (!$container->getReflectionClass($class)->implementsInterface(ObjectFieldMappingProviderInterface::class)) {
+            if (!$r->implementsInterface(ObjectFieldMappingProviderInterface::class)) {
                 throw new InvalidArgumentException(sprintf('Service "%s" must implement interface "%s".', $provider, ObjectFieldMappingProviderInterface::class));
             }
 
