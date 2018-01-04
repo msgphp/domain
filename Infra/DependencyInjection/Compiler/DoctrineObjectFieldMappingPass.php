@@ -33,7 +33,7 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
             $definition = $container->findDefinition((string) $provider);
 
             if (!($class = $definition->getClass()) || !($r = $container->getReflectionClass($class))) {
-                throw new InvalidArgumentException(sprintf('Service "%s" must have a class set.', $provider));
+                throw new InvalidArgumentException(sprintf('Service "%s" must have a valid class set.', $provider));
             }
 
             if (!$r->implementsInterface(ObjectFieldMappingProviderInterface::class)) {

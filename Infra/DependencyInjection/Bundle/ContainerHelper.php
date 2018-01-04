@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -28,9 +29,20 @@ final class ContainerHelper
         return array_flip($container->getParameter('kernel.bundles'));
     }
 
+    public static function getClassReflector(ContainerBuilder $container): \Closure
+    {
+        return function (string $class) use ($container): \ReflectionClass {
+            if (null === $reflection = $container->getReflectionClass($class)) {
+                throw new InvalidArgumentException(sprintf('Invalid class "%s".', $class));
+            }
+
+            return $reflection;
+        };
+    }
+
     public static function addCompilerPassOnce(ContainerBuilder $container, string $class, callable $initializer = null, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0): void
     {
-        $passes = array_flip(array_map(function (CompilerPassInterface $pass) {
+        $passes = array_flip(array_map(function (CompilerPassInterface $pass): string {
             return get_class($pass);
         }, $container->getCompiler()->getPassConfig()->getPasses()));
 
