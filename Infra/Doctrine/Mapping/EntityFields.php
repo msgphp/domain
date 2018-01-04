@@ -33,7 +33,7 @@ final class EntityFields implements ObjectFieldMappingProviderInterface
                     'type' => 'datetime',
                 ],
             ],
-            UserField::class => [
+            UserField::class => [ // @fixme move to User domain
                 'user' => [
                     'type' => self::TYPE_MANY_TO_ONE,
                     'targetEntity' => User::class,
