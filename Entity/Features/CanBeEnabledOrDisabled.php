@@ -8,10 +8,8 @@ use MsgPhp\Domain\Entity\Fields\EnabledField;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @internal
  */
-trait AbstractEnabledDisabled
+trait CanBeEnabledOrDisabled
 {
     use AbstractUpdated;
     use EnabledField;
