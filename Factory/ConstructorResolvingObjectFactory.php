@@ -2,68 +2,41 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Entity;
+namespace MsgPhp\Domain\Factory;
 
-use MsgPhp\Domain\DomainIdInterface;
-use MsgPhp\Domain\Exception\InvalidEntityClassException;
+use MsgPhp\Domain\Exception\InvalidClassException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @fixme split into / decorate Domain\ConstructorResolvingDomainObjectFactory
  */
-final class ClassMappingEntityFactory implements EntityFactoryInterface
+final class ConstructorResolvingObjectFactory implements DomainObjectFactoryInterface
 {
     private static $reflectionCache = [];
 
-    private $mapping;
-    private $idMapping;
     private $factory;
 
-    public function __construct(array $mapping, array $idMapping, EntityFactoryInterface $factory = null)
+    public function setNestedFactory(?DomainObjectFactoryInterface $factory): void
     {
-        $this->mapping = array_change_key_case(array_combine($values = array_values($mapping), $values) + $mapping, \CASE_LOWER);
-        $this->idMapping = array_change_key_case($idMapping, \CASE_LOWER);
         $this->factory = $factory;
     }
 
-    public function create(string $entity, array $context = [])
+    public function create(string $class, array $context = [])
     {
-        if (!isset($this->mapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
-            throw InvalidEntityClassException::create($entity);
+        if (!class_exists($class)) {
+            throw InvalidClassException::create($class);
         }
 
-        $class = $this->mapping[$lcEntity];
-
-        return new $class(...$this->getConstructorArguments($class, $context));
+        return new $class(...$this->resolveConstructorArguments($class, $context));
     }
 
-    public function identify(string $entity, $id): DomainIdInterface
-    {
-        if (!isset($this->idMapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
-            throw InvalidEntityClassException::create($entity);
-        }
-
-        return $this->create($this->idMapping[$lcEntity], [$id]);
-    }
-
-    public function nextIdentity(string $entity): DomainIdInterface
-    {
-        if (!isset($this->idMapping[$lcEntity = ltrim(strtolower($entity), '\\')])) {
-            throw InvalidEntityClassException::create($entity);
-        }
-
-        return $this->create($this->idMapping[$lcEntity]);
-    }
-
-    private function getConstructorArguments(string $class, array $context)
+    private function resolveConstructorArguments(string $class, array $context): array
     {
         if (!isset(self::$reflectionCache[$lcClass = ltrim(strtolower($class), '\\')])) {
             if (null === ($constructor = (new \ReflectionClass($class))->getConstructor())) {
                 return self::$reflectionCache[$lcClass] = [];
             }
 
-            self::$reflectionCache[$lcClass] = array_map(function (\ReflectionParameter $param) {
+            self::$reflectionCache[$lcClass] = array_map(function (\ReflectionParameter $param): array {
                 return [
                     strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1_\\2', '\\1_\\2'), $param->getName())),
                     $param->isDefaultValueAvailable() || $param->allowsNull(),
@@ -102,7 +75,7 @@ final class ClassMappingEntityFactory implements EntityFactoryInterface
                     $arguments[] = ($this->factory ?? $this)->create($type, (array) $value);
 
                     continue;
-                } catch (InvalidEntityClassException $e) {
+                } catch (InvalidClassException $e) {
                 }
             }
 
