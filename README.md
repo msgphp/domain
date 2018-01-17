@@ -17,7 +17,6 @@ composer require msgphp/domain
 - Generic domain exceptions
 - Generic domain identifier
 - Generic domain identity map
-- Generic domain message bus
 - Common infrastructure
 
 ## Contributing
