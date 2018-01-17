@@ -26,8 +26,6 @@ final class ResolveDomainPass implements CompilerPassInterface
         $this->processIdentityMap($container);
         $this->processEntityFactory($container);
 
-        $bundles = ContainerHelper::getBundles($container);
-
         if (ContainerHelper::isDoctrineOrmEnabled($container)) {
             self::register($container, DoctrineInfra\DomainIdentityMap::class)
                 ->setArgument('$em', new Reference(EntityManagerInterface::class));
@@ -64,17 +62,19 @@ final class ResolveDomainPass implements CompilerPassInterface
 
     private function processEntityFactory(ContainerBuilder $container): void
     {
-        self::register($container, Factory\ConstructorResolvingObjectFactory::class)
-            ->addMethodCall('setNestedFactory', [new Reference(Factory\EntityFactoryInterface::class)]);
+        self::register($container, Factory\DomainObjectFactory::class)
+            ->addMethodCall('setNestedFactory', [new Reference(Factory\DomainObjectFactoryInterface::class)]);
 
         self::register($container, Factory\ClassMappingObjectFactory::class)
+            ->setDecoratedService(Factory\DomainObjectFactory::class)
             ->setArgument('$mapping', array_merge(...$container->getParameter('msgphp.domain.class_map')))
-            ->setArgument('$factory', new Reference(Factory\ConstructorResolvingObjectFactory::class));
+            ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'));
 
         self::register($container, Factory\EntityFactory::class)
             ->setArgument('$identifierMapping', array_merge(...$container->getParameter('msgphp.domain.id_class_map')))
-            ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class));
+            ->setArgument('$factory', new Reference(Factory\DomainObjectFactory::class));
 
+        self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\DomainObjectFactory::class);
         self::alias($container, Factory\EntityFactoryInterface::class, Factory\EntityFactory::class);
     }
 }

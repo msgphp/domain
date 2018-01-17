@@ -33,9 +33,8 @@ final class DomainEntityRepositoryTraitTest extends AbstractDomainEntityReposito
             $mapping[$knownClass] = $knownClass::getIdFields();
         }
         $identityMap = new DomainIdentityMap($mapping);
-        $memory = self::$memory;
 
-        return new class($class, $identityMap, $memory) implements DomainEntityRepositoryTraitInterface {
+        return new class($class, $identityMap, [], self::$memory) implements DomainEntityRepositoryTraitInterface {
             use DomainEntityRepositoryTrait {
                 doFindAll as public;
                 doFindAllByFields as public;

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Factory;
 
 use MsgPhp\Domain\Exception\InvalidClassException;
-use MsgPhp\Domain\Factory\ConstructorResolvingObjectFactory;
+use MsgPhp\Domain\Factory\DomainObjectFactory;
 use PHPUnit\Framework\TestCase;
 
-final class ConstructorResolvingObjectFactoryTest extends TestCase
+final class DomainObjectFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
-        $object = (new ConstructorResolvingObjectFactory())->create(TestObject::class, ['arg_a' => 1, 'arg_b' => 'foo', 'bar' => 'baz']);
+        $object = (new DomainObjectFactory())->create(TestObject::class, ['arg_a' => 1, 'arg_b' => 'foo', 'bar' => 'baz']);
 
         $this->assertInstanceOf(TestObject::class, $object);
         $this->assertSame(1, $object->a);
@@ -21,7 +21,7 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testCreateWithUnknownObject(): void
     {
-        $factory = new ConstructorResolvingObjectFactory();
+        $factory = new DomainObjectFactory();
 
         $this->expectException(InvalidClassException::class);
 
@@ -30,7 +30,7 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testCreateWithUnknownNestedObject(): void
     {
-        $factory = new ConstructorResolvingObjectFactory();
+        $factory = new DomainObjectFactory();
 
         $this->assertInstanceOf(KnownTestObject::class, $factory->create(KnownTestObject::class));
         $this->assertInstanceOf(KnownTestObject::class, $factory->create(KnownTestObject::class, ['unknown' => 'foo']));
@@ -43,7 +43,7 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testNestedCreate(): void
     {
-        $object = (new ConstructorResolvingObjectFactory())->create(NestedTestObject::class, [
+        $object = (new DomainObjectFactory())->create(NestedTestObject::class, [
             'test' => ['arg_a' => 'nested_a', 'arg_b' => 'nested_b'],
             'self' => ['test' => ['arg_a' => 'foo', 'arg_b' => 'bar'], 'other' => $other = new TestObject(1, 2)],
         ]);
@@ -60,7 +60,7 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testNestedCreateWithoutContext(): void
     {
-        $factory = new ConstructorResolvingObjectFactory();
+        $factory = new DomainObjectFactory();
 
         $this->expectException(\LogicException::class);
 
@@ -69,7 +69,7 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testCreateWithNumericArgs(): void
     {
-        $object = (new ConstructorResolvingObjectFactory())->create(TestObject::class, [1 => 'b', 'arg_a' => 'a', 0 => 'ignore']);
+        $object = (new DomainObjectFactory())->create(TestObject::class, [1 => 'b', 'arg_a' => 'a', 0 => 'ignore']);
 
         $this->assertSame('a', $object->a);
         $this->assertSame('b', $object->b);
@@ -77,12 +77,12 @@ final class ConstructorResolvingObjectFactoryTest extends TestCase
 
     public function testCreateWithoutConstructor(): void
     {
-        $this->assertInstanceOf(EmptyTestObject::class, (new ConstructorResolvingObjectFactory())->create(EmptyTestObject::class, ['arg']));
+        $this->assertInstanceOf(EmptyTestObject::class, (new DomainObjectFactory())->create(EmptyTestObject::class, ['arg']));
     }
 
     public function testCreateWithPrivateConstructor(): void
     {
-        $factory = new ConstructorResolvingObjectFactory();
+        $factory = new DomainObjectFactory();
 
         $this->expectException(\Error::class);
 

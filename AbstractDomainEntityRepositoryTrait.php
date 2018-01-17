@@ -13,11 +13,13 @@ trait AbstractDomainEntityRepositoryTrait
 {
     private $class;
     private $identityMap;
+    private $fieldMapping;
 
-    public function __construct(string $class, DomainIdentityMapInterface $identityMap)
+    public function __construct(string $class, DomainIdentityMapInterface $identityMap, array $fieldMapping = [])
     {
         $this->class = $class;
         $this->identityMap = $identityMap;
+        $this->fieldMapping = $fieldMapping;
     }
 
     private function normalizeIdentifier($id, bool $normalizeObjectIdentifier = false)
@@ -66,8 +68,21 @@ trait AbstractDomainEntityRepositoryTrait
 
     private function isIdentity(array $fields): bool
     {
-        $idFields = $this->identityMap->getIdentifierFieldNames($this->class);
+        if (count($fields) !== count($idFields = $this->identityMap->getIdentifierFieldNames($this->class))) {
+            return false;
+        }
 
-        return count($fields) === count($idFields) && [] === array_diff(array_keys($fields), $idFields);
+        $fields = array_map(function (string $field) {
+            return $this->fieldMapping[$field] ?? $field;
+        }, array_keys($fields));
+
+        return [] === array_diff($fields, $idFields);
+    }
+
+    private function mapFields(array $fields): iterable
+    {
+        foreach ($fields as $key => $value) {
+            yield $this->fieldMapping[$key] ?? $key => $value;
+        }
     }
 }

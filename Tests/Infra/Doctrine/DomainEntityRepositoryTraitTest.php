@@ -97,9 +97,7 @@ final class DomainEntityRepositoryTraitTest extends AbstractDomainEntityReposito
 
     protected static function createRepository(string $class): DomainEntityRepositoryTraitInterface
     {
-        $em = self::$em;
-
-        return new class($class, $em) implements DomainEntityRepositoryTraitInterface {
+        return new class($class, self::$em, []) implements DomainEntityRepositoryTraitInterface {
             use DomainEntityRepositoryTrait {
                 doFindAll as public;
                 doFindAllByFields as public;

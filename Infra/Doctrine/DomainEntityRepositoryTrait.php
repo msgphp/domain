@@ -17,15 +17,17 @@ use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException};
  */
 trait DomainEntityRepositoryTrait
 {
-    use AbstractDomainEntityRepositoryTrait;
+    use AbstractDomainEntityRepositoryTrait {
+        __construct as private __parent_construct;
+    }
 
     private $em;
 
-    public function __construct(string $class, EntityManagerInterface $em)
+    public function __construct(string $class, EntityManagerInterface $em, array $fieldMapping = [])
     {
-        $this->class = $class;
+        $this->__parent_construct($class, new DomainIdentityMap($em), $fieldMapping);
+
         $this->em = $em;
-        $this->identityMap = new DomainIdentityMap($this->em);
     }
 
     private function doFindAll(int $offset = 0, int $limit = 0): DomainCollectionInterface
@@ -163,7 +165,7 @@ trait DomainEntityRepositoryTrait
         $alias = $alias ?? $qb->getAllAliases()[0] ?? $this->alias;
         $metadata = $this->em->getClassMetadata($this->class);
 
-        foreach ($fields as $field => $value) {
+        foreach ($this->mapFields($fields) as $field => $value) {
             $fieldAlias = $alias.'.'.$field;
             $value = $this->normalizeIdentifier($value);
 

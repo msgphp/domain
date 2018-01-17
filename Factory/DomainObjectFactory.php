@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Factory;
 
+use MsgPhp\Domain\{DomainIdInterface, DomainCollectionInterface};
 use MsgPhp\Domain\Exception\InvalidClassException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class ConstructorResolvingObjectFactory implements DomainObjectFactoryInterface
+final class DomainObjectFactory implements DomainObjectFactoryInterface
 {
     private static $reflectionCache = [];
 
@@ -26,17 +27,26 @@ final class ConstructorResolvingObjectFactory implements DomainObjectFactoryInte
             throw InvalidClassException::create($class);
         }
 
-        return new $class(...$this->resolveConstructorArguments($class, $context));
+        if (is_subclass_of($class, DomainIdInterface::class) || is_subclass_of($class, DomainCollectionInterface::class)) {
+            return $class::fromValue(...$this->resolveArguments($class, $context, 'fromValue'));
+        }
+
+        return new $class(...$this->resolveArguments($class, $context));
     }
 
-    private function resolveConstructorArguments(string $class, array $context): array
+    private function resolveArguments(string $class, array $context, string $method = '__construct'): array
     {
-        if (!isset(self::$reflectionCache[$lcClass = ltrim(strtolower($class), '\\')])) {
-            if (null === ($constructor = (new \ReflectionClass($class))->getConstructor())) {
-                return self::$reflectionCache[$lcClass] = [];
+        if (!isset(self::$reflectionCache[$cacheKey = $class.'::'.$method])) {
+            $reflection = new \ReflectionClass($class);
+            if ('__construct' === $method) {
+                if (null === $method = $reflection->getConstructor()) {
+                    return self::$reflectionCache[$cacheKey] = [];
+                }
+            } elseif (!($method = $reflection->getMethod($method))->isStatic() || !$method->isPublic()) {
+                throw new \LogicException(sprintf('To factorize object "%s" the method "%s" must be static and public.', $class, $method->getName()));
             }
 
-            self::$reflectionCache[$lcClass] = array_map(function (\ReflectionParameter $param): array {
+            self::$reflectionCache[$cacheKey] = array_map(function (\ReflectionParameter $param): array {
                 return [
                     strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1_\\2', '\\1_\\2'), $param->getName())),
                     $param->isDefaultValueAvailable() || $param->allowsNull(),
@@ -47,12 +57,12 @@ final class ConstructorResolvingObjectFactory implements DomainObjectFactoryInte
                             : $name)
                         : null,
                 ];
-            }, $constructor->getParameters());
+            }, $method->getParameters());
         }
 
         $arguments = [];
 
-        foreach (self::$reflectionCache[$lcClass] as $i => $argument) {
+        foreach (self::$reflectionCache[$cacheKey] as $i => $argument) {
             list($key, $hasDefault, $default, $type) = $argument;
 
             if (array_key_exists($key, $context)) {

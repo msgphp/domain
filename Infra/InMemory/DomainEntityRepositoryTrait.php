@@ -12,15 +12,17 @@ use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException};
  */
 trait DomainEntityRepositoryTrait
 {
-    use AbstractDomainEntityRepositoryTrait;
+    use AbstractDomainEntityRepositoryTrait {
+        __construct as private __parent_construct;
+    }
 
     private $memory;
     private $accessor;
 
-    public function __construct(string $class, DomainIdentityMapInterface $identityMap, GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
+    public function __construct(string $class, DomainIdentityMapInterface $identityMap, array $fieldMapping = [], GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
     {
-        $this->class = $class;
-        $this->identityMap = $identityMap;
+        $this->__parent_construct($class, $identityMap, $fieldMapping);
+
         $this->memory = $memory ?? GlobalObjectMemory::createDefault();
         $this->accessor = $accessor ?? new ObjectFieldAccessor();
     }
@@ -147,7 +149,7 @@ trait DomainEntityRepositoryTrait
      */
     private function matchesFields($entity, array $fields): bool
     {
-        foreach ($fields as $field => $value) {
+        foreach ($this->mapFields($fields) as $field => $value) {
             $value = $this->normalizeIdentifier($value, true);
             $knownValue = $this->normalizeIdentifier($this->accessor->getValue($entity, $field), true);
             if ($knownValue instanceof DomainIdInterface) {
