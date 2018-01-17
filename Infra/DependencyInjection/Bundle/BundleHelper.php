@@ -9,6 +9,7 @@ use MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 use MsgPhp\Domain\Infra\Doctrine as DoctrineInfra;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -25,6 +26,14 @@ final class BundleHelper
             ContainerHelper::addCompilerPassOnce($container, Compiler\DoctrineObjectFieldMappingPass::class);
 
             $container->setParameter('msgphp.doctrine.mapping_cache_dirname', 'msgphp/doctrine-mapping');
+            (new Filesystem())->mkdir($mappingDir = $container->getParameterBag()->resolveValue('%kernel.cache_dir%/%msgphp.doctrine.mapping_cache_dirname%'));
+
+            $container->prependExtensionConfig('doctrine', ['orm' => ['mappings' => ['msgphp' => [
+                'dir' => $mappingDir,
+                'type' => 'xml',
+                'prefix' => 'MsgPhp',
+                'is_bundle' => false,
+            ]]]]);
 
             $container->register(DoctrineInfra\Event\ObjectFieldMappingListener::class)
                 ->setPublic(false)

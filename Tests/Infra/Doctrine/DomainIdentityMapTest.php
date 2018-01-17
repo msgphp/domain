@@ -7,6 +7,7 @@ namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\MappingException;
 use MsgPhp\Domain\Exception\InvalidClassException;
 use MsgPhp\Domain\Infra\Doctrine\DomainIdentityMap;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,7 @@ final class DomainIdentityMapTest extends TestCase
             ->method('getMetadataFor')
             ->willReturnCallback(function ($class) {
                 if (\stdClass::class !== $class) {
-                    throw new \UnexpectedValueException();
+                    throw new MappingException();
                 }
 
                 $metadata = $this->createMock(ClassMetadata::class);

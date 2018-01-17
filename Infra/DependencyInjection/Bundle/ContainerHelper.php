@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -86,7 +85,7 @@ final class ContainerHelper
         $container->setParameter($param, $idClassMap);
     }
 
-    public static function configureDoctrineOrm(ContainerBuilder $container, array $mappingFiles, array $ormObjectFieldMappings = []): void
+    public static function configureDoctrineOrmMapping(ContainerBuilder $container, array $mappingFiles, array $objectFieldMappings = []): void
     {
         if (!self::isDoctrineOrmEnabled($container)) {
             return;
@@ -97,7 +96,7 @@ final class ContainerHelper
 
         $container->setParameter($param, $mappingFileList);
 
-        foreach ($ormObjectFieldMappings as $class) {
+        foreach ($objectFieldMappings as $class) {
             $container->register($class)
                 ->setPublic(false)
                 ->addTag('msgphp.doctrine.object_field_mapping', ['priority' => -100]);
@@ -158,25 +157,15 @@ final class ContainerHelper
         }
     }
 
-    public static function configureDoctrineMapping(ContainerBuilder $container, array $classMapping): void
+    public static function configureDoctrineOrmTargetEntities(ContainerBuilder $container, array $classMapping): void
     {
         if (!self::isDoctrineOrmEnabled($container)) {
             return;
         }
 
-        (new Filesystem())->mkdir($mappingDir = $container->getParameterBag()->resolveValue('%kernel.cache_dir%/%msgphp.doctrine.mapping_cache_dirname%'));
-
         $container->prependExtensionConfig('doctrine', [
             'orm' => [
                 'resolve_target_entities' => $classMapping,
-                'mappings' => [
-                    'msgphp' => [
-                        'dir' => $mappingDir,
-                        'type' => 'xml',
-                        'prefix' => 'MsgPhp',
-                        'is_bundle' => false,
-                    ],
-                ],
             ],
         ]);
     }

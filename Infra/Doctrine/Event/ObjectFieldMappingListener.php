@@ -6,6 +6,7 @@ namespace MsgPhp\Domain\Infra\Doctrine\Event;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
@@ -15,7 +16,9 @@ final class ObjectFieldMappingListener
 {
     private $typeConfig;
     private $mapping;
-    private $loadedMetadata = [];
+
+    /** @var ClassMetadataFactory|null */
+    private $metadataFactory;
 
     public function __construct(array $typeConfig, array $mapping)
     {
@@ -29,8 +32,7 @@ final class ObjectFieldMappingListener
             return;
         }
 
-        $this->loadedMetadata = $event->getEntityManager()->getMetadataFactory()->getLoadedMetadata();
-
+        $this->metadataFactory = $event->getEntityManager()->getMetadataFactory();
         $metadata = $event->getClassMetadata();
 
         if ($this->typeConfig) {
@@ -41,7 +43,7 @@ final class ObjectFieldMappingListener
             $this->processClassFields($metadata);
         }
 
-        $this->loadedMetadata = [];
+        $this->metadataFactory = null;
     }
 
     private function processClassIdentifiers(ClassMetadataInfo $metadata): void
@@ -86,11 +88,7 @@ final class ObjectFieldMappingListener
                 $metadata->$method($mapping);
 
                 if ('mapEmbedded' === $method) {
-                    if (!isset($this->loadedMetadata[$mapping['class']])) {
-                        continue;
-                    }
-
-                    $embeddableMetadata = $this->loadedMetadata[$mapping['class']];
+                    $embeddableMetadata = $this->getMetadata($mapping['class']);
 
                     if ($embeddableMetadata->isEmbeddedClass) {
                         $this->addNestedEmbeddedClasses($embeddableMetadata, $metadata, $field);
@@ -117,7 +115,7 @@ final class ObjectFieldMappingListener
                 continue;
             }
 
-            $embeddableMetadata = $this->loadedMetadata[$embeddableClass['class']];
+            $embeddableMetadata = $this->getMetadata($embeddableClass['class']);
 
             $parentClass->mapEmbedded([
                 'fieldName' => $prefix.'.'.$property,
@@ -144,5 +142,19 @@ final class ObjectFieldMappingListener
         if ($parent->idGenerator) {
             $class->setIdGenerator($parent->idGenerator);
         }
+    }
+
+    private function getMetadata(string $class): ClassMetadataInfo
+    {
+        if (null === $this->metadataFactory) {
+            throw new \LogicException('Metadata factory not set.');
+        }
+
+        $loaded = $this->metadataFactory->getLoadedMetadata();
+
+        /** @var ClassMetadataInfo $metadata */
+        $metadata = $loaded[$class] ?? $this->metadataFactory->getMetadataFor($class);
+
+        return $metadata;
     }
 }

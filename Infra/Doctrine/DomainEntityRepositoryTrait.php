@@ -176,17 +176,22 @@ trait DomainEntityRepositoryTrait
             } elseif (false === $value) {
                 $where->add($expr->eq($fieldAlias, 'FALSE'));
             } elseif (is_array($value)) {
-                $where->add($expr->in($fieldAlias, ':'.($param = uniqid($field))));
+                $where->add($expr->in($fieldAlias, ':'.($param = self::getPlaceholder($field))));
                 $qb->setParameter($param, $value);
             } elseif ($metadata->hasAssociation($field)) {
-                $where->add($expr->eq('IDENTITY('.$fieldAlias.')', ':'.($param = uniqid($field))));
+                $where->add($expr->eq('IDENTITY('.$fieldAlias.')', ':'.($param = self::getPlaceholder($field))));
                 $qb->setParameter($param, $value);
             } else {
-                $where->add($expr->eq($fieldAlias, ':'.($param = uniqid($field))));
+                $where->add($expr->eq($fieldAlias, ':'.($param = self::getPlaceholder($field))));
                 $qb->setParameter($param, $value);
             }
         }
 
         $qb->andWhere($where);
+    }
+
+    private static function getPlaceholder(string $name): string
+    {
+        return uniqid(strtr($name, ['.' => '_', '[' => '_', ']' => '_']));
     }
 }
