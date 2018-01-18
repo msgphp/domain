@@ -55,13 +55,13 @@ final class EntityFactoryTest extends TestCase
         $this->factory->identify('foo', '1');
     }
 
-    public function testNextIdentity(): void
+    public function tesNextIdentifier(): void
     {
-        $this->assertSame('new', $this->factory->nextIdentity('id')->toString());
-        $this->assertSame('new', $this->factory->nextIdentity('alias_id')->toString());
+        $this->assertSame('new', $this->factory->nextIdentifier('id')->toString());
+        $this->assertSame('new', $this->factory->nextIdentifier('alias_id')->toString());
 
         $this->expectException(InvalidClassException::class);
 
-        $this->factory->nextIdentity('foo');
+        $this->factory->nextIdentifier('foo');
     }
 }

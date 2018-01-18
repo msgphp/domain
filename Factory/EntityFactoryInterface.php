@@ -13,5 +13,5 @@ interface EntityFactoryInterface extends DomainObjectFactoryInterface
 {
     public function identify(string $class, $id): DomainIdInterface;
 
-    public function nextIdentity(string $class): DomainIdInterface;
+    public function nextIdentifier(string $class): DomainIdInterface;
 }

@@ -37,7 +37,7 @@ final class EntityFactory implements EntityFactoryInterface
         return $object;
     }
 
-    public function nextIdentity(string $class): DomainIdInterface
+    public function nextIdentifier(string $class): DomainIdInterface
     {
         $object = $this->factory->create($this->identifierMapping[$class] ?? $class);
 
