@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\InMemory;
 
 use MsgPhp\Domain\Exception\InvalidClassException;
-use MsgPhp\Domain\Infra\InMemory\DomainIdentityMap;
+use MsgPhp\Domain\Infra\InMemory\DomainIdentityMapping;
 use PHPUnit\Framework\TestCase;
 
-final class DomainIdentityMapTest extends TestCase
+final class DomainIdentityMappingTest extends TestCase
 {
     public function testGetIdentifierFieldNames(): void
     {
-        $map = new DomainIdentityMap(['foo' => 'a', 'bar' => ['b'], 'baz' => ['c', 'd']]);
+        $map = new DomainIdentityMapping(['foo' => 'a', 'bar' => ['b'], 'baz' => ['c', 'd']]);
 
         $this->assertSame(['a'], $map->getIdentifierFieldNames('foo'));
         $this->assertSame(['b'], $map->getIdentifierFieldNames('bar'));
@@ -21,7 +21,7 @@ final class DomainIdentityMapTest extends TestCase
 
     public function testGetIdentifierFieldNamesWithInvalidgetIdentityClass(): void
     {
-        $map = new DomainIdentityMap([]);
+        $map = new DomainIdentityMapping([]);
 
         $this->expectException(InvalidClassException::class);
 
@@ -30,7 +30,7 @@ final class DomainIdentityMapTest extends TestCase
 
     public function testGetIdentity(): void
     {
-        $map = new DomainIdentityMap([\stdClass::class => ['b', 'c']]);
+        $map = new DomainIdentityMapping([\stdClass::class => ['b', 'c']]);
         $object = new \stdClass();
         $object->a = 1;
         $object->b = 2;
@@ -41,7 +41,7 @@ final class DomainIdentityMapTest extends TestCase
 
     public function testGetIdentityWithInvalidClass(): void
     {
-        $map = new DomainIdentityMap([]);
+        $map = new DomainIdentityMapping([]);
 
         $this->expectException(InvalidClassException::class);
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use MsgPhp\Domain\{Factory, DomainIdentityMapInterface};
+use MsgPhp\Domain\{Factory, DomainIdentityMappingInterface};
 use MsgPhp\Domain\Infra\DependencyInjection\Bundle\ContainerHelper;
 use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra};
 use Symfony\Component\DependencyInjection\Alias;
@@ -27,10 +27,10 @@ final class ResolveDomainPass implements CompilerPassInterface
         $this->processEntityFactory($container);
 
         if (ContainerHelper::isDoctrineOrmEnabled($container)) {
-            self::register($container, DoctrineInfra\DomainIdentityMap::class)
+            self::register($container, DoctrineInfra\DomainIdentityMapping::class)
                 ->setArgument('$em', new Reference(EntityManagerInterface::class));
 
-            self::alias($container, DomainIdentityMapInterface::class, DoctrineInfra\DomainIdentityMap::class);
+            self::alias($container, DomainIdentityMappingInterface::class, DoctrineInfra\DomainIdentityMapping::class);
 
             self::register($container, DoctrineInfra\MappingCacheWarmer::class)
                 ->setArgument('$dirname', '%msgphp.doctrine.mapping_cache_dirname%')
@@ -53,11 +53,11 @@ final class ResolveDomainPass implements CompilerPassInterface
     {
         self::register($container, InMemoryInfra\ObjectFieldAccessor::class);
 
-        self::register($container, InMemoryInfra\DomainIdentityMap::class)
+        self::register($container, InMemoryInfra\DomainIdentityMapping::class)
             ->setArgument('$mapping', array_merge(...$container->getParameter('msgphp.domain.identity_map')))
             ->setArgument('$accessor', new Reference(InMemoryInfra\ObjectFieldAccessor::class));
 
-        self::alias($container, DomainIdentityMapInterface::class, InMemoryInfra\DomainIdentityMap::class);
+        self::alias($container, DomainIdentityMappingInterface::class, InMemoryInfra\DomainIdentityMapping::class);
     }
 
     private function processEntityFactory(ContainerBuilder $container): void

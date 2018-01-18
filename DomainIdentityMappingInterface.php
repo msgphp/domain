@@ -7,7 +7,7 @@ namespace MsgPhp\Domain;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainIdentityMapInterface
+interface DomainIdentityMappingInterface
 {
     /**
      * @return string[]

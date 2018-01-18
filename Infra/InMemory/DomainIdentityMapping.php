@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\InMemory;
 
-use MsgPhp\Domain\DomainIdentityMapInterface;
+use MsgPhp\Domain\DomainIdentityMappingInterface;
 use MsgPhp\Domain\Exception\InvalidClassException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class DomainIdentityMap implements DomainIdentityMapInterface
+final class DomainIdentityMapping implements DomainIdentityMappingInterface
 {
     private $mapping;
     private $accessor;

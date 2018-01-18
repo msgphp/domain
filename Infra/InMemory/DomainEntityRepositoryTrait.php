@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\InMemory;
 
-use MsgPhp\Domain\{AbstractDomainEntityRepositoryTrait, DomainCollection, DomainCollectionInterface, DomainIdentityMapInterface, DomainIdInterface};
+use MsgPhp\Domain\{AbstractDomainEntityRepositoryTrait, DomainCollection, DomainCollectionInterface, DomainIdentityMappingInterface, DomainIdInterface};
 use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException};
 
 /**
@@ -19,9 +19,9 @@ trait DomainEntityRepositoryTrait
     private $memory;
     private $accessor;
 
-    public function __construct(string $class, DomainIdentityMapInterface $identityMap, array $fieldMapping = [], GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
+    public function __construct(string $class, DomainIdentityMappingInterface $identityMapping, array $fieldMapping = [], GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
     {
-        $this->__parent_construct($class, $identityMap, $fieldMapping);
+        $this->__parent_construct($class, $identityMapping, $fieldMapping);
 
         $this->memory = $memory ?? GlobalObjectMemory::createDefault();
         $this->accessor = $accessor ?? new ObjectFieldAccessor();
@@ -116,7 +116,7 @@ trait DomainEntityRepositoryTrait
             return;
         }
 
-        if ($this->doExists(...$ids = array_values($this->identityMap->getIdentity($entity)))) {
+        if ($this->doExists(...$ids = array_values($this->identityMapping->getIdentity($entity)))) {
             throw DuplicateEntityException::createForId(get_class($entity), ...$ids);
         }
 

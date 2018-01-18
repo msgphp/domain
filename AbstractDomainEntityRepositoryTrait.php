@@ -12,13 +12,13 @@ use MsgPhp\Domain\Exception\InvalidClassException;
 trait AbstractDomainEntityRepositoryTrait
 {
     private $class;
-    private $identityMap;
+    private $identityMapping;
     private $fieldMapping;
 
-    public function __construct(string $class, DomainIdentityMapInterface $identityMap, array $fieldMapping = [])
+    public function __construct(string $class, DomainIdentityMappingInterface $identityMapping, array $fieldMapping = [])
     {
         $this->class = $class;
-        $this->identityMap = $identityMap;
+        $this->identityMapping = $identityMapping;
         $this->fieldMapping = $fieldMapping;
     }
 
@@ -30,7 +30,7 @@ trait AbstractDomainEntityRepositoryTrait
 
         if (is_object($id)) {
             try {
-                if (!$identity = $this->identityMap->getIdentity($id)) {
+                if (!$identity = $this->identityMapping->getIdentity($id)) {
                     return null;
                 }
 
@@ -53,7 +53,7 @@ trait AbstractDomainEntityRepositoryTrait
 
     private function toIdentity($id, ...$idN): ?array
     {
-        if (count($ids = func_get_args()) !== count($this->identityMap->getIdentifierFieldNames($this->class))) {
+        if (count($ids = func_get_args()) !== count($this->identityMapping->getIdentifierFieldNames($this->class))) {
             return null;
         }
 
@@ -63,12 +63,12 @@ trait AbstractDomainEntityRepositoryTrait
             }
         }
 
-        return array_combine($this->identityMap->getIdentifierFieldNames($this->class), $ids);
+        return array_combine($this->identityMapping->getIdentifierFieldNames($this->class), $ids);
     }
 
     private function isIdentity(array $fields): bool
     {
-        if (count($fields) !== count($idFields = $this->identityMap->getIdentifierFieldNames($this->class))) {
+        if (count($fields) !== count($idFields = $this->identityMapping->getIdentifierFieldNames($this->class))) {
             return false;
         }
 

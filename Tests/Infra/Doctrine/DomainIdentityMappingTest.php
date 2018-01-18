@@ -9,10 +9,10 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\MappingException;
 use MsgPhp\Domain\Exception\InvalidClassException;
-use MsgPhp\Domain\Infra\Doctrine\DomainIdentityMap;
+use MsgPhp\Domain\Infra\Doctrine\DomainIdentityMapping;
 use PHPUnit\Framework\TestCase;
 
-final class DomainIdentityMapTest extends TestCase
+final class DomainIdentityMappingTest extends TestCase
 {
     private $em;
 
@@ -50,12 +50,12 @@ final class DomainIdentityMapTest extends TestCase
 
     public function testGetIdentifierFieldNames(): void
     {
-        $this->assertSame(['id'], (new DomainIdentityMap($this->em))->getIdentifierFieldNames(\stdClass::class));
+        $this->assertSame(['id'], (new DomainIdentityMapping($this->em))->getIdentifierFieldNames(\stdClass::class));
     }
 
     public function testGetIdentifierFieldNamesWithInvalidClass(): void
     {
-        $map = new DomainIdentityMap($this->em);
+        $map = new DomainIdentityMapping($this->em);
 
         $this->expectException(InvalidClassException::class);
 
@@ -64,12 +64,12 @@ final class DomainIdentityMapTest extends TestCase
 
     public function testGetIdentity(): void
     {
-        $this->assertSame(['id' => 1], (new DomainIdentityMap($this->em))->getIdentity(new \stdClass()));
+        $this->assertSame(['id' => 1], (new DomainIdentityMapping($this->em))->getIdentity(new \stdClass()));
     }
 
     public function testGetIdentityWithInvalidClass(): void
     {
-        $map = new DomainIdentityMap($this->em);
+        $map = new DomainIdentityMapping($this->em);
 
         $this->expectException(InvalidClassException::class);
 

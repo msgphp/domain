@@ -25,7 +25,7 @@ trait DomainEntityRepositoryTrait
 
     public function __construct(string $class, EntityManagerInterface $em, array $fieldMapping = [])
     {
-        $this->__parent_construct($class, new DomainIdentityMap($em), $fieldMapping);
+        $this->__parent_construct($class, new DomainIdentityMapping($em), $fieldMapping);
 
         $this->em = $em;
     }
