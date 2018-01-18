@@ -15,7 +15,7 @@ interface DomainIdentityMappingInterface
     public function getIdentifierFieldNames(string $class): array;
 
     /**
-     * @param object $entity
+     * @param object $object
      */
-    public function getIdentity($entity): array;
+    public function getIdentity($object): array;
 }
