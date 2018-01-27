@@ -8,11 +8,14 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\DBAL\Types\Type as DoctrineType;
 use Doctrine\ORM\Version as DoctrineOrmVersion;
 use Ramsey\Uuid\Doctrine as DoctrineUuid;
+use SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle;
+use MsgPhp\Domain\Infra\SimpleBus as SimpleBusInfra;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -69,7 +72,19 @@ final class ContainerHelper
         }
     }
 
-    public static function configureIdentityMap(ContainerBuilder $container, array $classMapping, array $identityMapping): void
+    public static function removeIf(ContainerBuilder $container, $condition, array $ids): void
+    {
+        if (!$condition) {
+            return;
+        }
+
+        foreach ($ids as $id) {
+            self::removeDefinitionWithAliases($container, $id);
+            $container->removeAlias($id);
+        }
+    }
+
+    public static function configureIdentityMapping(ContainerBuilder $container, array $classMapping, array $identityMapping): void
     {
         foreach ($identityMapping as $class => $mapping) {
             if (isset($classMapping[$class])) {
@@ -77,23 +92,23 @@ final class ContainerHelper
             }
         }
 
-        $identiyMap = $container->hasParameter($param = 'msgphp.domain.identity_map') ? $container->getParameter($param) : [];
-        $identiyMap[] = $identityMapping;
+        $values = $container->hasParameter($param = 'msgphp.domain.identity_mapping') ? $container->getParameter($param) : [];
+        $values[] = $identityMapping;
 
-        $container->setParameter($param, $identiyMap);
+        $container->setParameter($param, $values);
     }
 
     public static function configureEntityFactory(ContainerBuilder $container, array $classMapping, array $idClassMapping): void
     {
-        $classMap = $container->hasParameter($param = 'msgphp.domain.class_map') ? $container->getParameter($param) : [];
-        $classMap[] = $classMapping;
+        $values = $container->hasParameter($param = 'msgphp.domain.class_mapping') ? $container->getParameter($param) : [];
+        $values[] = $classMapping;
 
-        $container->setParameter($param, $classMap);
+        $container->setParameter($param, $values);
 
-        $idClassMap = $container->hasParameter($param = 'msgphp.domain.id_class_map') ? $container->getParameter($param) : [];
-        $idClassMap[] = $idClassMapping;
+        $values = $container->hasParameter($param = 'msgphp.domain.id_class_mapping') ? $container->getParameter($param) : [];
+        $values[] = $idClassMapping;
 
-        $container->setParameter($param, $idClassMap);
+        $container->setParameter($param, $values);
     }
 
     public static function configureDoctrineTypes(ContainerBuilder $container, array $dataTypeMapping, array $classMapping, array $typeMapping): void
@@ -158,10 +173,10 @@ final class ContainerHelper
             return;
         }
 
-        $mappingFileList = $container->hasParameter($param = 'msgphp.doctrine.mapping_files') ? $container->getParameter($param) : [];
-        $mappingFileList[] = $mappingFiles;
+        $values = $container->hasParameter($param = 'msgphp.doctrine.mapping_files') ? $container->getParameter($param) : [];
+        $values[] = $mappingFiles;
 
-        $container->setParameter($param, $mappingFileList);
+        $container->setParameter($param, $values);
 
         foreach ($objectFieldMappings as $class) {
             $container->register($class)
@@ -181,6 +196,39 @@ final class ContainerHelper
                 'resolve_target_entities' => $classMapping,
             ],
         ]);
+    }
+
+    public static function removeDisabledCommandMessages(ContainerBuilder $container, array $commands): void
+    {
+        if (!self::hasBundle($container, SimpleBusCommandBusBundle::class)) {
+            return;
+        }
+
+        foreach ($container->findTaggedServiceIds('command_handler') as $id => $attr) {
+            foreach ($attr as $attr) {
+                if (!isset($attr['handles']) || !empty($commands[$attr['handles']])) {
+                    continue;
+                }
+
+                $container->removeDefinition($id);
+            }
+        }
+    }
+
+    public static function registerEventMessages(ContainerBuilder $container, array $events): void
+    {
+        if (!self::hasBundle($container, SimpleBusCommandBusBundle::class)) {
+            return;
+        }
+
+        $definition = $container->register(uniqid('msgphp'), SimpleBusInfra\EventMessageHandler::class);
+        $definition
+            ->setPublic(true)
+            ->setArgument('$bus', new Reference('simple_bus.event_bus', ContainerBuilder::NULL_ON_INVALID_REFERENCE));
+
+        foreach ($events as $event) {
+            $definition->addTag('command_handler', ['handles' => $event]);
+        }
     }
 
     private function __construct()
