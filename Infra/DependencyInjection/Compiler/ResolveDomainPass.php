@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
+use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManager;
 use MsgPhp\Domain\{Factory, DomainIdentityMappingInterface, DomainMessageBusInterface};
 use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra, SimpleBus as SimpleBusInfra};
+use SimpleBus\Message\Bus\MessageBus as SimpleMessageBus;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,26 +26,13 @@ final class ResolveDomainPass implements CompilerPassInterface
     {
         $this->registerIdentityMapping($container);
         $this->registerEntityFactory($container);
+        $this->registerMessageBus($container);
 
-        if ($container->has('doctrine.orm.entity_manager')) {
-            self::register($container, DoctrineInfra\DomainIdentityMapping::class)
-                ->setAutowired(true);
-
-            self::alias($container, DomainIdentityMappingInterface::class, DoctrineInfra\DomainIdentityMapping::class);
-
-            if (interface_exists(CacheWarmerInterface::class)) {
-                self::register($container, DoctrineInfra\MappingCacheWarmer::class)
-                    ->setArgument('$dirname', '%msgphp.doctrine.mapping_cache_dirname%')
-                    ->setArgument('$mappingFiles', array_merge(...$container->getParameter('msgphp.doctrine.mapping_files')))
-                    ->addTag('kernel.cache_warmer');
-            }
-        }
-
-        if ($container->has('simple_bus.command_bus')) {
-            self::register($container, SimpleBusInfra\DomainMessageBus::class)
-                ->setArgument('$bus', new Reference('simple_bus.command_bus'));
-
-            self::alias($container, DomainMessageBusInterface::class, SimpleBusInfra\DomainMessageBus::class);
+        if (interface_exists(CacheWarmerInterface::class) && $container->hasParameter('msgphp.doctrine.mapping_files')) {
+            self::register($container, DoctrineInfra\MappingCacheWarmer::class)
+                ->setArgument('$dirname', '%msgphp.doctrine.mapping_cache_dirname%')
+                ->setArgument('$mappingFiles', array_merge(...$container->getParameter('msgphp.doctrine.mapping_files')))
+                ->addTag('kernel.cache_warmer');
         }
     }
 
@@ -59,30 +48,61 @@ final class ResolveDomainPass implements CompilerPassInterface
 
     private function registerIdentityMapping(ContainerBuilder $container): void
     {
-        self::register($container, InMemoryInfra\ObjectFieldAccessor::class);
+        $identityMapping = $container->getParameter($param = 'msgphp.domain.identity_mapping');
+        $container->getParameterBag()->remove($param);
 
-        self::register($container, InMemoryInfra\DomainIdentityMapping::class)
-            ->setArgument('$mapping', array_merge(...$container->getParameter('msgphp.domain.identity_mapping')))
-            ->setArgument('$accessor', new Reference(InMemoryInfra\ObjectFieldAccessor::class));
+        if ($container->has(DoctrineEntityManager::class)) {
+            self::register($container, $alias = DoctrineInfra\DomainIdentityMapping::class)
+                ->setAutowired(true);
+        } else {
+            self::register($container, InMemoryInfra\ObjectFieldAccessor::class);
 
-        self::alias($container, DomainIdentityMappingInterface::class, InMemoryInfra\DomainIdentityMapping::class);
+            self::register($container, $alias = InMemoryInfra\DomainIdentityMapping::class)
+                ->setArgument('$mapping', array_merge(...$identityMapping))
+                ->setArgument('$accessor', new Reference(InMemoryInfra\ObjectFieldAccessor::class));
+        }
+
+        self::alias($container, DomainIdentityMappingInterface::class, $alias);
     }
 
     private function registerEntityFactory(ContainerBuilder $container): void
     {
+        $classMapping = $container->getParameter($param = 'msgphp.domain.class_mapping');
+        $container->getParameterBag()->remove($param);
+
+        $idClassMapping = $container->getParameter($param = 'msgphp.domain.id_class_mapping');
+        $container->getParameterBag()->remove($param);
+
         self::register($container, Factory\DomainObjectFactory::class)
             ->addMethodCall('setNestedFactory', [new Reference(Factory\DomainObjectFactoryInterface::class)]);
 
         self::register($container, Factory\ClassMappingObjectFactory::class)
             ->setDecoratedService(Factory\DomainObjectFactory::class)
-            ->setArgument('$mapping', array_merge(...$container->getParameter('msgphp.domain.class_mapping')))
+            ->setArgument('$mapping', array_merge(...$classMapping))
             ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'));
 
         self::register($container, Factory\EntityFactory::class)
-            ->setArgument('$identifierMapping', array_merge(...$container->getParameter('msgphp.domain.id_class_mapping')))
+            ->setArgument('$identifierMapping', array_merge(...$idClassMapping))
             ->setArgument('$factory', new Reference(Factory\DomainObjectFactory::class));
 
         self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\DomainObjectFactory::class);
         self::alias($container, Factory\EntityFactoryInterface::class, Factory\EntityFactory::class);
+    }
+
+    private function registerMessageBus(ContainerBuilder $container): void
+    {
+        if (!($autowire = $container->has(SimpleMessageBus::class)) && !$container->has('simple_bus.command_bus')) {
+            return;
+        }
+
+        $definition = self::register($container, SimpleBusInfra\DomainMessageBus::class);
+
+        if ($autowire) {
+            $definition->setAutowired(true);
+        } else {
+            $definition->setArgument('$bus', new Reference('simple_bus.command_bus'));
+        }
+
+        self::alias($container, DomainMessageBusInterface::class, SimpleBusInfra\DomainMessageBus::class);
     }
 }
