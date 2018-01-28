@@ -10,13 +10,10 @@ composer require msgphp/domain
 
 ## Features
 
-- Common entity fields
-- Interface bound collection
-- Interface bound object factory
+- Common entity fields & features
+- Common domain events
+- Interface bound collection, identifier, object factory & message bus
 - Abstract entity repository
-- Generic domain exceptions
-- Generic domain identifier
-- Generic domain identity map
 - Common infrastructure
 
 ## Documentation
