@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
 use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManager;
-use MsgPhp\Domain\{Factory, DomainIdentityMappingInterface, DomainMessageBusInterface};
+use MsgPhp\Domain\{DomainIdentityMappingInterface, Factory, Message};
 use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra, SimpleBus as SimpleBusInfra};
 use SimpleBus\Message\Bus\MessageBus as SimpleMessageBus;
 use Symfony\Component\DependencyInjection\Alias;
@@ -81,12 +81,12 @@ final class ResolveDomainPass implements CompilerPassInterface
             ->setArgument('$mapping', array_merge(...$classMapping))
             ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'));
 
-        self::register($container, Factory\EntityFactory::class)
+        self::register($container, Factory\EntityAwareFactory::class)
             ->setArgument('$identifierMapping', array_merge(...$idClassMapping))
             ->setArgument('$factory', new Reference(Factory\DomainObjectFactory::class));
 
-        self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\DomainObjectFactory::class);
-        self::alias($container, Factory\EntityFactoryInterface::class, Factory\EntityFactory::class);
+        self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\EntityAwareFactory::class);
+        self::alias($container, Factory\EntityAwareFactoryInterface::class, Factory\EntityAwareFactory::class);
     }
 
     private function registerMessageBus(ContainerBuilder $container): void
@@ -103,6 +103,6 @@ final class ResolveDomainPass implements CompilerPassInterface
             $definition->setArgument('$bus', new Reference('simple_bus.command_bus'));
         }
 
-        self::alias($container, DomainMessageBusInterface::class, SimpleBusInfra\DomainMessageBus::class);
+        self::alias($container, Message\DomainMessageBusInterface::class, SimpleBusInfra\DomainMessageBus::class);
     }
 }
