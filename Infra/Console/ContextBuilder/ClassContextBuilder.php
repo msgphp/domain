@@ -184,7 +184,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
             }
         }
 
-        return new ContextElement(str_replace('_', ' ', ucfirst($argument)));
+        return new ContextElement(ucfirst(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1 \\2', '\\1 \\2'), $argument)));
     }
 
     private function askRequiredValue(StyleInterface $io, ContextElement $element, $default)
