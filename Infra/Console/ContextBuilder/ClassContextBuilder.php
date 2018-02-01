@@ -80,7 +80,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
                 $normalizers[$key] = $element->normalizer;
             }
 
-            if (self::isObject($type = $argument['type'])) {
+            if (self::isObject($type = $argument['type']) && ($argument['required'] || $value)) {
                 if ($this->generatedValue($element, $generated)) {
                     $context[$key] = $generated;
                     continue;
