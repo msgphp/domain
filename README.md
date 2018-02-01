@@ -16,6 +16,10 @@ composer require msgphp/domain
 - Abstract entity repository
 - Common infrastructure
 
+## Blog posts
+
+- [Initializing objects with CLI and the power of Symfony Console](https://medium.com/@ro0NL/initializing-objects-with-cli-and-the-power-of-symfony-console-2a008d5611f)
+
 ## Documentation
 
 - Read the [main documentation](https://msgphp.github.io/docs/)
