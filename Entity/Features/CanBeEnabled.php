@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Entity\Features;
 
 use MsgPhp\Domain\Entity\Fields\EnabledField;
-use MsgPhp\Domain\Event\{DisableDomainEvent, EnableDomainEvent};
+use MsgPhp\Domain\Event\{DisableEvent, EnableEvent};
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -24,25 +24,25 @@ trait CanBeEnabled
         $this->enabled = false;
     }
 
-    private function handleEnableEvent(EnableDomainEvent $event): bool
-    {
-        if ($this->enabled) {
-            return false;
-        }
-
-        $this->enable();
-
-        return true;
-    }
-
-    private function handleDisableEvent(DisableDomainEvent $event): bool
+    private function handleEnableEvent(EnableEvent $event): bool
     {
         if (!$this->enabled) {
-            return false;
+            $this->enable();
+
+            return true;
         }
 
-        $this->disable();
+        return false;
+    }
 
-        return true;
+    private function handleDisableEvent(DisableEvent $event): bool
+    {
+        if ($this->enabled) {
+            $this->disable();
+
+            return true;
+        }
+
+        return false;
     }
 }
