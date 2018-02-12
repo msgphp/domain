@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\InMemory;
 
-use MsgPhp\Domain\{AbstractDomainEntityRepositoryTrait, DomainCollection, DomainCollectionInterface, DomainIdentityMappingInterface, DomainIdInterface};
+use MsgPhp\Domain\{DomainCollectionInterface, DomainIdentityHelper};
+use MsgPhp\Domain\Factory\DomainCollectionFactory;
 use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException};
 
 /**
@@ -12,16 +13,15 @@ use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException};
  */
 trait DomainEntityRepositoryTrait
 {
-    use AbstractDomainEntityRepositoryTrait;
-
+    private $class;
+    private $identityHelper;
     private $memory;
     private $accessor;
 
-    public function __construct(string $class, DomainIdentityMappingInterface $identityMapping, array $fieldMapping = [], GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
+    public function __construct(string $class, DomainIdentityHelper $identityHelper, GlobalObjectMemory $memory = null, ObjectFieldAccessor $accessor = null)
     {
         $this->class = $class;
-        $this->identityMapping = $identityMapping;
-        $this->fieldMapping = $fieldMapping;
+        $this->identityHelper = $identityHelper;
         $this->memory = $memory ?? GlobalObjectMemory::createDefault();
         $this->accessor = $accessor ?? new ObjectFieldAccessor();
     }
@@ -59,7 +59,7 @@ trait DomainEntityRepositoryTrait
      */
     private function doFind($id, ...$idN)
     {
-        $identity = $this->toIdentity(...$ids = func_get_args());
+        $identity = $this->identityHelper->toIdentity($this->class, ...$ids = func_get_args());
 
         if (null === $identity) {
             throw EntityNotFoundException::createForId($this->class, ...$ids);
@@ -77,7 +77,7 @@ trait DomainEntityRepositoryTrait
             return $entity;
         }
 
-        if ($this->isIdentity($fields)) {
+        if ($this->identityHelper->isIdentity($this->class, $fields)) {
             throw EntityNotFoundException::createForId($this->class, ...array_values($fields));
         }
 
@@ -86,7 +86,7 @@ trait DomainEntityRepositoryTrait
 
     private function doExists($id, ...$idN): bool
     {
-        $identity = $this->toIdentity(...func_get_args());
+        $identity = $this->identityHelper->toIdentity($this->class, ...func_get_args());
 
         if (null === $identity) {
             return false;
@@ -115,7 +115,7 @@ trait DomainEntityRepositoryTrait
             return;
         }
 
-        if ($this->doExists(...$ids = array_values($this->identityMapping->getIdentity($entity)))) {
+        if ($this->doExists(...$ids = array_values($this->identityHelper->getIdentity($entity)))) {
             throw DuplicateEntityException::createForId(get_class($entity), ...$ids);
         }
 
@@ -140,7 +140,7 @@ trait DomainEntityRepositoryTrait
             $entities = array_slice($entities, $offset, $limit ?: null);
         }
 
-        return new DomainCollection($entities);
+        return DomainCollectionFactory::create($entities);
     }
 
     /**
@@ -148,23 +148,23 @@ trait DomainEntityRepositoryTrait
      */
     private function matchesFields($entity, array $fields): bool
     {
-        foreach ($this->mapFields($fields) as $field => $value) {
-            $value = $this->normalizeIdentifier($value, true);
-            $knownValue = $this->normalizeIdentifier($this->accessor->getValue($entity, $field), true);
-            if ($knownValue instanceof DomainIdInterface) {
-                $knownValue = $knownValue->isEmpty() ? null : $knownValue->toString();
-            }
-            if ($value instanceof DomainIdInterface) {
-                $value = $value->isEmpty() ? null : $value->toString();
+        $idFields = array_flip($this->identityHelper->getIdentifierFieldNames(get_class($entity)));
+        foreach ($fields as $field => $value) {
+            if (isset($idFields[$field]) && $this->identityHelper->isEmptyIdentifier($value)) {
+                return false;
             }
 
+            $knownValue = $this->identityHelper->normalizeIdentifier($this->accessor->getValue($entity, $field));
+
             if (is_array($value)) {
-                if (!in_array($knownValue, $value)) {
+                if (!in_array($knownValue, array_map([$this->identityHelper, 'normalizeIdentifier'], $value))) {
                     return false;
                 }
 
                 continue;
             }
+
+            $value = $this->identityHelper->normalizeIdentifier($value);
 
             if (null === $value xor null === $knownValue) {
                 return false;
