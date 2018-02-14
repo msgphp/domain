@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
-use Doctrine\ORM\ORMInvalidArgumentException;
+use Doctrine\ORM\ORMException;
 use MsgPhp\Domain\DomainIdInterface;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
 use MsgPhp\Domain\Infra\Doctrine\EntityReferenceLoader;
@@ -39,7 +39,7 @@ final class EntityReferenceLoaderTest extends TestCase
     {
         $loader = new EntityReferenceLoader(self::$em);
 
-        $this->expectException(ORMInvalidArgumentException::class);
+        $this->expectException(ORMException::class);
 
         $loader(Entities\TestPrimitiveEntity::class, [1, 2]);
     }
