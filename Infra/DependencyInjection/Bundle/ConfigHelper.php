@@ -23,7 +23,7 @@ final class ConfigHelper
     public const UUID_DATA_TYPES = ['uuid', 'uuid_binary', 'uuid_binary_ordered_time'];
 
     // @todo consider custom node type instead
-    public static function createClassMappingNode(string $name, array $required = [], array $abstracts = [], \Closure $normalizer = null, $defaultValue = null, string $prototype = 'scalar', \Closure $prototypeCallback = null, NodeBuilder $builder = null): ArrayNodeDefinition
+    public static function createClassMappingNode(string $name, array $required = [], array $abstracts = [], bool $valueIsClass = false, \Closure $normalizer = null, $defaultValue = null, string $prototype = 'scalar', \Closure $prototypeCallback = null, NodeBuilder $builder = null): ArrayNodeDefinition
     {
         $node = ($builder ?? new NodeBuilder())->arrayNode($name);
         $node->useAttributeAsKey('class');
@@ -49,13 +49,13 @@ final class ConfigHelper
             $prototypeCallback($prototype);
         }
 
-        $node->validate()->always(function (array $value) use ($abstracts): array {
+        $node->validate()->always(function (array $value) use ($abstracts, $valueIsClass): array {
             foreach ($value as $class => $mappedClass) {
                 if (!($isClass = class_exists($class)) && !interface_exists($class)) {
                     throw new \LogicException(sprintf('A class or interface named "%s" does not exists.', $class));
                 }
 
-                if (null === $mappedClass || ($isClass && $mappedClass === $class)) {
+                if (!$valueIsClass || null === $mappedClass || ($isClass && $mappedClass === $class)) {
                     continue;
                 }
 
