@@ -98,7 +98,7 @@ final class ResolveDomainPass implements CompilerPassInterface
                 ->setArgument('$classMapping', $classMapping));
         }
 
-        self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\EntityAwareFactory::class);
+        self::alias($container, Factory\DomainObjectFactoryInterface::class, Factory\DomainObjectFactory::class);
         self::alias($container, Factory\EntityAwareFactoryInterface::class, Factory\EntityAwareFactory::class);
     }
 
