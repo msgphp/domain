@@ -26,12 +26,10 @@ final class DomainCollection implements DomainCollectionInterface
 
     public function getIterator(): \Traversable
     {
-        $this->toArray(true);
-
         if ($this->elements instanceof \Traversable) {
             return (function () {
-                foreach ($this->elements as $element) {
-                    yield $element;
+                foreach ($this->elements as $key => $element) {
+                    yield $key => $element;
                 }
             })();
         }
@@ -43,8 +41,6 @@ final class DomainCollection implements DomainCollectionInterface
     {
         if ($this->elements instanceof \Traversable) {
             foreach ($this->elements as $element) {
-                $this->toArray(true);
-
                 return false;
             }
 
@@ -57,10 +53,8 @@ final class DomainCollection implements DomainCollectionInterface
     public function contains($element): bool
     {
         if ($this->elements instanceof \Traversable) {
-            foreach ($this->elements as $knownElement) {
+            foreach ($this->elements as $key => $knownElement) {
                 if ($element === $knownElement) {
-                    $this->toArray(true);
-
                     return true;
                 }
             }
@@ -76,8 +70,6 @@ final class DomainCollection implements DomainCollectionInterface
         if ($this->elements instanceof \Traversable) {
             foreach ($this->elements as $knownKey => $element) {
                 if ((string) $key === (string) $knownKey) {
-                    $this->toArray(true);
-
                     return true;
                 }
             }
@@ -92,8 +84,6 @@ final class DomainCollection implements DomainCollectionInterface
     {
         if ($this->elements instanceof \Traversable) {
             foreach ($this->elements as $element) {
-                $this->toArray(true);
-
                 return $element;
             }
 
@@ -105,7 +95,13 @@ final class DomainCollection implements DomainCollectionInterface
 
     public function last()
     {
-        $this->toArray();
+        if ($this->elements instanceof \Traversable) {
+            $element = false;
+            foreach ($this->elements as $key => $element) {
+            }
+
+            return $element;
+        }
 
         return end($this->elements);
     }
@@ -115,8 +111,6 @@ final class DomainCollection implements DomainCollectionInterface
         if ($this->elements instanceof \Traversable) {
             foreach ($this->elements as $knownKey => $element) {
                 if ((string) $key === (string) $knownKey) {
-                    $this->toArray(true);
-
                     return $element;
                 }
             }
@@ -129,36 +123,59 @@ final class DomainCollection implements DomainCollectionInterface
 
     public function filter(callable $filter): DomainCollectionInterface
     {
-        $this->toArray();
+        if ($this->elements instanceof \Traversable) {
+            $elements = [];
+            foreach ($this->elements as $key => $element) {
+                if ($filter($element)) {
+                    $elements[$key] = $element;
+                }
+            }
+
+            return new self($elements);
+        }
 
         return new self(array_filter($this->elements, $filter));
     }
 
     public function slice(int $offset, int $limit = 0): DomainCollectionInterface
     {
-        $this->toArray();
+        if ($this->elements instanceof \Traversable) {
+            $elements = [];
+            $i = -1;
+            foreach ($this->elements as $key => $element) {
+                if (++$i < $offset) {
+                    continue;
+                }
+
+                if ($limit && $i >= ($offset + $limit)) {
+                    break;
+                }
+
+                $elements[$key] = $element;
+            }
+
+            return new self($elements);
+        }
 
         return new self(array_slice($this->elements, $offset, $limit ?: null, true));
     }
 
     public function map(callable $mapper): array
     {
-        $this->toArray();
+        if ($this->elements instanceof \Traversable) {
+            $elements = [];
+            foreach ($this->elements as $key => $element) {
+                $elements[$key] = $mapper($element);
+            }
+
+            return $elements;
+        }
 
         return array_map($mapper, $this->elements);
     }
 
     public function count(): int
     {
-        $this->toArray();
-
-        return count($this->elements);
-    }
-
-    private function toArray(bool $generatorOnly = false): void
-    {
-        if ((!$generatorOnly && $this->elements instanceof \Traversable) || $this->elements instanceof \Generator) {
-            $this->elements = iterator_to_array($this->elements);
-        }
+        return $this->elements instanceof \Traversable ? iterator_count($this->elements) : count($this->elements);
     }
 }
