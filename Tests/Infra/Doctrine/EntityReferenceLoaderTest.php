@@ -13,6 +13,8 @@ final class EntityReferenceLoaderTest extends TestCase
 {
     use EntityManagerTrait;
 
+    private $createSchema = false;
+
     public function testInvoke(): void
     {
         $loader = new EntityReferenceLoader(self::$em, ['alias' => Entities\TestEntity::class]);
