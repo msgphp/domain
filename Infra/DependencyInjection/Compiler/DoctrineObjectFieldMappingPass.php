@@ -38,19 +38,17 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
 
         foreach ($providers as $provider) {
             if (!ContainerHelper::getClassReflection($container, $provider)->implementsInterface(ObjectFieldMappingProviderInterface::class)) {
-                throw new InvalidArgumentException(sprintf('Provider "%s" must implement interface "%s".', $provider, ObjectFieldMappingProviderInterface::class));
+                throw new InvalidArgumentException(sprintf('Provider "%s" must implement "%s".', $provider, ObjectFieldMappingProviderInterface::class));
             }
 
             $mapping = array_replace_recursive($mapping, $provider::getObjectFieldMapping());
         }
 
-        if (!$mapping) {
+        if ($mapping) {
+            $container->getDefinition(ObjectFieldMappingListener::class)
+                ->setArgument('$mapping', $mapping);
+        } else {
             $container->removeDefinition(ObjectFieldMappingListener::class);
-
-            return;
         }
-
-        $container->getDefinition(ObjectFieldMappingListener::class)
-            ->setArgument('$mapping', $mapping);
     }
 }

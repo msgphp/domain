@@ -179,7 +179,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
 
         $this->resolved = [];
 
-        foreach (ClassMethodResolver::resolve($this->class, $this->method) as $argument) {
+        foreach (ClassMethodResolver::resolve($this->classMapping[$this->class] ?? $this->class, $this->method) as $argument) {
             $this->resolved[] = [
                 'element' => $this->getElement($this->class, $this->method, $argument['name']),
                 'type' => isset($argument['type']) ? ($this->classMapping[$argument['type']] ?? $argument['type']) : null,
