@@ -82,7 +82,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
         foreach ($resolved ?? $this->resolve() as $argument) {
             $key = $argument['name'];
             if (null === $resolved) {
-                list($field, $isArg) = $this->fieldMapping[$key];
+                [$field, $isArg] = $this->fieldMapping[$key];
                 $value = $isArg ? $input->getArgument($field) : $input->getOption($field);
             } else {
                 $field = $key;
@@ -150,7 +150,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
 
         $generatedValues = [];
         while (null !== $generatedValue = array_shift($this->generatedValues)) {
-            list($label, $value) = $generatedValue;
+            [$label, $value] = $generatedValue;
             $generatedValues[] = [$label, json_encode($value)];
         }
         if ($generatedValues) {
