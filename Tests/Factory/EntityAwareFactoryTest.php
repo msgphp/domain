@@ -93,7 +93,7 @@ final class EntityAwareFactoryTest extends TestCase
         $this->factory->identify('foo', '1');
     }
 
-    public function tesNextIdentifier(): void
+    public function testNextIdentifier(): void
     {
         $this->assertSame('new', $this->factory->nextIdentifier('id')->toString());
         $this->assertSame('new', $this->factory->nextIdentifier('alias_id')->toString());

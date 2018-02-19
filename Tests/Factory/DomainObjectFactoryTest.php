@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Factory;
 
+use MsgPhp\Domain\{DomainCollection, DomainId};
 use MsgPhp\Domain\Exception\InvalidClassException;
 use MsgPhp\Domain\Factory\{DomainObjectFactory, DomainObjectFactoryInterface};
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,16 @@ final class DomainObjectFactoryTest extends TestCase
         $this->assertInstanceOf(TestObject::class, $object);
         $this->assertSame(1, $object->a);
         $this->assertSame('foo', $object->b);
+    }
+
+    public function testCreateWithDomainId(): void
+    {
+        $this->assertInstanceOf(DomainId::class, (new DomainObjectFactory())->create(DomainId::class, [1]));
+    }
+
+    public function testCreateWithDomainCollection(): void
+    {
+        $this->assertInstanceOf(DomainCollection::class, (new DomainObjectFactory())->create(DomainCollection::class, [null]));
     }
 
     public function testCreateWithUnknownObject(): void
