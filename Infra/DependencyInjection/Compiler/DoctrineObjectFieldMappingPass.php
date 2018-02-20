@@ -21,11 +21,13 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
     use PriorityTaggedServiceTrait;
 
     private $tagName;
+    private $listenerId;
     private $defaultProviders;
 
-    public function __construct(string $tagName = 'msgphp.doctrine.object_field_mapping', array $defaultProviders = [EntityFieldsMapping::class])
+    public function __construct(string $tagName = 'msgphp.doctrine.object_field_mapping', string $listenerId = ObjectFieldMappingListener::class, array $defaultProviders = [EntityFieldsMapping::class])
     {
         $this->tagName = $tagName;
+        $this->listenerId = $listenerId;
         $this->defaultProviders = $defaultProviders;
     }
 
@@ -45,10 +47,10 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
         }
 
         if ($mapping) {
-            $container->getDefinition(ObjectFieldMappingListener::class)
+            $container->getDefinition($this->listenerId)
                 ->setArgument('$mapping', $mapping);
         } else {
-            $container->removeDefinition(ObjectFieldMappingListener::class);
+            $container->removeDefinition($this->listenerId);
         }
     }
 }

@@ -1,4 +1,4 @@
-# Base Domain
+# Base domain layer
 
 A base domain layer to rapidly built other domain layers.
 

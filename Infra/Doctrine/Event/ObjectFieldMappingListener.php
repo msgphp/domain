@@ -151,8 +151,6 @@ final class ObjectFieldMappingListener
         }
 
         $loaded = $this->metadataFactory->getLoadedMetadata();
-
-        /** @var ClassMetadataInfo $metadata */
         $metadata = $loaded[$class] ?? $this->metadataFactory->getMetadataFor($class);
 
         return $metadata;
