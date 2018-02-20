@@ -85,8 +85,8 @@ final class ResolveDomainPass implements CompilerPassInterface
 
         self::register($container, Factory\ClassMappingObjectFactory::class)
             ->setDecoratedService(Factory\DomainObjectFactory::class)
-            ->setArgument('$mapping', $classMapping)
-            ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'));
+            ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'))
+            ->setArgument('$mapping', $classMapping);
 
         $entityFactory = self::register($container, Factory\EntityAwareFactory::class)
             ->setArgument('$factory', new Reference(Factory\DomainObjectFactory::class))

@@ -21,7 +21,7 @@ final class ClassMappingObjectFactoryTest extends TestCase
 
                 return $o;
             });
-        $factory = new ClassMappingObjectFactory(['foo' => 'bar'], $innerFactory);
+        $factory = new ClassMappingObjectFactory($innerFactory, ['foo' => 'bar']);
 
         $this->assertSame(['class' => 'bar', 'context' => []], (array) $factory->create('foo'));
         $this->assertSame(['class' => 'Foo', 'context' => ['context']], (array) $factory->create('Foo', ['context']));

@@ -9,13 +9,13 @@ namespace MsgPhp\Domain\Factory;
  */
 final class ClassMappingObjectFactory implements DomainObjectFactoryInterface
 {
-    private $mapping;
     private $factory;
+    private $mapping;
 
-    public function __construct(array $mapping, DomainObjectFactoryInterface $factory)
+    public function __construct(DomainObjectFactoryInterface $factory, array $mapping)
     {
-        $this->mapping = $mapping;
         $this->factory = $factory;
+        $this->mapping = $mapping;
     }
 
     public function create(string $class, array $context = [])
