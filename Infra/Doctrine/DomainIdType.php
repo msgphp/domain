@@ -18,9 +18,6 @@ class DomainIdType extends Type
 
     private static $mapping = [];
 
-    /**
-     * @internal
-     */
     final public static function setClass(string $class): void
     {
         if (!is_subclass_of($class, DomainIdInterface::class)) {
@@ -30,25 +27,16 @@ class DomainIdType extends Type
         self::$mapping[static::class]['class'] = $class;
     }
 
-    /**
-     * @internal
-     */
     final public static function getClass(): string
     {
         return self::$mapping[static::class]['class'] ?? DomainId::class;
     }
 
-    /**
-     * @internal
-     */
-    final public static function setDataType(string $dataType): void
+    final public static function setDataType(string $type): void
     {
-        self::$mapping[static::class]['data_type'] = $dataType;
+        self::$mapping[static::class]['data_type'] = $type;
     }
 
-    /**
-     * @internal
-     */
     final public static function getDataType(): string
     {
         return self::$mapping[static::class]['data_type'] ?? Type::INTEGER;
