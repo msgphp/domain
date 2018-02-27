@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infra\DependencyInjection\Bundle;
+namespace MsgPhp\Domain\Infra\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\ORM\Events as DoctrineOrmEvents;
 use Doctrine\ORM\Version as DoctrineOrmVersion;
-use MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 use MsgPhp\Domain\Infra\{Console as ConsoleInfra, Doctrine as DoctrineInfra};
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
