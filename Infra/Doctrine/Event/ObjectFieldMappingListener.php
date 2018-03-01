@@ -53,7 +53,7 @@ final class ObjectFieldMappingListener
         }
 
         foreach ($metadata->getIdentifierFieldNames() as $field) {
-            if (!isset($this->typeConfig[$type = $metadata->getTypeOfField($field)]) || !in_array($this->typeConfig[$type]['data_type'], [Type::INTEGER, Type::BIGINT], true)) {
+            if (!isset($this->typeConfig[$type = $metadata->getTypeOfField($field)]) || !in_array($this->typeConfig[$type]['type'], [Type::INTEGER, Type::BIGINT], true)) {
                 continue;
             }
 
