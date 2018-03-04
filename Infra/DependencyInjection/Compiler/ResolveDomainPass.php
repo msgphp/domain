@@ -6,7 +6,6 @@ namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
 use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManager;
 use MsgPhp\Domain\{DomainIdentityHelper, DomainIdentityMappingInterface, Factory, Message};
-use MsgPhp\Domain\Infra\DependencyInjection\ContainerHelper;
 use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra, SimpleBus as SimpleBusInfra};
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -89,18 +88,20 @@ final class ResolveDomainPass implements CompilerPassInterface
             ->setArgument('$factory', new Reference(Factory\ClassMappingObjectFactory::class.'.inner'))
             ->setArgument('$mapping', $classMapping);
 
-        $entityFactory = self::register($container, Factory\EntityAwareFactory::class)
-            ->setArgument('$factory', new Reference(Factory\DomainObjectFactory::class))
+        self::register($container, $entityAliasId = Factory\EntityAwareFactory::class)
+            ->setAutowired(true)
             ->setArgument('$identifierMapping', $idClassMapping);
 
         if ($container->has(DoctrineEntityManager::class)) {
-            $entityFactory->setArgument('$referenceLoader', ContainerHelper::registerAnonymous($container, DoctrineInfra\EntityReferenceLoader::class)
+            self::register($container, DoctrineInfra\EntityAwareFactory::class)
                 ->setAutowired(true)
-                ->setArgument('$classMapping', $classMapping));
+                ->setDecoratedService($entityAliasId)
+                ->setArgument('$factory', new Reference(DoctrineInfra\EntityAwareFactory::class.'.inner'))
+                ->setArgument('$classMapping', $classMapping);
         }
 
         self::alias($container, Factory\DomainObjectFactoryInterface::class, $aliasId);
-        self::alias($container, Factory\EntityAwareFactoryInterface::class, Factory\EntityAwareFactory::class);
+        self::alias($container, Factory\EntityAwareFactoryInterface::class, $entityAliasId);
     }
 
     private function registerMessageBus(ContainerBuilder $container): void
