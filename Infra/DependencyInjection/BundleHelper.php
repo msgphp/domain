@@ -26,8 +26,6 @@ final class BundleHelper
             return;
         }
 
-        $container->addCompilerPass(new Compiler\ResolveDomainPass());
-
         $container->registerForAutoconfiguration(ConsoleInfra\ContextBuilder\ContextElementProviderInterface::class)
             ->addTag('msgphp.console.context_element_provider');
 
@@ -38,6 +36,7 @@ final class BundleHelper
 
             $container->register(DoctrineInfra\Event\ObjectFieldMappingListener::class)
                 ->setPublic(false)
+                ->setArgument('$mapping', [])
                 ->addTag('doctrine.event_listener', ['event' => DoctrineOrmEvents::loadClassMetadata]);
 
             if (ContainerHelper::hasBundle($container, DoctrineBundle::class)) {
@@ -59,6 +58,8 @@ final class BundleHelper
                 ]]);
             }
         }
+
+        $container->addCompilerPass(new Compiler\ResolveDomainPass());
 
         $initialized = true;
     }
