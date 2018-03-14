@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infra\Console\ContextBuilder;
+namespace MsgPhp\Domain\Infra\Console\Context;
 
 use MsgPhp\Domain\{DomainCollectionInterface, DomainIdInterface};
 use MsgPhp\Domain\Factory\ClassMethodResolver;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\StyleInterface;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class ClassContextBuilder implements ContextBuilderInterface
+final class ClassContextFactory implements ContextFactoryInterface
 {
     public const ALWAYS_OPTIONAL = 1;
     public const NO_DEFAULTS = 2;
@@ -23,27 +23,38 @@ final class ClassContextBuilder implements ContextBuilderInterface
 
     private $class;
     private $method;
-    private $elementProviders;
     private $classMapping;
     private $flags = 0;
+    private $elementFactory;
     private $resolved;
     private $fieldMapping = [];
     private $generatedValues = [];
 
-    /**
-     * @param ContextElementProviderInterface[] $elementProviders
-     */
-    public function __construct(string $class, string $method, iterable $elementProviders = [], array $classMapping = [], int $flags = 0)
+    public static function getUniqueFieldName(InputDefinition $definition, string $field, bool $isOption = true): string
+    {
+        $known = $isOption ? $definition->getOptions() : $definition->getArguments();
+        $base = $field;
+        $i = 1;
+        while (isset($known[$field])) {
+            $field = $base.++$i;
+        }
+
+        return $field;
+    }
+
+    public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactoryInterface $elementFactory = null)
     {
         $this->class = $class;
         $this->method = $method;
-        $this->elementProviders = $elementProviders;
         $this->classMapping = $classMapping;
         $this->flags = $flags;
+        $this->elementFactory = $elementFactory ?? new ClassContextElementFactory();
     }
 
     public function configure(InputDefinition $definition): void
     {
+        $this->fieldMapping = [];
+
         if ($this->flags & self::REUSE_DEFINITION) {
             $origOptions = $definition->getOptions();
             $origArgs = $definition->getArguments();
@@ -96,8 +107,8 @@ final class ClassContextBuilder implements ContextBuilderInterface
                 $value = $argument['value'] ?? null;
             }
 
-            if (array_key_exists($field, $values)) {
-                $context[$key] = $values[$field];
+            if (array_key_exists($key, $values)) {
+                $context[$key] = $values[$key];
                 continue;
             }
 
@@ -106,15 +117,11 @@ final class ClassContextBuilder implements ContextBuilderInterface
 
             /** @var ContextElement $element */
             $element = $argument['element'];
-            if (null !== $element->normalizer) {
-                $normalizers[$key] = $element->normalizer;
-            }
-
             $required = $argument['required'] && !($this->flags & self::ALWAYS_OPTIONAL);
 
             if (is_array($value) && self::isObject($type = $argument['type']) && ($required || $given)) {
                 $method = is_subclass_of($type, DomainCollectionInterface::class) || is_subclass_of($type, DomainIdInterface::class) ? 'fromValue' : '__construct';
-                $context[$key] = $this->getContext($input, $io, $values[$field] ?? [], array_map(function (array $argument, int $i) use ($type, $method, $value, $element): array {
+                $context[$key] = $this->getContext($input, $io, [], array_map(function (array $argument, int $i) use ($type, $method, $value, $element): array {
                     if (array_key_exists($argument['name'], $value)) {
                         $argument['value'] = $value[$argument['name']];
                     } elseif (array_key_exists($i, $value)) {
@@ -125,7 +132,7 @@ final class ClassContextBuilder implements ContextBuilderInterface
                         $argument['value'] = [];
                     }
 
-                    $child = $this->getElement($type, $method, $argument['name']);
+                    $child = $this->elementFactory->getElement($type, $method, $argument['name']);
                     $child->label = $element->label.' > '.$child->label;
 
                     return ['element' => $child] + $argument;
@@ -134,11 +141,17 @@ final class ClassContextBuilder implements ContextBuilderInterface
             }
 
             if (!$isEmpty) {
-                $context[$key] = $value;
+                $context[$key] = $element->normalize($value);
                 continue;
             }
 
-            if ($required || $given) {
+            if ($element->generate($io, $generated)) {
+                $this->generatedValues[] = [$element->label, json_encode($generated)];
+                $context[$key] = $element->normalize($generated);
+                continue;
+            }
+
+            if ($required) {
                 if (!$interactive) {
                     throw new \LogicException(sprintf('No value provided for "%s".', $field));
                 }
@@ -148,30 +161,16 @@ final class ClassContextBuilder implements ContextBuilderInterface
             }
 
             if ($this->flags & self::NO_DEFAULTS) {
-                unset($normalizers[$key]);
                 continue;
             }
 
-            if ($this->generatedValue($element, $generated)) {
-                $context[$key] = $generated;
-                continue;
-            }
-
-            $context[$key] = $argument['default'];
+            $context[$key] = $element->normalize($argument['default']);
         }
 
-        foreach ($normalizers as $key => $normalizer) {
-            $context[$key] = $normalizer($context[$key], $context);
-        }
-
-        $generatedValues = [];
-        while (null !== $generatedValue = array_shift($this->generatedValues)) {
-            [$label, $value] = $generatedValue;
-            $generatedValues[] = [$label, json_encode($value)];
-        }
-        if ($generatedValues) {
+        if ($this->generatedValues) {
             $io->note('Generated values');
-            $io->table([], $generatedValues);
+            $io->table([], $this->generatedValues);
+            $this->generatedValues = [];
         }
 
         return $context;
@@ -187,18 +186,6 @@ final class ClassContextBuilder implements ContextBuilderInterface
         return null !== $type && (class_exists($type) || interface_exists($type));
     }
 
-    private static function getUniqueFieldName(InputDefinition $definition, string $field, bool $isOption = true): string
-    {
-        $known = $isOption ? $definition->getOptions() : $definition->getArguments();
-        $base = $field;
-        $i = 1;
-        while (isset($known[$field])) {
-            $field = $base.++$i;
-        }
-
-        return $field;
-    }
-
     private function resolve(): iterable
     {
         if (null !== $this->resolved) {
@@ -207,9 +194,9 @@ final class ClassContextBuilder implements ContextBuilderInterface
 
         $this->resolved = [];
 
-        foreach (ClassMethodResolver::resolve($class = $this->classMapping[$this->class] ?? $this->class, $this->method) as $argument) {
+        foreach (ClassMethodResolver::resolve($this->class, $this->method) as $argument) {
             $this->resolved[] = [
-                'element' => $this->getElement($class, $this->method, $argument['name']),
+                'element' => $this->elementFactory->getElement($this->class, $this->method, $argument['name']),
                 'type' => isset($argument['type']) ? ($this->classMapping[$argument['type']] ?? $argument['type']) : null,
             ] + $argument;
         }
@@ -217,75 +204,20 @@ final class ClassContextBuilder implements ContextBuilderInterface
         return $this->resolved;
     }
 
-    private function getElement(string $class, string $method, string $argument): ContextElement
+    private function askRequiredValue(StyleInterface $io, ContextElement $element, $emptyValue)
     {
-        foreach ($this->elementProviders as $provider) {
-            if (null !== $element = $provider->getElement($class, $method, $argument)) {
-                return $element;
-            }
+        if (null === $emptyValue) {
+            return $element->askString($io);
         }
 
-        return new ContextElement(ucfirst(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], ['\\1 \\2', '\\1 \\2'], $argument)));
-    }
-
-    private function askRequiredValue(StyleInterface $io, ContextElement $element, $default)
-    {
-        $label = $element->label;
-        $generated = null !== $element->generator;
-
-        if (null === $default) {
-            if ($generated) {
-                $label .= ' (leave blank to generate a value)';
-            }
-
-            do {
-                if (null === $value = $element->hidden ? $io->askHidden($label) : $io->ask($label)) {
-                    $this->generatedValue($element, $value);
-                }
-            } while (!$generated && null === $value);
-
-            return $value;
+        if (false === $emptyValue) {
+            return $element->askBool($io);
         }
 
-        if ($generated && $io->confirm(sprintf('Generate value for "%s"?', $label))) {
-            $this->generatedValue($element, $value);
-
-            return $value;
+        if ([] === $emptyValue) {
+            return $element->askIterable($io);
         }
 
-        if (false === $default) {
-            return $io->confirm($label, false);
-        }
-
-        if ([] === $default) {
-            $i = 0;
-            $value = [];
-            do {
-                $offsetLabel = $label.' ['.$i.']';
-                $value[] = $element->hidden ? $io->askHidden($offsetLabel) : $io->ask($offsetLabel);
-                ++$i;
-            } while ($io->confirm('Add another value?', false));
-
-            return $value;
-        }
-
-        return $default;
-    }
-
-    private function generatedValue(ContextElement $element, &$generated): bool
-    {
-        if (null === $element->generator) {
-            $generated = null;
-            $result = false;
-        } else {
-            $generated = ($element->generator)();
-            $result = true;
-
-            $this->generatedValues[] = [$element->label, $generated];
-        }
-
-        unset($generated);
-
-        return $result;
+        return $emptyValue;
     }
 }
