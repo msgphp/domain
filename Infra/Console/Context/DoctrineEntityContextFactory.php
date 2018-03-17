@@ -58,7 +58,7 @@ final class DoctrineEntityContextFactory implements ContextFactoryInterface
                 $context[$key] = $values[$key];
                 unset($values[$key]);
             } elseif (null === $value = $input->getOption($this->discriminatorField)) {
-                $context[$key] = $io->choice('Select entity discriminator', array_keys($metadata->discriminatorMap), $metadata->discriminatorValue);
+                $context[$key] = $io->choice('Select discriminator', array_keys($metadata->discriminatorMap), $metadata->discriminatorValue);
             } elseif (isset($metadata->discriminatorMap[$value])) {
                 $context[$key] = $value;
             } elseif (false !== $found = array_search($value, $metadata->discriminatorMap, true)) {
