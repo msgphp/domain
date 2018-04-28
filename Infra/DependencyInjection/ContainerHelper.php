@@ -7,16 +7,18 @@ namespace MsgPhp\Domain\Infra\DependencyInjection;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\DBAL\Types\Type as DoctrineType;
 use Doctrine\ORM\Version as DoctrineOrmVersion;
+use MsgPhp\Domain\Infra\{Console as ConsoleInfra, SimpleBus as SimpleBusInfra};
+use MsgPhp\Domain\Message\FallbackMessageHandler;
 use Ramsey\Uuid\Doctrine as DoctrineUuid;
 use SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle;
-use MsgPhp\Domain\Infra\{Console as ConsoleInfra, SimpleBus as SimpleBusInfra};
-use Symfony\Component\Console\ConsoleEvents;
+use SimpleBus\SymfonyBridge\SimpleBusEventBusBundle;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -232,52 +234,70 @@ final class ContainerHelper
 
     public static function configureCommandMessages(ContainerBuilder $container, array $classMapping, array $commands): void
     {
-        if (!self::hasBundle($container, SimpleBusCommandBusBundle::class)) {
-            return;
-        }
+        $messengerEnabled = interface_exists(MessageBusInterface::class);
+        $simpleBusEnabled = self::hasBundle($container, SimpleBusCommandBusBundle::class);
 
-        foreach ($container->findTaggedServiceIds($tag = 'command_handler') as $id => $attr) {
-            foreach ($attr as $attr) {
-                if (!isset($attr[$attrName = 'handles'])) {
-                    continue;
-                }
+        foreach ($container->findTaggedServiceIds($tag = 'msgphp.domain.command_handler') as $id => $attr) {
+            $definition = $container->getDefinition($id);
+            $command = self::getClassReflection($container, $definition->getClass() ?? $id)->getMethod('__invoke')->getParameters()[0]->getClass()->getName();
 
-                if ($commands[$command = $attr[$attrName]] ?? false) {
-                    if (isset($classMapping[$command])) {
-                        $container->getDefinition($id)
-                            ->addTag($tag, [$attrName => $classMapping[$command]]);
-                    }
-
-                    continue;
-                }
-
+            if (empty($commands[$command])) {
                 $container->removeDefinition($id);
+                continue;
+            }
+
+            $mappedCommand = $classMapping[$command] ?? null;
+
+            $definition->clearTag($tag);
+
+            if ($messengerEnabled) {
+                $definition->addTag('messenger.message_handler', ['handles' => $command]);
+                if (null !== $mappedCommand) {
+                    $definition->addTag('messenger.message_handler', ['handles' => $mappedCommand]);
+                }
+            }
+
+            if ($simpleBusEnabled) {
+                $definition
+                    ->setPublic(true)
+                    ->addTag('command_handler', ['handles' => $command]);
+                if (null !== $mappedCommand) {
+                    $definition->addTag('command_handler', ['handles' => $mappedCommand]);
+                }
             }
         }
     }
 
     public static function configureEventMessages(ContainerBuilder $container, array $classMapping, array $events): void
     {
-        if (!self::hasBundle($container, SimpleBusCommandBusBundle::class)) {
-            return;
+        $messengerHandler = $simpleBusHandler = null;
+        if (interface_exists(MessageBusInterface::class)) {
+            $messengerHandler = self::registerAnonymous($container, FallbackMessageHandler::class);
         }
-
-        $definition = self::registerAnonymous($container, SimpleBusInfra\EventMessageHandler::class);
-        $definition
-            ->setPublic(true)
-            ->setArgument('$bus', new Reference('simple_bus.event_bus', ContainerBuilder::NULL_ON_INVALID_REFERENCE));
-
-        if (class_exists(ConsoleEvents::class)) {
-            $definition
-                ->addTag('kernel.event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => 'onConsoleCommand'])
-                ->addTag('kernel.event_listener', ['event' => ConsoleEvents::TERMINATE, 'method' => 'onConsoleTerminate']);
+        if (self::hasBundle($container, SimpleBusCommandBusBundle::class)) {
+            $simpleBusHandler = self::registerAnonymous($container, FallbackMessageHandler::class);
+            $simpleBusHandler->setPublic(true);
+            if (self::hasBundle($container, SimpleBusEventBusBundle::class)) {
+                $simpleBusHandler->setArgument('$bus', self::registerAnonymous($container, SimpleBusInfra\DomainMessageBus::class)
+                    ->setArgument('$bus', new Reference('simple_bus.event_bus')));
+            }
         }
 
         foreach ($events as $event) {
-            $definition->addTag($tag = 'command_handler', [$attrName = 'handles' => $event]);
+            $mappedEvent = $classMapping[$event] ?? null;
 
-            if (isset($classMapping[$event])) {
-                $definition->addTag($tag, [$attrName => $classMapping[$event]]);
+            if (null !== $messengerHandler) {
+                $messengerHandler->addTag('messenger.message_handler', ['handles' => $event]);
+                if (null !== $mappedEvent) {
+                    $messengerHandler->addTag('messenger.message_handler', ['handles' => $mappedEvent]);
+                }
+            }
+
+            if (null !== $simpleBusHandler) {
+                $simpleBusHandler->addTag('command_handler', ['handles' => $event]);
+                if (null !== $mappedEvent) {
+                    $simpleBusHandler->addTag('command_handler', ['handles' => $mappedEvent]);
+                }
             }
         }
     }

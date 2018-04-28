@@ -6,13 +6,15 @@ namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
 use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManager;
 use MsgPhp\Domain\{DomainIdentityHelper, DomainIdentityMappingInterface, Factory, Message};
-use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra, SimpleBus as SimpleBusInfra};
+use MsgPhp\Domain\Infra\{Console as ConsoleInfra, Doctrine as DoctrineInfra, InMemory as InMemoryInfra, Messenger as MessengerInfra, SimpleBus as SimpleBusInfra};
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -143,13 +145,28 @@ final class ResolveDomainPass implements CompilerPassInterface
 
     private function registerMessageBus(ContainerBuilder $container): void
     {
-        if (!$container->has('simple_bus.command_bus')) {
-            return;
+        $aliasId = null;
+
+        if ($container->has('simple_bus.command_bus')) {
+            self::register($container, $aliasId = SimpleBusInfra\DomainMessageBus::class)
+                ->setArgument('$bus', new Reference('simple_bus.command_bus'));
         }
 
-        self::register($container, $aliasId = SimpleBusInfra\DomainMessageBus::class)
-            ->setArgument('$bus', new Reference('simple_bus.command_bus'));
+        if ($container->has(MessageBusInterface::class)) {
+            self::register($container, $aliasId = MessengerInfra\DomainMessageBus::class)
+                ->setAutowired(true);
 
-        self::alias($container, Message\DomainMessageBusInterface::class, $aliasId);
+            if (class_exists(ConsoleEvents::class)) {
+                foreach ($container->findTaggedServiceIds('messenger.bus') as $id => $attr) {
+                    self::register($container, MessengerInfra\ConsoleMessageReceiverBus::class, MessengerInfra\ConsoleMessageReceiverBus::class.'.'.$id)
+                        ->setDecoratedService($id)
+                        ->setArgument('$bus', MessengerInfra\ConsoleMessageReceiverBus::class.'.'.$id.'.inner');
+                }
+            }
+        }
+
+        if (null !== $aliasId) {
+            self::alias($container, Message\DomainMessageBusInterface::class, $aliasId);
+        }
     }
 }
