@@ -73,7 +73,7 @@ final class ConfigHelper
         });
 
         try {
-            return class_exists($class) || interface_exists($class);
+            return class_exists($class) || interface_exists($class, false);
         } catch (\LogicException $e) {
             return false;
         } finally {
