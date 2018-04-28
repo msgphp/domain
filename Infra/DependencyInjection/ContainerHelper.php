@@ -40,13 +40,6 @@ final class ContainerHelper
         return array_flip($container->getParameter('kernel.bundles'));
     }
 
-    public static function getClassReflector(ContainerBuilder $container): \Closure
-    {
-        return function (string $class) use ($container): \ReflectionClass {
-            return self::getClassReflection($container, $class);
-        };
-    }
-
     public static function getClassReflection(ContainerBuilder $container, ?string $class): \ReflectionClass
     {
         if (!$class || !($reflection = $container->getReflectionClass($class))) {
@@ -68,7 +61,7 @@ final class ContainerHelper
         }
     }
 
-    public static function removeIf(ContainerBuilder $container, $condition, array $ids): void
+    public static function removeIf(ContainerBuilder $container, bool $condition, array $ids): void
     {
         if (!$condition) {
             return;
