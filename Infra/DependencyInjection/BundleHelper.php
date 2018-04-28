@@ -11,6 +11,7 @@ use MsgPhp\Domain\Infra\{Console as ConsoleInfra, Doctrine as DoctrineInfra, Sim
 use SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -29,7 +30,7 @@ final class BundleHelper
             return;
         }
 
-        $container->addCompilerPass(new Compiler\ResolveDomainPass());
+        $container->addCompilerPass(new Compiler\ResolveDomainPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -100);
 
         self::initConsole($container);
         self::initDoctrineOrm($container);
@@ -95,6 +96,7 @@ final class BundleHelper
         $container->register(DoctrineInfra\Event\ObjectFieldMappingListener::class)
             ->setPublic(false)
             ->setArgument('$mapping', [])
+            ->addTag('msgphp.domain.process_class_mapping', ['argument' => '$mapping'])
             ->addTag('doctrine.event_listener', ['event' => DoctrineOrmEvents::loadClassMetadata]);
 
         if (ContainerHelper::hasBundle($container, DoctrineBundle::class)) {
