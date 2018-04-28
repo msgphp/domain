@@ -30,7 +30,7 @@ final class BundleHelper
             return;
         }
 
-        $container->addCompilerPass(new Compiler\ResolveDomainPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -100);
+        $container->addCompilerPass(new Compiler\ResolveDomainPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 100);
 
         self::initConsole($container);
         self::initDoctrineOrm($container);
@@ -91,7 +91,7 @@ final class BundleHelper
             return;
         }
 
-        $container->addCompilerPass(new Compiler\DoctrineObjectFieldMappingPass());
+        $container->addCompilerPass(new Compiler\DoctrineObjectFieldMappingPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 200);
 
         $container->register(DoctrineInfra\Event\ObjectFieldMappingListener::class)
             ->setPublic(false)

@@ -34,8 +34,10 @@ final class DoctrineObjectFieldMappingPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $mapping = [];
-        $providers = array_merge($this->defaultProviders, array_map(function (Reference $provider) use ($container): ?string {
-            return $container->findDefinition((string) $provider)->getClass();
+        $providers = array_merge($this->defaultProviders, array_map(function (Reference $provider) use ($container): string {
+            $provider = (string) $provider;
+
+            return $container->findDefinition($provider)->getClass() ?? $provider;
         }, $this->findAndSortTaggedServices($this->tagName, $container)));
 
         foreach ($providers as $provider) {

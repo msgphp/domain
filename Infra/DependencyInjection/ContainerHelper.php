@@ -265,6 +265,8 @@ final class ContainerHelper
                     $definition->addTag('command_handler', ['handles' => $mappedCommand]);
                 }
             }
+
+            $definition->addTag('msgphp.domain.message_aware');
         }
     }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\DependencyInjection\Compiler;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManager;
 use MsgPhp\Domain\Infra\DependencyInjection\ContainerHelper;
 use MsgPhp\Domain\{DomainIdentityHelper, DomainIdentityMappingInterface, Factory, Message};
 use MsgPhp\Domain\Infra\{Doctrine as DoctrineInfra, InMemory as InMemoryInfra, Messenger as MessengerInfra, SimpleBus as SimpleBusInfra};
@@ -101,7 +100,7 @@ final class ResolveDomainPass implements CompilerPassInterface
 
     private function registerIdentityMapping(ContainerBuilder $container, array $identityMapping): void
     {
-        if (ContainerHelper::hasBundle($container, DoctrineBundle::class) && $container->has(DoctrineEntityManager::class)) {
+        if (ContainerHelper::hasBundle($container, DoctrineBundle::class)) {
             self::register($container, $aliasId = DoctrineInfra\DomainIdentityMapping::class)
                 ->setAutowired(true)
                 ->setArgument('$classMapping', '%msgphp.domain.class_mapping%');
@@ -145,7 +144,7 @@ final class ResolveDomainPass implements CompilerPassInterface
             ->setAutowired(true)
             ->setArgument('$identifierMapping', $idClassMapping);
 
-        if (ContainerHelper::hasBundle($container, DoctrineBundle::class) && $container->has(DoctrineEntityManager::class)) {
+        if (ContainerHelper::hasBundle($container, DoctrineBundle::class)) {
             self::register($container, DoctrineInfra\EntityAwareFactory::class)
                 ->setAutowired(true)
                 ->setDecoratedService($aliasId)
@@ -183,7 +182,7 @@ final class ResolveDomainPass implements CompilerPassInterface
         }
 
         if (null === $aliasId) {
-            foreach ($container->findTaggedServiceIds('msgphp.domain.command_handler') as $id => $attr) {
+            foreach ($container->findTaggedServiceIds('msgphp.domain.message_aware') as $id => $attr) {
                 $container->removeDefinition($id);
             }
 
