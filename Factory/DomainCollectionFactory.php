@@ -15,6 +15,10 @@ final class DomainCollectionFactory
 {
     public static function create(?iterable $value): DomainCollectionInterface
     {
+        if ($value instanceof DomainCollectionInterface) {
+            return $value;
+        }
+
         if ($value instanceof Collection) {
             return new DoctrineInfra\DomainCollection($value);
         }

@@ -16,8 +16,8 @@ final class DomainCollectionFactoryTest extends TestCase
     {
         $this->assertInstanceOf(DomainCollection::class, DomainCollectionFactory::create(null));
         $this->assertInstanceOf(DomainCollection::class, DomainCollectionFactory::create([]));
-        $this->assertInstanceOf(DomainCollection::class, DomainCollectionFactory::create($this->createMock(DomainCollectionInterface::class)));
         $this->assertInstanceOf(DomainCollection::class, DomainCollectionFactory::create([1, 2, 3]));
         $this->assertInstanceOf(DoctrineDomainCollection::class, DomainCollectionFactory::create($this->createMock(Collection::class)));
+        $this->assertSame($collection = $this->createMock(DomainCollectionInterface::class), DomainCollectionFactory::create($collection));
     }
 }

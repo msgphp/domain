@@ -16,9 +16,9 @@ final class DomainIdFactoryTest extends TestCase
     {
         $this->assertInstanceOf(DomainId::class, DomainIdFactory::create(null));
         $this->assertInstanceOf(DomainId::class, DomainIdFactory::create(1));
-        $this->assertInstanceOf(DomainId::class, DomainIdFactory::create($this->createMock(DomainIdInterface::class)));
         $this->assertInstanceOf(DomainId::class, DomainIdFactory::create('vgi00000000-0000-0000-0000-00000000000'));
         $this->assertInstanceOf(DomainUuid::class, DomainIdFactory::create($this->createMock(UuidInterface::class)));
         $this->assertInstanceOf(DomainUuid::class, DomainIdFactory::create('00000000-0000-0000-0000-000000000000'));
+        $this->assertSame($id = $this->createMock(DomainIdInterface::class), DomainIdFactory::create($id));
     }
 }

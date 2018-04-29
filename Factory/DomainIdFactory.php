@@ -16,6 +16,10 @@ final class DomainIdFactory
 {
     public static function create($value): DomainIdInterface
     {
+        if ($value instanceof DomainIdInterface) {
+            return $value;
+        }
+
         if ($value instanceof UuidInterface) {
             return new UuidInfra\DomainId($value);
         }
