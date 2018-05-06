@@ -2,7 +2,7 @@
     "name": "msgphp/domain",
     "type": "library",
     "license": "MIT",
-    "description": "Base domain layer",
+    "description": "A base domain layer to rapidly built other domain layers",
     "keywords": ["entity"],
     "authors": [
         {

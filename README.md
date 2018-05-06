@@ -1,4 +1,4 @@
-# Base domain layer
+# Base Domain Layer
 
 A base domain layer to rapidly built other domain layers.
 
@@ -20,9 +20,10 @@ composer require msgphp/domain
 - Common domain events
 - Interface bound collection, identifier, factory & message bus
 - Abstract entity repositories
+- Projection document model
 - Common infrastructure
 
-## Blog posts
+## Blog Posts
 
 - [Domain-driven-design: Projections in practice with API Platform and Elasticsearch](https://medium.com/@ro0NL/domain-driven-design-projections-in-practice-with-api-platform-and-elasticsearch-c785ed6d660b)
 - [Domain-driven-design: Moving forward with API Platform and Elasticsearch](https://medium.com/@ro0NL/domain-driven-design-moving-forward-with-api-platform-and-elasticsearch-f1705614f9e2)
