@@ -83,12 +83,12 @@ final class DomainProjectionRepository implements DomainProjectionRepositoryInte
         $this->client->index($params);
     }
 
-    public function delete(DomainProjectionDocument $document): void
+    public function delete(string $type, string $id): void
     {
         $this->client->delete([
             'index' => $this->index,
-            'type' => $document->getType(),
-            'id' => $document->getId(),
+            'type' => $type,
+            'id' => $id,
         ]);
     }
 }

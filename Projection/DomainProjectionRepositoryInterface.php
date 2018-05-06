@@ -20,5 +20,5 @@ interface DomainProjectionRepositoryInterface
 
     public function save(DomainProjectionDocument $document): void;
 
-    public function delete(DomainProjectionDocument $document): void;
+    public function delete(string $type, string $id): void;
 }
