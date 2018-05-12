@@ -25,7 +25,7 @@ final class DomainProjectionDocument
 
     private $type;
     private $id;
-    private $body = [];
+    private $body;
 
     public function __construct(string $type = null, string $id = null, array $body = [])
     {
@@ -34,16 +34,8 @@ final class DomainProjectionDocument
         $this->body = $body;
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
-        if (null === $this->type) {
-            throw new \LogicException('Document type not set.');
-        }
-
-        if (!is_subclass_of($this->type, DomainProjectionInterface::class)) {
-            throw new \LogicException(sprintf('Document type must be a sub class of "%s", got "%s".', DomainProjectionInterface::class, $this->type));
-        }
-
         return $this->type;
     }
 
@@ -59,6 +51,14 @@ final class DomainProjectionDocument
 
     public function toProjection(): DomainProjectionInterface
     {
-        return $this->getType()::fromDocument($this->body);
+        if (null === $this->type) {
+            throw new \LogicException('Document type not set.');
+        }
+
+        if (!is_subclass_of($this->type, DomainProjectionInterface::class)) {
+            throw new \LogicException(sprintf('Document type must be a sub class of "%s", got "%s".', DomainProjectionInterface::class, $this->type));
+        }
+
+        return $this->type::fromDocument($this->body);
     }
 }
