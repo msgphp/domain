@@ -58,7 +58,7 @@ final class ConfigHelper
 
             foreach ($features as $feature => $info) {
                 if (!is_array($info)) {
-                    $config[$info] = $available;
+                    $config += [$info => $available];
                 } else {
                     $config += array_fill_keys($info, $available && self::uses($classMapping[$class], $feature) ? $handlerAvailable : false);
                 }
