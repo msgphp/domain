@@ -40,6 +40,10 @@ final class ObjectFieldMappingListener
     {
         $class = $class ?? $metadata->getReflectionClass();
 
+        if (null === $class) {
+            return;
+        }
+
         if (isset($this->mappings[$name = $class->getName()])) {
             $this->processFieldMapping($metadata, $this->mappings[$name]);
         }
