@@ -3,7 +3,7 @@
     "type": "library",
     "license": "MIT",
     "description": "A base domain layer to rapidly built other domain layers",
-    "keywords": ["entity"],
+    "keywords": ["domain-driven-design", "ddd", "domain model", "rich domain model", "entity", "event sourcing", "es", "command query responsibility segregation", "cqrs"],
     "authors": [
         {
             "name": "Roland Franssen",
