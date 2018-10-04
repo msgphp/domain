@@ -64,10 +64,10 @@ final class DoctrineEntityContextFactory implements ContextFactoryInterface
             } elseif (false !== $found = array_search($value, $metadata->discriminatorMap, true)) {
                 $context[$key] = $found;
             } else {
-                throw new \LogicException(sprintf('Invalid entity discriminator "%s" provided.', (string) $value));
+                throw new \LogicException(sprintf('Invalid entity discriminator %s provided.', json_encode($value)));
             }
 
-            // @todo add feature to ask additional context values, required by the provided discriminator class
+            // @todo ask additional context values, required by the provided discriminator class
         }
 
         return $context + $this->factory->getContext($input, $io, $values);
