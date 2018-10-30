@@ -112,9 +112,10 @@ final class DomainCollectionTest extends AbstractDomainCollectionTest
         })));
         self::assertSame([1, null, 3], $visited);
 
-        $this->assertClosedGenerator();
+        $result = $collection->filter($filter);
 
-        $collection->filter($filter);
+        $this->assertClosedGenerator();
+        iterator_to_array($result);
     }
 
     public function testLazySlice(): void
@@ -124,9 +125,10 @@ final class DomainCollectionTest extends AbstractDomainCollectionTest
         self::assertSame([1 => 2], iterator_to_array(($collection = static::createLazyCollection([1, 2, 3, null, 5], $visited))->slice(1, 1)));
         self::assertSame([1, 2, 3], $visited);
 
-        $this->assertUnrewindableGenerator();
+        $result = $collection->slice(0);
 
-        $collection->slice(0);
+        $this->assertUnrewindableGenerator();
+        iterator_to_array($result);
     }
 
     public function testLazyMap(): void
