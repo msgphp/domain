@@ -65,7 +65,7 @@ final class ResolveDomainPass implements CompilerPassInterface
 
         if (FeatureDetection::isDoctrineOrmAvailable($container)) {
             $container->setParameter($param = 'msgphp.doctrine.mapping_config', ($container->hasParameter($param) ? $container->getParameter($param) : []) + [
-                'mapping_dir' => '%kernel.project_dir%/config/packages/msgphp/doctrine',
+                'mapping_dir' => '%kernel.project_dir%/config/msgphp/doctrine',
             ]);
         }
     }
