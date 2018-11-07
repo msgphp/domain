@@ -210,6 +210,7 @@ final class BundleHelper
         $container->autowire(DoctrineInfra\Event\ObjectMappingListener::class)
             ->setPublic(false)
             ->setArgument('$providers', new TaggedIteratorArgument('msgphp.doctrine.object_mapping_provider'))
+            ->setArgument('$classMapping', '%msgphp.domain.class_mapping%')
             ->addTag('doctrine.event_listener', ['event' => DoctrineOrmEvents::loadClassMetadata]);
 
         $container->registerForAutoconfiguration(DoctrineInfra\ObjectMappingProviderInterface::class)

@@ -17,6 +17,7 @@ final class ObjectMappingListener
 {
     private $providers;
     private $mappingConfig;
+    private $classMapping;
 
     /** @var ClassMetadataFactory|null */
     private $metadataFactory;
@@ -27,10 +28,11 @@ final class ObjectMappingListener
     /**
      * @param ObjectMappingProviderInterface[] $providers
      */
-    public function __construct(iterable $providers, MappingConfig $mappingConfig)
+    public function __construct(iterable $providers, MappingConfig $mappingConfig, array $classMapping = [])
     {
         $this->providers = $providers;
         $this->mappingConfig = $mappingConfig;
+        $this->classMapping = $classMapping;
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $event): void
@@ -40,6 +42,11 @@ final class ObjectMappingListener
 
             foreach ($this->providers as $provider) {
                 foreach ($provider::provideObjectMappings($this->mappingConfig) as $object => $mapping) {
+                    foreach ($mapping as $field => $fieldMapping) {
+                        if (isset($fieldMapping['targetEntity'])) {
+                            $mapping[$field]['targetEntity'] = $this->classMapping[$fieldMapping['targetEntity']] ?? $fieldMapping['targetEntity'];
+                        }
+                    }
                     $this->mappings[$object] = $mapping;
                 }
             }
