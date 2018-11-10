@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Event;
 
 use MsgPhp\Domain\Event\{DomainEventHandlerInterface, DomainEventHandlerTrait, DomainEventInterface};
-use MsgPhp\Domain\Exception\UnknownDomainEventException;
+use MsgPhp\Domain\Exception\UnexpectedDomainEventException;
 use PHPUnit\Framework\TestCase;
 
 final class DomainEventHandlerTraitTest extends TestCase
@@ -29,7 +29,7 @@ final class DomainEventHandlerTraitTest extends TestCase
     {
         $object = $this->getObject();
 
-        $this->expectException(UnknownDomainEventException::class);
+        $this->expectException(UnexpectedDomainEventException::class);
 
         $object->handleEvent($this->createMock(DomainEventInterface::class));
     }

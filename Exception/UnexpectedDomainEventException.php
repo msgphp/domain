@@ -9,7 +9,7 @@ use MsgPhp\Domain\Event\{DomainEventHandlerInterface, DomainEventInterface};
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class UnknownDomainEventException extends \RuntimeException implements DomainExceptionInterface
+final class UnexpectedDomainEventException extends \RuntimeException implements DomainExceptionInterface
 {
     public static function createForHandler(DomainEventHandlerInterface $handler, DomainEventInterface $event): self
     {

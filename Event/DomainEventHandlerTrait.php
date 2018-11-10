@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Event;
 
-use MsgPhp\Domain\Exception\UnknownDomainEventException;
+use MsgPhp\Domain\Exception\UnexpectedDomainEventException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
@@ -19,7 +19,7 @@ trait DomainEventHandlerTrait
         }
 
         if (!method_exists($this, $method)) {
-            throw UnknownDomainEventException::createForHandler($this, $event);
+            throw UnexpectedDomainEventException::createForHandler($this, $event);
         }
 
         return $this->$method($event);
