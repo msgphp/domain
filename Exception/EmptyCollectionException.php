@@ -9,8 +9,8 @@ namespace MsgPhp\Domain\Exception;
  */
 final class EmptyCollectionException extends \RuntimeException implements DomainExceptionInterface
 {
-    public static function create()
+    public static function create(): self
     {
-        return new self('Cannot obtain element from an empty collection.');
+        return new self('Cannot obtain elements from an empty collection.');
     }
 }
