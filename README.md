@@ -13,7 +13,7 @@ composer require msgphp/domain
 ## Documentation
 
 - [Domain-Driven-Design](https://msgphp.github.io/docs/ddd/identifiers/)
-- [Event Sourcing](https://msgphp.github.io/docs/event-sourcing/events/)
+- [Event Sourcing](https://msgphp.github.io/docs/event-sourcing/event-handlers/)
 - [Message Driven](https://msgphp.github.io/docs/message-driven/message-bus/)
 - Browse the [API documentation](https://msgphp.github.io/api/MsgPhp/Domain.html)
 - Try the Symfony [demo application](https://github.com/msgphp/symfony-demo-app)
