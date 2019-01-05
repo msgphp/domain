@@ -24,7 +24,8 @@ final class EntityAwareFactoryTest extends TestCase
                     $id = $this->createMock(DomainIdInterface::class);
                     $id->expects(self::any())
                         ->method('toString')
-                        ->willReturn($context ? reset($context) : 'new');
+                        ->willReturn($context ? reset($context) : 'new')
+                    ;
 
                     return $id;
                 }
@@ -34,15 +35,18 @@ final class EntityAwareFactoryTest extends TestCase
                 $o->context = $context;
 
                 return $o;
-            });
+            })
+        ;
         $innerFactory->expects(self::any())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
 
         $identityMapping = $this->createMock(DomainIdentityMappingInterface::class);
         $identityMapping->expects(self::any())
             ->method('getIdentifierFieldNames')
-            ->willReturn(['id_field', 'id_field2']);
+            ->willReturn(['id_field', 'id_field2'])
+        ;
 
         $this->factory = new EntityAwareFactory($innerFactory, new DomainIdentityHelper($identityMapping), ['alias_id' => 'id']);
     }

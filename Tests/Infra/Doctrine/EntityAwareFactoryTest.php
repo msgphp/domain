@@ -24,10 +24,12 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(Entities\TestEntity::class, ['foo' => 'bar'])
-            ->willReturn($obj = new \stdClass());
+            ->willReturn($obj = new \stdClass())
+        ;
         $innerFactory->expects(self::once())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertSame($obj, $factory->create(Entities\TestEntity::class, ['foo' => 'bar']));
@@ -39,10 +41,12 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(Entities\TestChildEntity::class, ['foo' => 'bar', 'discriminator' => 'child'])
-            ->willReturn($obj = new \stdClass());
+            ->willReturn($obj = new \stdClass())
+        ;
         $innerFactory->expects(self::once())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertSame($obj, $factory->create(Entities\TestParentEntity::class, ['foo' => 'bar', 'discriminator' => 'child']));
@@ -54,10 +58,12 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(\stdClass::class)
-            ->willReturn($obj = new \stdClass());
+            ->willReturn($obj = new \stdClass())
+        ;
         $innerFactory->expects(self::once())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
 
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
@@ -69,7 +75,8 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory = $this->createMock(EntityAwareFactoryInterface::class);
         $innerFactory->expects(self::once())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertInstanceOf(Proxy::class, $ref = $factory->reference(Entities\TestEntity::class, $id = $this->createMock(DomainIdInterface::class)));
@@ -82,7 +89,8 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory = $this->createMock(EntityAwareFactoryInterface::class);
         $innerFactory->expects(self::once())
             ->method('getClass')
-            ->willReturnArgument(0);
+            ->willReturnArgument(0)
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertInstanceOf(Proxy::class, $ref = $factory->reference(Entities\TestParentEntity::class, ['id' => 'foo', 'discriminator' => 'child']));
@@ -114,7 +122,8 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('identify')
             ->with('foo', 1)
-            ->willReturn($obj = $this->createMock(DomainIdInterface::class));
+            ->willReturn($obj = $this->createMock(DomainIdInterface::class))
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertSame($obj, $factory->identify('foo', 1));
@@ -126,7 +135,8 @@ final class EntityAwareFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('nextIdentifier')
             ->with('foo')
-            ->willReturn($obj = $this->createMock(DomainIdInterface::class));
+            ->willReturn($obj = $this->createMock(DomainIdInterface::class))
+        ;
         $factory = new EntityAwareFactory($innerFactory, self::$em);
 
         self::assertSame($obj, $factory->nextIdentifier('foo'));

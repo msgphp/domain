@@ -27,15 +27,15 @@ final class ObjectFieldAccessor
         // @todo throw on dot/bracket notation (suggest sf/prop-access instead)
 
         if (method_exists($object, $method = 'get'.($uc = ucfirst($field))) || method_exists($object, $method = 'has'.$uc) || method_exists($object, $method = 'is'.$uc)) {
-            return $object->$method();
+            return $object->{$method}();
         }
 
         if (method_exists($object, $field)) {
-            return $object->$field();
+            return $object->{$field}();
         }
 
         if (property_exists($object, $field)) {
-            return $object->$field;
+            return $object->{$field};
         }
 
         throw new \RuntimeException(sprintf('Unknown field name "%s" for object "%s".', $field, \get_class($object)));

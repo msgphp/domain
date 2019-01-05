@@ -33,7 +33,8 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
                 ->ifTrue(function (array $value) use ($class): bool {
                     return !isset($value[$class]);
                 })
-                ->thenInvalid(sprintf('Class "%s" must be configured.', $class));
+                ->thenInvalid(sprintf('Class "%s" must be configured.', $class))
+            ;
         }
 
         if ($classes) {
@@ -50,7 +51,8 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
                 ->ifTrue(function (array $value) use ($class): bool {
                     return isset($value[$class]);
                 })
-                ->thenInvalid(sprintf('Class "%s" is not applicable to be configured.', $class));
+                ->thenInvalid(sprintf('Class "%s" is not applicable to be configured.', $class))
+            ;
         }
 
         return $this;

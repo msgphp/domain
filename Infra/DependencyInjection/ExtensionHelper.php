@@ -102,7 +102,8 @@ final class ExtensionHelper
 
             $definition
                 ->clearTag($tag)
-                ->addTag($tag, $attr[0] + ['handles' => implode(',', $handles)]);
+                ->addTag($tag, $attr[0] + ['handles' => implode(',', $handles)])
+            ;
         }
 
         foreach ($events as $class) {
@@ -127,7 +128,8 @@ final class ExtensionHelper
             }
 
             ($definition = $container->getDefinition($repository))
-                ->setArgument('$class', $classMapping[$entity]);
+                ->setArgument('$class', $classMapping[$entity])
+                ;
 
             foreach (class_implements($definition->getClass() ?? $repository) as $interface) {
                 $container->setAlias($interface, new Alias($repository, false));
@@ -149,7 +151,8 @@ final class ExtensionHelper
                 }
 
                 $container->getDefinition($consoleCommand)
-                    ->addTag('msgphp.domain.message_aware');
+                    ->addTag('msgphp.domain.message_aware')
+                ;
             }
         }
     }
@@ -158,13 +161,15 @@ final class ExtensionHelper
     {
         $definition = ContainerHelper::registerAnonymous($container, ConsoleInfra\Context\ClassContextFactory::class, true)
             ->setArgument('$class', $class)
-            ->setArgument('$flags', $flags);
+            ->setArgument('$flags', $flags)
+        ;
 
         if (FeatureDetection::isDoctrineOrmAvailable($container)) {
             $definition = ContainerHelper::registerAnonymous($container, ConsoleInfra\Context\DoctrineEntityContextFactory::class)
                 ->setArgument('$factory', $definition)
                 ->setArgument('$em', new Reference('msgphp.doctrine.entity_manager'))
-                ->setArgument('$class', $class);
+                ->setArgument('$class', $class)
+            ;
         }
 
         return $definition;

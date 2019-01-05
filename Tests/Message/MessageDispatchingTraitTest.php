@@ -16,11 +16,13 @@ final class MessageDispatchingTraitTest extends TestCase
         $factory->expects(self::once())
             ->method('create')
             ->with('class', ['context'])
-            ->willReturn($message = new \stdClass());
+            ->willReturn($message = new \stdClass())
+        ;
         $bus = $this->createMock(DomainMessageBusInterface::class);
         $bus->expects(self::once())
             ->method('dispatch')
-            ->with($message);
+            ->with($message)
+        ;
 
         self::assertNull($this->getObject($factory, $bus)->dispatch('class', ['context']));
     }

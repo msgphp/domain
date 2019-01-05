@@ -17,7 +17,8 @@ final class DomainMessageBusTest extends TestCase
         $bus->expects(self::once())
             ->method('dispatch')
             ->with($message = new \stdClass())
-            ->willReturn(new Envelope($message));
+            ->willReturn(new Envelope($message))
+        ;
 
         (new DomainMessageBus($bus))->dispatch($message);
     }

@@ -24,7 +24,8 @@ final class DomainIdentityHelperTest extends TestCase
                 }
 
                 throw InvalidClassException::create($class);
-            });
+            })
+        ;
         $this->mapping->expects(self::any())
             ->method('getIdentity')
             ->willReturnCallback(function ($object): array {
@@ -33,7 +34,8 @@ final class DomainIdentityHelperTest extends TestCase
                 }
 
                 throw InvalidClassException::create(\get_class($object));
-            });
+            })
+        ;
     }
 
     public function testIsIdentifier(): void
@@ -57,11 +59,13 @@ final class DomainIdentityHelperTest extends TestCase
         $emptyId = $this->createMock(DomainIdInterface::class);
         $emptyId->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $id = $this->createMock(DomainIdInterface::class);
         $id->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         self::assertTrue($helper->isEmptyIdentifier(null));
         self::assertTrue($helper->isEmptyIdentifier($emptyId));
@@ -83,14 +87,17 @@ final class DomainIdentityHelperTest extends TestCase
         $emptyId = $this->createMock(DomainIdInterface::class);
         $emptyId->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $id = $this->createMock(DomainIdInterface::class);
         $id->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
         $id->expects(self::any())
             ->method('toString')
-            ->willReturn('id');
+            ->willReturn('id')
+        ;
 
         self::assertNull($helper->normalizeIdentifier(null));
         self::assertNull($helper->normalizeIdentifier($emptyId));
@@ -152,11 +159,13 @@ final class DomainIdentityHelperTest extends TestCase
         $emptyId = $this->createMock(DomainIdInterface::class);
         $emptyId->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $id = $this->createMock(DomainIdInterface::class);
         $id->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         self::assertTrue($helper->isIdentity(Entities\TestEntity::class, ['id' => $id]));
         self::assertTrue($helper->isIdentity(Entities\TestEntity::class, $id));

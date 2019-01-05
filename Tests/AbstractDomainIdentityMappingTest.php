@@ -38,7 +38,8 @@ abstract class AbstractDomainIdentityMappingTest extends TestCase
         $id = $this->createMock(DomainIdInterface::class);
         $id->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
         $entity = Entities\TestPrimitiveEntity::create(['id' => $id]);
 
         self::assertSame($identity = ['idA' => $id, 'idB' => 'foo'], $mapping->getIdentity(Entities\TestCompositeEntity::create($identity)));
@@ -54,7 +55,8 @@ abstract class AbstractDomainIdentityMappingTest extends TestCase
         $id = $this->createMock(DomainIdInterface::class);
         $id->expects(self::any())
             ->method('isEmpty')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $entity = Entities\TestPrimitiveEntity::create(['id' => $id]);
 
         self::assertSame(['idB' => 'foo'], $mapping->getIdentity(Entities\TestCompositeEntity::create(['idA' => $id, 'idB' => 'foo'])));

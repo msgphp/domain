@@ -120,7 +120,8 @@ final class DomainObjectFactoryTest extends TestCase
         $nestedFactory = $this->createMock(DomainObjectFactoryInterface::class);
         $nestedFactory->expects(self::any())
             ->method('create')
-            ->willReturn($nested = new TestObject(1, 2));
+            ->willReturn($nested = new TestObject(1, 2))
+        ;
 
         $factory = new DomainObjectFactory();
         $factory->setNestedFactory($nestedFactory);
@@ -134,7 +135,8 @@ final class DomainObjectFactoryTest extends TestCase
         $nestedFactory = $this->createMock(DomainObjectFactoryInterface::class);
         $nestedFactory->expects(self::any())
             ->method('create')
-            ->willThrowException(InvalidClassException::create(TestObject::class));
+            ->willThrowException(InvalidClassException::create(TestObject::class))
+        ;
 
         $factory = new DomainObjectFactory();
         $factory->setNestedFactory($nestedFactory);

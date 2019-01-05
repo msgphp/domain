@@ -82,7 +82,8 @@ final class ContainerHelper
             if ($simpleBusEnabled) {
                 $handler
                     ->setPublic(true)
-                    ->addTag('command_handler', ['handles' => $class]);
+                    ->addTag('command_handler', ['handles' => $class])
+                ;
             }
         }
     }
