@@ -137,6 +137,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
 
     /**
      * @dataProvider provideEntityFields
+     *
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
      */
     public function testFindByFields(string $class, array $fields): void
     {
@@ -150,7 +152,6 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
             $this->addToAssertionCount(1);
         }
 
-        /** @psalm-suppress InvalidStringClass */
         $entity = $class::create($fields);
         $this->loadEntities($entity);
 
@@ -208,6 +209,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
 
     /**
      * @dataProvider provideEntityFields
+     *
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
      */
     public function testExistsByFields(string $class, array $fields): void
     {
@@ -215,7 +218,6 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
 
         self::assertFalse($repository->doExistsByFields($fields));
 
-        /** @psalm-suppress InvalidStringClass */
         $entity = $class::create($fields);
         $this->loadEntities($entity);
 

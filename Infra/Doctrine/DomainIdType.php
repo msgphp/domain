@@ -27,6 +27,9 @@ class DomainIdType extends Type
         self::$mapping[static::class]['class'] = $class;
     }
 
+    /**
+     * @psalm-return class-string<DomainIdInterface>
+     */
     final public static function getClass(): string
     {
         return self::$mapping[static::class]['class'] ?? DomainId::class;
@@ -123,7 +126,6 @@ class DomainIdType extends Type
             throw ConversionException::conversionFailed($value, $this->getName());
         }
 
-        /** @psalm-suppress InvalidStringClass */
         return null === $value ? null : static::getClass()::fromValue($value);
     }
 
