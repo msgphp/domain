@@ -142,7 +142,7 @@ final class DomainObjectFactoryTest extends TestCase
         $factory->setNestedFactory($nestedFactory);
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp(sprintf('/^Argument 1 passed to %s::__construct\(\) must be an instance of MsgPhp\\\Domain\\\Tests\\\Factory\\\TestObject, array given\b/', preg_quote(NestedTestObject::class)));
+        $this->expectExceptionMessageRegExp(sprintf('/^Argument 1 passed to %s::__construct\(\) must be an instance of MsgPhp\\\Domain\\\Tests\\\Factory\\\TestObject, array given\b/', preg_quote(NestedTestObject::class, '/')));
 
         $factory->create(NestedTestObject::class, [['a', 'b']]);
     }

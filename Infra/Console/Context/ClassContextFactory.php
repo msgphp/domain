@@ -24,7 +24,7 @@ final class ClassContextFactory implements ContextFactoryInterface
     private $class;
     private $method;
     private $classMapping;
-    private $flags = 0;
+    private $flags;
     private $elementFactory;
     private $resolved;
     private $fieldMapping = [];
