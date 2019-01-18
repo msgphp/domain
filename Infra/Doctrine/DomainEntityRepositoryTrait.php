@@ -191,7 +191,7 @@ trait DomainEntityRepositoryTrait
                 continue;
             }
 
-            $param = $this->addFieldParameter($qb, $field, $value);
+            $param = $this->addFieldParameter($qb, (string) $field, $value);
 
             if (\is_array($value)) {
                 $where->add($expr->in($fieldAlias, $param));
