@@ -85,18 +85,18 @@ final class DomainObjectFactoryTest extends TestCase
 
     public function testReferenceWithDiscriminator(): void
     {
+        self::$em->persist(Entities\TestChildEntity::create(['id' => 'child']));
+        self::$em->flush();
+        self::$em->clear();
+
         $innerFactory = $this->createMock(DomainObjectFactoryInterface::class);
         $innerFactory->expects(self::once())
             ->method('getClass')
             ->willReturnArgument(0)
         ;
-        $factory = new DomainObjectFactory($innerFactory, self::$em);
+        $ref = (new DomainObjectFactory($innerFactory, self::$em))->reference(Entities\TestParentEntity::class, ['id' => 'child']);
 
-        self::$em->persist(Entities\TestChildEntity::create(['id' => 'child']));
-        self::$em->flush();
-        self::$em->clear();
-
-        self::assertInstanceOf(Entities\TestChildEntity::class, $ref = $factory->reference(Entities\TestParentEntity::class, ['id' => 'child']));
+        self::assertInstanceOf(Entities\TestChildEntity::class, $ref);
         self::assertSame('child', $ref->id);
     }
 
