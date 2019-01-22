@@ -13,6 +13,9 @@ interface DomainCollectionInterface extends \Countable, \IteratorAggregate
 
     public function isEmpty(): bool;
 
+    /**
+     * @param mixed $element
+     */
     public function contains($element): bool;
 
     /**
@@ -20,12 +23,20 @@ interface DomainCollectionInterface extends \Countable, \IteratorAggregate
      */
     public function containsKey($key): bool;
 
+    /**
+     * @return mixed
+     */
     public function first();
 
+    /**
+     * @return mixed
+     */
     public function last();
 
     /**
      * @param string|int $key
+     *
+     * @return mixed
      */
     public function get($key);
 

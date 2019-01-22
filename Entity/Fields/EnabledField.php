@@ -9,7 +9,9 @@ namespace MsgPhp\Domain\Entity\Fields;
  */
 trait EnabledField
 {
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $enabled = false;
 
     public function isEnabled(): bool

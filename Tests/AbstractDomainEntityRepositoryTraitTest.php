@@ -116,6 +116,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
      * @dataProvider provideEntities
      */
     public function testFind(string $class, Entities\BaseTestEntity $entity, array $ids): void
@@ -136,9 +138,9 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
-     * @dataProvider provideEntityFields
-     *
      * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
+     * @dataProvider provideEntityFields
      */
     public function testFindByFields(string $class, array $fields): void
     {
@@ -194,6 +196,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
      * @dataProvider provideEntities
      */
     public function testExists(string $class, Entities\BaseTestEntity $entity, array $ids): void
@@ -208,9 +212,9 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
-     * @dataProvider provideEntityFields
-     *
      * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
+     * @dataProvider provideEntityFields
      */
     public function testExistsByFields(string $class, array $fields): void
     {
@@ -249,6 +253,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
      * @dataProvider provideEntities
      */
     public function testSave(string $class, Entities\BaseTestEntity $entity, array $ids): void
@@ -325,6 +331,8 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
     }
 
     /**
+     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     *
      * @dataProvider provideEntities
      */
     public function testDelete(string $class, Entities\BaseTestEntity $entity): void
@@ -379,8 +387,14 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
         }
     }
 
+    /**
+     * @psalm-param class-string $class
+     */
     abstract protected static function createRepository(string $class): DomainEntityRepositoryTraitInterface;
 
+    /**
+     * @param object[] $entities
+     */
     abstract protected static function flushEntities(iterable $entities): void;
 
     final protected function assertEntityCollectionEquals(array $expected, $actual): void

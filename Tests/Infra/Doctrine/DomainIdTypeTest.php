@@ -59,6 +59,7 @@ final class DomainIdTypeTest extends TestCase
 
         $this->expectException(\LogicException::class);
 
+        /** @psalm-suppress InvalidArgument */
         DomainIdType::setClass(\stdClass::class);
     }
 

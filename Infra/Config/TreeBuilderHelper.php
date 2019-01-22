@@ -12,6 +12,9 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 final class TreeBuilderHelper
 {
+    /**
+     * @param mixed $treeBuilder
+     */
     public static function root(string $name, &$treeBuilder = null): ArrayNodeDefinition
     {
         $treeBuilder = new TreeBuilder($name, 'array', $builder = new NodeBuilder());

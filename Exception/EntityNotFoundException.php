@@ -9,6 +9,9 @@ namespace MsgPhp\Domain\Exception;
  */
 final class EntityNotFoundException extends \RuntimeException implements DomainExceptionInterface
 {
+    /**
+     * @param mixed $id
+     */
     public static function createForId(string $class, $id): self
     {
         return new self(sprintf('Entity "%s" with identity %s cannot be found.', $class, (string) json_encode($id)));

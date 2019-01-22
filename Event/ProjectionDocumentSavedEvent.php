@@ -11,6 +11,9 @@ use MsgPhp\Domain\Projection\ProjectionDocument;
  */
 class ProjectionDocumentSavedEvent
 {
+    /**
+     * @var ProjectionDocument
+     */
     public $document;
 
     final public function __construct(ProjectionDocument $document)

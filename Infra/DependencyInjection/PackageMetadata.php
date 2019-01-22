@@ -9,7 +9,14 @@ namespace MsgPhp\Domain\Infra\DependencyInjection;
  */
 final class PackageMetadata
 {
+    /**
+     * @var string
+     */
     private $namespace;
+
+    /**
+     * @var string[]
+     */
     private $dirs;
 
     /**

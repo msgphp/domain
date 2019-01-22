@@ -15,18 +15,38 @@ use MsgPhp\Domain\Infra\Doctrine\ObjectMappingProviderInterface;
  */
 final class ObjectMappingListener
 {
+    /**
+     * @var iterable|ObjectMappingProviderInterface[]
+     */
     private $providers;
+
+    /**
+     * @var MappingConfig
+     */
     private $mappingConfig;
+
+    /**
+     * @psalm-var array<class-string, class-string>
+     *
+     * @var string[]
+     */
     private $classMapping;
 
-    /** @var ClassMetadataFactory|null */
+    /**
+     * @var ClassMetadataFactory|null
+     */
     private $metadataFactory;
 
-    /** @var array|null */
+    /**
+     * @var array[]|null
+     */
     private $mappings;
 
     /**
-     * @param ObjectMappingProviderInterface[] $providers
+     * @psalm-param array<class-string, class-string> $classMapping
+     *
+     * @param iterable|ObjectMappingProviderInterface[] $providers
+     * @param string[]                                  $classMapping
      */
     public function __construct(iterable $providers, MappingConfig $mappingConfig, array $classMapping = [])
     {

@@ -24,6 +24,7 @@ final class DomainObjectFactoryTest extends TestCase
     {
         $object = (new DomainObjectFactory())->create(TestObject::class);
 
+        self::assertInstanceOf(TestObject::class, $object);
         self::assertNull($object->a);
         self::assertSame('default-b', $object->b);
     }
@@ -38,19 +39,27 @@ final class DomainObjectFactoryTest extends TestCase
 
     public function testCreateWithAlias(): void
     {
-        $object = (new DomainObjectFactory(['alias' => \stdClass::class]))->create('alias');
+        $object = (new DomainObjectFactory([
+            EmptyTestObject::class => ExtendedEmptyTestObject::class,
+        ]))->create(EmptyTestObject::class);
 
-        self::assertInstanceOf(\stdClass::class, $object);
+        self::assertInstanceOf(ExtendedEmptyTestObject::class, $object);
     }
 
     public function testCreateWithDomainId(): void
     {
-        self::assertInstanceOf(DomainId::class, (new DomainObjectFactory())->create(DomainId::class, [1]));
+        $id = (new DomainObjectFactory())->create(DomainId::class, ['value' => 123]);
+
+        self::assertInstanceOf(DomainId::class, $id);
+        self::assertSame('123', $id->toString());
     }
 
     public function testCreateWithDomainCollection(): void
     {
-        self::assertInstanceOf(DomainCollection::class, (new DomainObjectFactory())->create(DomainCollection::class, [null]));
+        $collection = (new DomainObjectFactory())->create(DomainCollection::class, ['value' => [1, 2, 3]]);
+
+        self::assertInstanceOf(DomainCollection::class, $collection);
+        self::assertSame([1, 2, 3], iterator_to_array($collection));
     }
 
     public function testCreateWithUnknownObject(): void
@@ -164,10 +173,11 @@ final class DomainObjectFactoryTest extends TestCase
 
     public function testGetClass(): void
     {
-        $factory = new DomainObjectFactory(['alias' => \stdClass::class]);
+        $factory = new DomainObjectFactory([
+            EmptyTestObject::class => ExtendedEmptyTestObject::class,
+        ]);
 
-        self::assertSame('foo', $factory->getClass('foo'));
-        self::assertSame(\stdClass::class, $factory->getClass('alias'));
+        self::assertSame(ExtendedEmptyTestObject::class, $factory->getClass(EmptyTestObject::class));
         self::assertSame(\stdClass::class, $factory->getClass(\stdClass::class));
     }
 }
@@ -199,6 +209,10 @@ class NestedTestObject
 }
 
 class EmptyTestObject
+{
+}
+
+class ExtendedEmptyTestObject extends EmptyTestObject
 {
 }
 

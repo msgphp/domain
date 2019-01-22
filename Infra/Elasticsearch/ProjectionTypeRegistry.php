@@ -15,12 +15,39 @@ final class ProjectionTypeRegistry implements ProjectionTypeRegistryInterface
 {
     private const DEFAULT_PROPERTY_TYPE = 'text';
 
+    /**
+     * @var Client
+     */
     private $client;
+
+    /**
+     * @var string
+     */
     private $index;
+
+    /**
+     * @var array
+     */
     private $mappings;
+
+    /**
+     * @var array
+     */
     private $settings;
+
+    /**
+     * @var LoggerInterface|null
+     */
     private $logger;
+
+    /**
+     * @var string[]|null
+     */
     private $types;
+
+    /**
+     * @var array|null
+     */
     private $indexParams;
 
     public function __construct(Client $client, string $index, array $mappings, array $settings = [], LoggerInterface $logger = null)

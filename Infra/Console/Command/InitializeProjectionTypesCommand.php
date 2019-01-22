@@ -18,6 +18,9 @@ final class InitializeProjectionTypesCommand extends Command
 {
     protected static $defaultName = 'projection:initialize-types';
 
+    /**
+     * @var ProjectionTypeRegistryInterface
+     */
     private $typeRegistry;
 
     public function __construct(ProjectionTypeRegistryInterface $typeRegistry)

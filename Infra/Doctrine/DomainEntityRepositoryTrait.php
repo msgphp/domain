@@ -17,10 +17,26 @@ use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException, 
  */
 trait DomainEntityRepositoryTrait
 {
+    /**
+     * @psalm-var class-string
+     *
+     * @var string
+     */
     private $class;
+
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
+
+    /**
+     * @var string|null
+     */
     private $alias;
 
+    /**
+     * @psalm-param class-string $class
+     */
     public function __construct(string $class, EntityManagerInterface $em)
     {
         $this->class = $class;
@@ -49,11 +65,14 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @param mixed $id
+     *
      * @return object
      */
     private function doFind($id)
     {
-        if (null === $entity = $this->em->find($this->class, $id)) {
+        $entity = $this->em->find($this->class, $id);
+        if (null === $entity) {
             throw EntityNotFoundException::createForId($this->class, $id);
         }
 
@@ -80,6 +99,9 @@ trait DomainEntityRepositoryTrait
         return $entity;
     }
 
+    /**
+     * @param mixed $id
+     */
     private function doExists($id): bool
     {
         $id = $this->toIdentity($id);
@@ -136,6 +158,9 @@ trait DomainEntityRepositoryTrait
         $this->em->flush();
     }
 
+    /**
+     * @param string|int $hydrate
+     */
     private function createResultSet(Query $query, int $offset = null, int $limit = null, $hydrate = Query::HYDRATE_OBJECT): DomainCollectionInterface
     {
         if (null !== $offset || !$query->getFirstResult()) {
@@ -196,6 +221,9 @@ trait DomainEntityRepositoryTrait
         $qb->andWhere($where);
     }
 
+    /**
+     * @param mixed $value
+     */
     private function addFieldParameter(QueryBuilder $qb, string $field, $value, string $type = null): string
     {
         $name = $base = str_replace('.', '_', $field);
@@ -210,6 +238,9 @@ trait DomainEntityRepositoryTrait
         return ':'.$name;
     }
 
+    /**
+     * @param mixed $id
+     */
     private function toIdentity($id): ?array
     {
         $metadataFactory = $this->em->getMetadataFactory();

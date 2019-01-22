@@ -70,6 +70,11 @@ final class ResolveDomainPass implements CompilerPassInterface
         }
     }
 
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
     private static function processClassMapping($value, array $classMapping, bool $arrayKeys = false)
     {
         if (\is_string($value) && isset($classMapping[$value])) {

@@ -11,15 +11,25 @@ final class MappingConfig
 {
     private const DEFAULT_KEY_MAX_LENGTH = 191;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     public $mappingFiles;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     public $mappingDir;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     public $keyMaxLength = self::DEFAULT_KEY_MAX_LENGTH;
 
+    /**
+     * @param string[] $mappingFiles
+     * @param array    $mappingConfig
+     */
     public function __construct(array $mappingFiles, array $mappingConfig = [])
     {
         $this->mappingFiles = $mappingFiles;

@@ -17,6 +17,9 @@ final class DeleteProjectionDocumentHandler
 {
     use MessageDispatchingTrait;
 
+    /**
+     * @var ProjectionRepositoryInterface
+     */
     private $repository;
 
     public function __construct(DomainObjectFactoryInterface $factory, DomainMessageBusInterface $bus, ProjectionRepositoryInterface $repository)
@@ -28,11 +31,22 @@ final class DeleteProjectionDocumentHandler
 
     public function __invoke(DeleteProjectionDocumentCommand $command): void
     {
-        if (null === $document = $this->repository->find($command->type, $command->id)) {
+        $document = $document = $this->repository->find($command->type, $command->id);
+        if (null === $document) {
             return;
         }
 
-        $this->repository->delete($document->getType(), $document->getId());
+        $type = $document->getType();
+        if (null === $type) {
+            throw new \LogicException('Document must have a type.');
+        }
+
+        $id = $document->getId();
+        if (null === $id) {
+            throw new \LogicException('Document must have an ID.');
+        }
+
+        $this->repository->delete($type, $id);
         $this->dispatch(ProjectionDocumentDeletedEvent::class, compact('document'));
     }
 }

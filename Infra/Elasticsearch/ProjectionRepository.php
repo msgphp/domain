@@ -14,7 +14,14 @@ use MsgPhp\Domain\Projection\{ProjectionDocument, ProjectionRepositoryInterface}
  */
 final class ProjectionRepository implements ProjectionRepositoryInterface
 {
+    /**
+     * @var Client
+     */
     private $client;
+
+    /**
+     * @var string
+     */
     private $index;
 
     public function __construct(Client $client, string $index)

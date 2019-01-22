@@ -9,11 +9,18 @@ namespace MsgPhp\Domain\Projection;
  */
 final class ProjectionDocumentProvider implements \IteratorAggregate
 {
+    /**
+     * @var ProjectionDocumentTransformerInterface
+     */
     private $transformer;
+
+    /**
+     * @var iterable|callable[]
+     */
     private $dataProviders;
 
     /**
-     * @param callable[] $dataProviders
+     * @param iterable|callable[] $dataProviders
      */
     public function __construct(ProjectionDocumentTransformerInterface $transformer, iterable $dataProviders)
     {

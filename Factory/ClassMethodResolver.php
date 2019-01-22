@@ -13,8 +13,14 @@ use MsgPhp\Domain\Exception\InvalidClassException;
  */
 final class ClassMethodResolver
 {
+    /**
+     * @var array[][]
+     */
     private static $cache = [];
 
+    /**
+     * @psalm-param class-string $class
+     */
     public static function resolve(string $class, string $method): array
     {
         if (isset(self::$cache[$key = $class.'::'.$method])) {

@@ -20,10 +20,24 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 {
     public const NAME = 'class_mapping';
 
-    /** @var BaseNodeBuilder|null */
+    /**
+     * @var BaseNodeBuilder|null
+     */
     private $builder;
+
+    /**
+     * @var NodeDefinition|null
+     */
     private $prototype;
+
+    /**
+     * @var string
+     */
     private $type = 'scalar';
+
+    /**
+     * @psalm-var array<class-string, string>
+     */
     private $hints = [];
 
     public function requireClasses(array $classes): self
@@ -126,6 +140,8 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
     }
 
     /**
+     * @psalm-param class-string|array<int, class-string> $class
+     *
      * @param string|string[] $class
      */
     public function hint($class, string $hint): self

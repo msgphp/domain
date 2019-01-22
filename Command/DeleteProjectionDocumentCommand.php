@@ -9,7 +9,14 @@ namespace MsgPhp\Domain\Command;
  */
 class DeleteProjectionDocumentCommand
 {
+    /**
+     * @var string
+     */
     public $type;
+
+    /**
+     * @var string
+     */
     public $id;
 
     final public function __construct(string $type, string $id)

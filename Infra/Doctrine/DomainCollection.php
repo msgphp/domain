@@ -14,6 +14,9 @@ use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementE
  */
 final class DomainCollection implements DomainCollectionInterface
 {
+    /**
+     * @var Collection
+     */
     private $collection;
 
     public static function fromValue(?iterable $value): DomainCollectionInterface
@@ -83,7 +86,7 @@ final class DomainCollection implements DomainCollectionInterface
 
     public function filter(callable $filter): DomainCollectionInterface
     {
-        return new self($this->collection->filter($filter));
+        return new self($this->collection->filter(\Closure::fromCallable($filter)));
     }
 
     public function slice(int $offset, int $limit = 0): DomainCollectionInterface
@@ -93,7 +96,7 @@ final class DomainCollection implements DomainCollectionInterface
 
     public function map(callable $mapper): DomainCollectionInterface
     {
-        return new self($this->collection->map($mapper));
+        return new self($this->collection->map(\Closure::fromCallable($mapper)));
     }
 
     public function count(): int

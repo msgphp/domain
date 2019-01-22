@@ -14,9 +14,23 @@ use Symfony\Component\VarExporter\Instantiator;
  */
 final class DomainObjectFactory implements DomainObjectFactoryInterface
 {
+    /**
+     * @psalm-var array<class-string, class-string>
+     *
+     * @var string[]
+     */
     private $classMapping;
+
+    /**
+     * @var DomainObjectFactoryInterface|null
+     */
     private $factory;
 
+    /**
+     * @psalm-param array<class-string, class-string> $classMapping
+     *
+     * @param string[] $classMapping
+     */
     public function __construct(array $classMapping = [])
     {
         $this->classMapping = $classMapping;
@@ -27,6 +41,9 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         $this->factory = $factory;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function create(string $class, array $context = [])
     {
         $class = $this->getClass($class, $context);
@@ -42,6 +59,9 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         return new $class(...$this->resolveArguments($class, '__construct', $context));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function reference(string $class, array $context = [])
     {
         if (!class_exists(Instantiator::class)) {
@@ -64,11 +84,17 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getClass(string $class, array $context = []): string
     {
         return $this->classMapping[$class] ?? $class;
     }
 
+    /**
+     * @psalm-param class-string $class
+     */
     private function resolveArguments(string $class, string $method, array $context): array
     {
         $arguments = [];

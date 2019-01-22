@@ -21,13 +21,48 @@ final class ClassContextFactory implements ContextFactoryInterface
     public const NO_DEFAULTS = 2;
     public const REUSE_DEFINITION = 4;
 
+    /**
+     * @psalm-var class-string
+     *
+     * @var string
+     */
     private $class;
+
+    /**
+     * @var string
+     */
     private $method;
+
+    /**
+     * @psalm-var array<class-string, class-string>
+     *
+     * @var string[]
+     */
     private $classMapping;
+
+    /**
+     * @var int
+     */
     private $flags;
+
+    /**
+     * @var ClassContextElementFactoryInterface
+     */
     private $elementFactory;
+
+    /**
+     * @var array[]|null
+     */
     private $resolved;
+
+    /**
+     * @var array[]
+     */
     private $fieldMapping = [];
+
+    /**
+     * @var array[]
+     */
     private $generatedValues = [];
 
     public static function getFieldName(string $argument, bool $isOption = true): string
@@ -49,6 +84,12 @@ final class ClassContextFactory implements ContextFactoryInterface
         return $field;
     }
 
+    /**
+     * @psalm-param class-string $class
+     * @psalm-param array<class-string, class-string> $classMapping
+     *
+     * @param string[] $classMapping
+     */
     public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactoryInterface $elementFactory = null)
     {
         $this->class = $class;
@@ -177,6 +218,11 @@ final class ClassContextFactory implements ContextFactoryInterface
         return null !== $type && (class_exists($type) || interface_exists($type, false));
     }
 
+    /**
+     * @param mixed $emptyValue
+     *
+     * @return mixed
+     */
     private static function askRequiredValue(StyleInterface $io, ContextElement $element, $emptyValue)
     {
         if (null === $emptyValue) {
@@ -212,12 +258,15 @@ final class ClassContextFactory implements ContextFactoryInterface
         return $this->resolved;
     }
 
-    private function resolveNested(string $type, array $parentValue, ContextElement $parentElement): iterable
+    /**
+     * @psalm-param class-string $class
+     */
+    private function resolveNested(string $class, array $parentValue, ContextElement $parentElement): iterable
     {
-        $method = is_subclass_of($type, DomainCollectionInterface::class) || is_subclass_of($type, DomainIdInterface::class) ? 'fromValue' : '__construct';
+        $method = is_subclass_of($class, DomainCollectionInterface::class) || is_subclass_of($class, DomainIdInterface::class) ? 'fromValue' : '__construct';
         $resolved = [];
 
-        foreach (ClassMethodResolver::resolve($type, $method) as $argument => $metadata) {
+        foreach (ClassMethodResolver::resolve($class, $method) as $argument => $metadata) {
             if (array_key_exists($argument, $parentValue)) {
                 $value = $parentValue[$argument];
             } elseif (array_key_exists($metadata['index'], $parentValue)) {
@@ -230,7 +279,7 @@ final class ClassContextFactory implements ContextFactoryInterface
                 $value = null;
             }
 
-            $element = $this->elementFactory->getElement($type, $method, $argument);
+            $element = $this->elementFactory->getElement($class, $method, $argument);
             $element->label = $parentElement->label.' > '.$element->label;
 
             $resolved[$argument] = [

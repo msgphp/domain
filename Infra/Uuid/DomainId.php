@@ -13,9 +13,14 @@ use Ramsey\Uuid\UuidInterface;
  */
 class DomainId implements DomainIdInterface
 {
+    /**
+     * @var UuidInterface
+     */
     private $uuid;
 
     /**
+     * @inheritdoc
+     *
      * @return static
      */
     final public static function fromValue($value): DomainIdInterface

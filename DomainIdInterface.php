@@ -9,6 +9,9 @@ namespace MsgPhp\Domain;
  */
 interface DomainIdInterface extends \Serializable, \JsonSerializable
 {
+    /**
+     * @param mixed $value
+     */
     public static function fromValue($value): self;
 
     public function isEmpty(): bool;

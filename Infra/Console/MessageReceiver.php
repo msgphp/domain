@@ -14,9 +14,14 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
  */
 final class MessageReceiver
 {
-    /** @var MessageReceivingInterface|null */
+    /**
+     * @var MessageReceivingInterface|null
+     */
     private $receiver;
 
+    /**
+     * @param object $message
+     */
     public function receive($message): void
     {
         if (null === $this->receiver) {

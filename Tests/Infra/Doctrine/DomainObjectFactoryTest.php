@@ -23,7 +23,7 @@ final class DomainObjectFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(Entities\TestEntity::class, ['foo' => 'bar'])
-            ->willReturn($obj = new \stdClass())
+            ->willReturn($obj = Entities\TestEntity::create())
         ;
         $innerFactory->expects(self::once())
             ->method('getClass')
@@ -40,7 +40,7 @@ final class DomainObjectFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(Entities\TestChildEntity::class, ['foo' => 'bar', 'discriminator' => 'child'])
-            ->willReturn($obj = new \stdClass())
+            ->willReturn($obj = Entities\TestParentEntity::create())
         ;
         $innerFactory->expects(self::once())
             ->method('getClass')

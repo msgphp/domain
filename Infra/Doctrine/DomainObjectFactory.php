@@ -13,7 +13,14 @@ use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
  */
 final class DomainObjectFactory implements DomainObjectFactoryInterface
 {
+    /**
+     * @var DomainObjectFactoryInterface
+     */
     private $factory;
+
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
 
     public function __construct(DomainObjectFactoryInterface $factory, EntityManagerInterface $em)
@@ -22,16 +29,17 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         $this->em = $em;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function create(string $class, array $context = [])
     {
         return $this->factory->create($this->resolveDiscriminatorClass($class, $context), $context);
     }
 
-    public function getClass(string $class, array $context = []): string
-    {
-        return $this->resolveDiscriminatorClass($class, $context);
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function reference(string $class, array $context = [])
     {
         $class = $this->factory->getClass($class, $context);
@@ -47,6 +55,20 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         return $ref;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getClass(string $class, array $context = []): string
+    {
+        return $this->resolveDiscriminatorClass($class, $context);
+    }
+
+    /**
+     * @psalm-param class-string $class
+     * @psalm-return class-string
+     *
+     * @return string
+     */
     private function resolveDiscriminatorClass(string $class, array $context): string
     {
         $class = $this->factory->getClass($class, $context);

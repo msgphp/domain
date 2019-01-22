@@ -11,10 +11,29 @@ use Symfony\Component\Console\Style\StyleInterface;
  */
 final class ContextElement
 {
+    /**
+     * @var string
+     */
     public $label;
+
+    /**
+     * @var string
+     */
     public $description;
+
+    /**
+     * @var bool
+     */
     private $hide = false;
+
+    /**
+     * @var callable|null
+     */
     private $generator;
+
+    /**
+     * @var callable|null
+     */
     private $normalizer;
 
     public function __construct(string $label, string $description = '')
@@ -44,11 +63,19 @@ final class ContextElement
         return $this;
     }
 
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
     public function normalize($value)
     {
         return null === $this->normalizer ? $value : ($this->normalizer)($value);
     }
 
+    /**
+     * @param mixed $generated
+     */
     public function generate(StyleInterface $io, &$generated): bool
     {
         $generated = null;

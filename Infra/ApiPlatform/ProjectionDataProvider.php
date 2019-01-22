@@ -15,7 +15,14 @@ use MsgPhp\Domain\Projection\{ProjectionInterface, ProjectionRepositoryInterface
  */
 final class ProjectionDataProvider implements CollectionDataProviderInterface, ItemDataProviderInterface, RestrictedDataProviderInterface
 {
+    /**
+     * @var ProjectionTypeRegistryInterface
+     */
     private $typeRegistry;
+
+    /**
+     * @var ProjectionRepositoryInterface
+     */
     private $repository;
 
     public function __construct(ProjectionTypeRegistryInterface $typeRegistry, ProjectionRepositoryInterface $repository)
@@ -45,7 +52,11 @@ final class ProjectionDataProvider implements CollectionDataProviderInterface, I
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?ProjectionInterface
     {
-        $document = $this->repository->find($resourceClass, $id);
+        if (!is_scalar($id)) {
+            throw new \InvalidArgumentException('Document ID must be a scalar.');
+        }
+
+        $document = $this->repository->find($resourceClass, (string) $id);
 
         return null === $document ? null : $document->toProjection();
     }

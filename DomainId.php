@@ -9,9 +9,14 @@ namespace MsgPhp\Domain;
  */
 class DomainId implements DomainIdInterface
 {
+    /**
+     * @var string|null
+     */
     private $id;
 
     /**
+     * @inheritdoc
+     *
      * @return static
      */
     final public static function fromValue($value): DomainIdInterface

@@ -16,8 +16,14 @@ class DomainIdType extends Type
 {
     public const NAME = 'msgphp_domain_id';
 
+    /**
+     * @var array[]
+     */
     private static $mapping = [];
 
+    /**
+     * @psalm-param class-string<DomainIdInterface> $class
+     */
     final public static function setClass(string $class): void
     {
         if (!is_subclass_of($class, DomainIdInterface::class)) {
@@ -54,6 +60,8 @@ class DomainIdType extends Type
     }
 
     /**
+     * @param mixed $value
+     *
      * @internal
      */
     final public static function resolveName($value): ?string
@@ -61,6 +69,7 @@ class DomainIdType extends Type
         if ($value instanceof DomainIdInterface) {
             $class = \get_class($value);
 
+            /** @var string $type */
             foreach (self::$mapping as $type => $mapping) {
                 if ($class === $mapping['class']) {
                     return $type::NAME;
@@ -74,6 +83,10 @@ class DomainIdType extends Type
     }
 
     /**
+     * @param mixed $value
+     *
+     * @return mixed
+     *
      * @internal
      */
     final public static function resolveValue($value, AbstractPlatform $platform)

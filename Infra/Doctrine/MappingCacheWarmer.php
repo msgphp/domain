@@ -14,7 +14,14 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
  */
 final class MappingCacheWarmer implements CacheWarmerInterface
 {
+    /**
+     * @var string
+     */
     private $dirName;
+
+    /**
+     * @var MappingConfig
+     */
     private $mappingConfig;
 
     public function __construct(string $dirName, MappingConfig $mappingConfig)
@@ -37,9 +44,9 @@ final class MappingCacheWarmer implements CacheWarmerInterface
             $filename = basename($file);
 
             if ($this->mappingConfig->mappingDir && $filesystem->exists($this->mappingConfig->mappingDir.'/'.$filename)) {
-                $filesystem->dumpFile($target.'/'.basename($file), $this->mappingConfig->interpolate(file_get_contents($this->mappingConfig->mappingDir.'/'.$filename)));
+                $filesystem->dumpFile($target.'/'.basename($file), $this->mappingConfig->interpolate((string) file_get_contents($this->mappingConfig->mappingDir.'/'.$filename)));
             } else {
-                $filesystem->dumpFile($target.'/'.basename($file), $this->mappingConfig->interpolate(file_get_contents($file)));
+                $filesystem->dumpFile($target.'/'.basename($file), $this->mappingConfig->interpolate((string) file_get_contents($file)));
             }
         }
     }

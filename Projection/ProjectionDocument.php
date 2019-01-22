@@ -14,17 +14,34 @@ final class ProjectionDocument
     public const STATUS_FAILED_TRANSFORMATION = 3;
     public const STATUS_FAILED_SAVING = 4;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     public $status = self::STATUS_UNKNOWN;
 
-    /** @var object|null */
+    /**
+     * @var object|null
+     */
     public $source;
 
-    /** @var \Throwable|null $error */
+    /**
+     * @var \Throwable|null
+     */
     public $error;
 
+    /**
+     * @var string|null
+     */
     private $type;
+
+    /**
+     * @var string|null
+     */
     private $id;
+
+    /**
+     * @var array
+     */
     private $body;
 
     public function __construct(string $type = null, string $id = null, array $body = [])

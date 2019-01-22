@@ -13,10 +13,28 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 final class DomainMessageBus implements DomainMessageBusInterface
 {
+    /**
+     * @var MessageBusInterface
+     */
     private $commandBus;
+
+    /**
+     * @var MessageBusInterface
+     */
     private $eventBus;
+
+    /**
+     * @psalm-var array<class-string, int>
+     *
+     * @var int[]
+     */
     private $eventClasses;
 
+    /**
+     * @psalm-param array<int, class-string> $eventClasses
+     *
+     * @param string[] $eventClasses
+     */
     public function __construct(MessageBusInterface $commandBus, MessageBusInterface $eventBus, array $eventClasses = [])
     {
         $this->commandBus = $commandBus;

@@ -9,10 +9,29 @@ namespace MsgPhp\Domain;
  */
 final class PaginatedDomainCollection implements PaginatedDomainCollectionInterface
 {
+    /**
+     * @var DomainCollectionInterface
+     */
     private $collection;
+
+    /**
+     * @var float
+     */
     private $offset;
+
+    /**
+     * @var float
+     */
     private $limit;
+
+    /**
+     * @var int|null
+     */
     private $count;
+
+    /**
+     * @var float|null
+     */
     private $totalCount;
 
     public static function fromValue(?iterable $value): DomainCollectionInterface

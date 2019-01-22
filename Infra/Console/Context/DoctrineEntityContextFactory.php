@@ -17,11 +17,31 @@ use Symfony\Component\Console\Style\StyleInterface;
  */
 final class DoctrineEntityContextFactory implements ContextFactoryInterface
 {
+    /**
+     * @var ContextFactoryInterface
+     */
     private $factory;
+
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
+
+    /**
+     * @psalm-var class-string
+     *
+     * @var string
+     */
     private $class;
+
+    /**
+     * @var string|null
+     */
     private $discriminatorField;
 
+    /**
+     * @psalm-param class-string $class
+     */
     public function __construct(ContextFactoryInterface $factory, EntityManagerInterface $em, string $class)
     {
         $this->factory = $factory;

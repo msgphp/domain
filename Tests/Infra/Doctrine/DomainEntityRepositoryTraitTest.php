@@ -57,6 +57,9 @@ final class DomainEntityRepositoryTraitTest extends AbstractDomainEntityReposito
         return $equals;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected static function createRepository(string $class): DomainEntityRepositoryTraitInterface
     {
         /** @psalm-suppress InaccessibleMethod */

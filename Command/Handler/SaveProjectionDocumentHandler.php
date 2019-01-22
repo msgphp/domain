@@ -17,6 +17,9 @@ final class SaveProjectionDocumentHandler
 {
     use MessageDispatchingTrait;
 
+    /**
+     * @var ProjectionRepositoryInterface
+     */
     private $repository;
 
     public function __construct(DomainObjectFactoryInterface $factory, DomainMessageBusInterface $bus, ProjectionRepositoryInterface $repository)

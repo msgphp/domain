@@ -11,7 +11,14 @@ use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
  */
 trait MessageDispatchingTrait
 {
+    /**
+     * @var DomainObjectFactoryInterface
+     */
     private $factory;
+
+    /**
+     * @var DomainMessageBusInterface
+     */
     private $bus;
 
     public function __construct(DomainObjectFactoryInterface $factory, DomainMessageBusInterface $bus)
@@ -20,6 +27,9 @@ trait MessageDispatchingTrait
         $this->bus = $bus;
     }
 
+    /**
+     * @psalm-param class-string $class
+     */
     private function dispatch(string $class, array $context = []): void
     {
         $this->bus->dispatch($this->factory->create($class, $context));

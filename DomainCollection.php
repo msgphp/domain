@@ -11,6 +11,9 @@ use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementE
  */
 final class DomainCollection implements DomainCollectionInterface
 {
+    /**
+     * @var iterable
+     */
     private $elements;
 
     public static function fromValue(?iterable $value): DomainCollectionInterface
