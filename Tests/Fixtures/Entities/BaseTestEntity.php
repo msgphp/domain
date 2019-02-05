@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the MsgPHP package.
+ *
+ * (c) Roland Franssen <franssen.roland@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace MsgPhp\Domain\Tests\Fixtures\Entities;
 
 use MsgPhp\Domain\DomainIdInterface;
@@ -9,11 +18,10 @@ use MsgPhp\Domain\DomainIdInterface;
 abstract class BaseTestEntity
 {
     /**
-     * @return $this
+     * @return static
      */
     final public static function create(array $fields = []): self
     {
-        /** @var $this $entity */
         $entity = new static();
 
         foreach ($fields as $field => $value) {
