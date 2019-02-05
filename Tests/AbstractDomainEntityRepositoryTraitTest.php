@@ -53,7 +53,7 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
         $this->assertEntityCollectionEquals($entities, $repository->doFindAll());
         $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->doFindAll(1));
         $this->assertEntityCollectionEquals([$entity2], $repository->doFindAll(1, 1));
-        $this->assertEntityCollectionEquals([$entity2,  $entity3], $repository->doFindAll(1, 0));
+        $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->doFindAll(1, 0));
         $this->assertEntityCollectionEquals($entities, $repository->doFindAll(0, 10));
         $this->assertEntityCollectionEquals([], $repository->doFindAll(10, 10));
         $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->doFindAll(0, 2));
@@ -380,7 +380,7 @@ abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
             foreach ($class::createEntities() as $entity) {
                 $ids = Entities\BaseTestEntity::getPrimaryIds($entity, $primitiveIds);
 
-                yield [$class, $entity,  $ids, $primitiveIds];
+                yield [$class, $entity, $ids, $primitiveIds];
             }
         }
     }
