@@ -26,7 +26,6 @@
             <exclude>
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>
-                <file>./Infra/Bundle/ServiceConfigHelper.php</file>
             </exclude>
         </whitelist>
     </filter>
