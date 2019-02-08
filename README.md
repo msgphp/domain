@@ -2,7 +2,7 @@
 
 A dependency-free package to help building a business domain layer.
 
-[![Latest Stable Version](https://poser.pugx.org/msgphp/domain/v/stable)](https://packagist.org/packages/msgphp/domain)
+[![Latest Stable Version][packagist:img]][packagist]
 
 ## Installation
 
@@ -21,3 +21,6 @@ composer require msgphp/domain
 ## Contributing
 
 This repository is **READ ONLY**. Issues and pull requests should be submitted in the [main development repository](https://github.com/msgphp/msgphp).
+
+[packagist]: https://packagist.org/packages/msgphp/domain
+[packagist:img]: https://img.shields.io/packagist/v/msgphp/domain.svg?style=flat-square
