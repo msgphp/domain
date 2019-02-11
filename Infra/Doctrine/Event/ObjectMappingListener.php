@@ -172,10 +172,8 @@ final class ObjectMappingListener
             throw new \LogicException('Metadata factory not set.');
         }
 
-        $loaded = $this->metadataFactory->getLoadedMetadata();
-
         /** @var ClassMetadataInfo $metadata */
-        $metadata = $loaded[$class] ?? $this->metadataFactory->getMetadataFor($class);
+        $metadata = $this->metadataFactory->getMetadataFor($class);
 
         return $metadata;
     }
