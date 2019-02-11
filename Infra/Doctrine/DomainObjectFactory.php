@@ -66,8 +66,6 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
     /**
      * @psalm-param class-string $class
      * @psalm-return class-string
-     *
-     * @return string
      */
     private function resolveDiscriminatorClass(string $class, array $context): string
     {

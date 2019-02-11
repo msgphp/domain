@@ -28,7 +28,6 @@ final class MappingConfig
 
     /**
      * @param string[] $mappingFiles
-     * @param array    $mappingConfig
      */
     public function __construct(array $mappingFiles, array $mappingConfig = [])
     {
