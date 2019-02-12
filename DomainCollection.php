@@ -79,7 +79,7 @@ final class DomainCollection implements DomainCollectionInterface
             return false;
         }
 
-        return isset($this->elements[$key]) || array_key_exists($key, $this->elements);
+        return isset($this->elements[$key]) || \array_key_exists($key, $this->elements);
     }
 
     public function first()
@@ -134,7 +134,7 @@ final class DomainCollection implements DomainCollectionInterface
             throw UnknownCollectionElementException::createForKey($key);
         }
 
-        if (isset($this->elements[$key]) || array_key_exists($key, $this->elements)) {
+        if (isset($this->elements[$key]) || \array_key_exists($key, $this->elements)) {
             return $this->elements[$key];
         }
 

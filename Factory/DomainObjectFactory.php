@@ -100,7 +100,7 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
         $arguments = [];
 
         foreach (ClassMethodResolver::resolve($class, $method) as $argument => $metadata) {
-            if (array_key_exists($argument, $context)) {
+            if (\array_key_exists($argument, $context)) {
                 $given = true;
                 $value = $context[$argument];
             } elseif (!$metadata['required']) {

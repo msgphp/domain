@@ -156,7 +156,7 @@ final class ClassContextFactory implements ContextFactoryInterface
                 $value = $metadata['value'] ?? null;
             }
 
-            if (array_key_exists($argument, $values)) {
+            if (\array_key_exists($argument, $values)) {
                 $context[$argument] = $values[$argument];
                 continue;
             }
@@ -267,9 +267,9 @@ final class ClassContextFactory implements ContextFactoryInterface
         $resolved = [];
 
         foreach (ClassMethodResolver::resolve($class, $method) as $argument => $metadata) {
-            if (array_key_exists($argument, $parentValue)) {
+            if (\array_key_exists($argument, $parentValue)) {
                 $value = $parentValue[$argument];
-            } elseif (array_key_exists($metadata['index'], $parentValue)) {
+            } elseif (\array_key_exists($metadata['index'], $parentValue)) {
                 $value = $parentValue[$metadata['index']];
             } elseif ('bool' === $metadata['type']) {
                 $value = false;
