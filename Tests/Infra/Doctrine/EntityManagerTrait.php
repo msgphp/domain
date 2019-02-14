@@ -9,20 +9,35 @@ use MsgPhp\Domain\Infra\Doctrine\Test\EntityManagerTrait as BaseEntityManagerTra
 
 trait EntityManagerTrait
 {
-    use BaseEntityManagerTrait;
+    use BaseEntityManagerTrait {
+        initEm as public setUpBeforeClass;
+        destroyEm as public tearDownAfterClass;
+    }
 
     protected static function createSchema(): bool
     {
         return true;
     }
 
-    protected static function getEntityPaths(): iterable
+    protected static function getEntityMappings(): iterable
     {
-        yield \dirname(__DIR__, 2).'/Fixtures/Entities';
+        yield 'annot' => [
+            'MsgPhp\\Domain\\Tests\\Fixtures\\Entities\\' => \dirname(__DIR__, 2).'/Fixtures/Entities',
+        ];
     }
 
-    protected static function getTypes(): iterable
+    protected static function getEntityIdTypes(): iterable
     {
         yield DomainIdType::class;
+    }
+
+    protected function setUp(): void
+    {
+        self::prepareEm();
+    }
+
+    protected function tearDown(): void
+    {
+        self::cleanEm();
     }
 }
