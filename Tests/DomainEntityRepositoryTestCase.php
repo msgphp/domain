@@ -9,7 +9,7 @@ use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException, 
 use MsgPhp\Domain\Tests\Fixtures\{DomainEntityRepositoryTraitInterface, Entities};
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractDomainEntityRepositoryTraitTest extends TestCase
+abstract class DomainEntityRepositoryTestCase extends TestCase
 {
     protected static $entityTypes = [
         Entities\TestEntity::class,

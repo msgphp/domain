@@ -36,9 +36,6 @@
         "psr/container": "^1.0",
         "ramsey/uuid": "^3.7",
         "ramsey/uuid-doctrine": "^1.4",
-        "symfony/config": "^3.4 || ^4.0",
-        "symfony/dependency-injection": "^3.4.16 || ^4.0.16 || ^4.1.5",
-        "symfony/http-kernel": "^3.4 || ^4.0",
         "symfony/messenger": "^4.2",
         "symfony/var-exporter": "^4.2"
     },

@@ -15,8 +15,6 @@ final class DomainObjectFactoryTest extends TestCase
 {
     use EntityManagerTrait;
 
-    private $createSchema = true;
-
     public function testCreate(): void
     {
         $innerFactory = $this->createMock(DomainObjectFactoryInterface::class);

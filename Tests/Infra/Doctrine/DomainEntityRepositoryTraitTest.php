@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
 use MsgPhp\Domain\Infra\Doctrine\DomainEntityRepositoryTrait;
-use MsgPhp\Domain\Tests\AbstractDomainEntityRepositoryTraitTest;
+use MsgPhp\Domain\Tests\DomainEntityRepositoryTestCase;
 use MsgPhp\Domain\Tests\Fixtures\DomainEntityRepositoryTraitInterface;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
 
-final class DomainEntityRepositoryTraitTest extends AbstractDomainEntityRepositoryTraitTest
+final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCase
 {
     use EntityManagerTrait;
-
-    private $createSchema = true;
 
     public function testDuplicateFieldParameters(): void
     {

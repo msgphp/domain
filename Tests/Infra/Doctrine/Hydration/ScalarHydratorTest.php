@@ -14,19 +14,15 @@ final class ScalarHydratorTest extends TestCase
 {
     use EntityManagerTrait;
 
-    private $createSchema = true;
-
     public function testHydrator(): void
     {
+        self::$em->getConfiguration()->addCustomHydrationMode(ScalarHydrator::NAME, ScalarHydrator::class);
         self::$em->persist($entity = Entities\TestPrimitiveEntity::create(['id' => new DomainId('1')]));
         self::$em->flush();
 
         $query = self::$em->createQuery('SELECT root.id FROM '.\get_class($entity).' root');
 
         self::assertSame('1', $query->getScalarResult()[0]['id']);
-
-        self::$em->getConfiguration()->addCustomHydrationMode(ScalarHydrator::NAME, ScalarHydrator::class);
-
         self::assertSame(1, $query->getResult(ScalarHydrator::NAME)[0]['id']);
     }
 }
