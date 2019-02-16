@@ -80,4 +80,11 @@ trait MessageBusTrait
 
         self::assertMessageIsDispatched($class, $assertion);
     }
+
+    private static function assertMessageIsNotDispatched(string $class): void
+    {
+        if (isset(self::$dispatchedMessages[$class])) {
+            throw new \LogicException(sprintf('Message "%s" is dispatched.', $class));
+        }
+    }
 }
