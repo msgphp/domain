@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\Doctrine;
 
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
@@ -72,6 +72,7 @@ trait DomainEntityRepositoryTrait
     private function doFind($id)
     {
         $entity = $this->em->find($this->class, $id);
+
         if (null === $entity) {
             throw EntityNotFoundException::createForId($this->class, $id);
         }
@@ -256,13 +257,21 @@ trait DomainEntityRepositoryTrait
         }
 
         foreach ($id as $field => $value) {
-            if (\is_object($value) && $metadataFactory->hasMetadataFor(ClassUtils::getClass($value))) {
-                $id[$field] = $this->em->getUnitOfWork()->getSingleIdentifierValue($value);
-
-                if (null === $id[$field]) {
-                    return null;
-                }
+            if (!\is_object($value)) {
+                continue;
             }
+
+            try {
+                $value = $this->em->getUnitOfWork()->getSingleIdentifierValue($value);
+            } catch (MappingException $e) {
+                continue;
+            }
+
+            if (null === $value) {
+                return null;
+            }
+
+            $id[$field] = $value;
         }
 
         $identity = [];
