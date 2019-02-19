@@ -244,9 +244,7 @@ trait DomainEntityRepositoryTrait
      */
     private function toIdentity($id): ?array
     {
-        $metadataFactory = $this->em->getMetadataFactory();
-        $metadata = $metadataFactory->getMetadataFor($this->class);
-        $fields = $metadata->getIdentifierFieldNames();
+        $fields = $this->em->getClassMetadata($this->class)->getIdentifierFieldNames();
 
         if (!\is_array($id)) {
             if (1 !== \count($fields)) {
