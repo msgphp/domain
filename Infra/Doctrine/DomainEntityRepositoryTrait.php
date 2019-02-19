@@ -9,7 +9,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use MsgPhp\Domain\{DomainCollection, DomainCollectionInterface};
+use MsgPhp\Domain\{DomainCollection, DomainCollectionInterface, DomainIdInterface};
 use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException, InvalidClassException};
 
 /**
@@ -71,7 +71,8 @@ trait DomainEntityRepositoryTrait
      */
     private function doFind($id)
     {
-        $entity = $this->em->find($this->class, $id);
+        $id = $this->toIdentity($id);
+        $entity = null === $id ? null : $this->em->find($this->class, $id);
 
         if (null === $entity) {
             throw EntityNotFoundException::createForId($this->class, $id);
@@ -255,21 +256,14 @@ trait DomainEntityRepositoryTrait
         }
 
         foreach ($id as $field => $value) {
-            if (!\is_object($value)) {
-                continue;
+            if (\is_object($value) && !$value instanceof DomainIdInterface) {
+                try {
+                    $value = $this->em->getUnitOfWork()->getSingleIdentifierValue($value);
+                } catch (MappingException $e) {
+                }
             }
 
-            try {
-                $value = $this->em->getUnitOfWork()->getSingleIdentifierValue($value);
-            } catch (MappingException $e) {
-                continue;
-            }
-
-            if (null === $value) {
-                return null;
-            }
-
-            $id[$field] = $value;
+            $id[$field] = DomainIdType::resolveValue($value, $this->em->getConnection()->getDatabasePlatform());
         }
 
         $identity = [];
@@ -279,7 +273,6 @@ trait DomainEntityRepositoryTrait
             }
 
             $identity[$field] = $id[$field];
-            unset($id[$field]);
         }
 
         return $identity ?: null;

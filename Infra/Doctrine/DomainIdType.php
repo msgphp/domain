@@ -95,9 +95,9 @@ class DomainIdType extends Type
             $class = \get_class($value);
             $type = Type::INTEGER;
 
-            foreach (self::$mapping as $type => $mapping) {
+            foreach (self::$mapping as $mapping) {
                 if ($class === $mapping['class']) {
-                    $type = $mapping['data_type'];
+                    $type = $mapping['data_type'] ?? $type;
                     break;
                 }
             }
