@@ -8,7 +8,7 @@ use MsgPhp\Domain\DomainCollectionInterface;
 use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractDomainCollectionTest extends TestCase
+abstract class DomainCollectionTestCase extends TestCase
 {
     public function testFromValue(): void
     {

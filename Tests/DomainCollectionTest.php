@@ -8,7 +8,7 @@ use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\DomainCollectionInterface;
 use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
 
-final class DomainCollectionTest extends AbstractDomainCollectionTest
+final class DomainCollectionTest extends DomainCollectionTestCase
 {
     public function testLazyFromValue(): void
     {

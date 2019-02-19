@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Tests;
 use MsgPhp\Domain\PaginatedDomainCollection;
 use MsgPhp\Domain\DomainCollectionInterface;
 
-final class PaginatedDomainCollectionTest extends AbstractDomainCollectionTest
+final class PaginatedDomainCollectionTest extends DomainCollectionTestCase
 {
     public function testDefaultPagination(): void
     {

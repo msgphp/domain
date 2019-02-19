@@ -8,9 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use MsgPhp\Domain\DomainCollectionInterface;
 use MsgPhp\Domain\Infra\Doctrine\DomainCollection;
-use MsgPhp\Domain\Tests\AbstractDomainCollectionTest;
+use MsgPhp\Domain\Tests\DomainCollectionTestCase;
 
-final class DomainCollectionTest extends AbstractDomainCollectionTest
+final class DomainCollectionTest extends DomainCollectionTestCase
 {
     public function testFromValueWithCollection(): void
     {
