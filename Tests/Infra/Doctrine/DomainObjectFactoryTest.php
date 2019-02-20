@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 final class DomainObjectFactoryTest extends TestCase
 {
-    use EntityManagerTrait;
+    use EntityManagerTestTrait;
 
     public function testCreate(): void
     {

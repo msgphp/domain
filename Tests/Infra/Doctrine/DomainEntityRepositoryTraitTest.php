@@ -11,7 +11,7 @@ use MsgPhp\Domain\Tests\Fixtures\Entities;
 
 final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCase
 {
-    use EntityManagerTrait;
+    use EntityManagerTestTrait;
 
     public function testDuplicateFieldParameters(): void
     {

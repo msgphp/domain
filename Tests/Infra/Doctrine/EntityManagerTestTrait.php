@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
 use MsgPhp\Domain\Infra\Doctrine\DomainIdType;
-use MsgPhp\Domain\Infra\Doctrine\Test\EntityManagerTrait as BaseEntityManagerTrait;
+use MsgPhp\Domain\Infra\Doctrine\Test\EntityManagerTestTrait as BaseEntityManagerTestTrait;
 
-trait EntityManagerTrait
+trait EntityManagerTestTrait
 {
-    use BaseEntityManagerTrait {
+    use BaseEntityManagerTestTrait {
         initEm as public setUpBeforeClass;
         destroyEm as public tearDownAfterClass;
     }

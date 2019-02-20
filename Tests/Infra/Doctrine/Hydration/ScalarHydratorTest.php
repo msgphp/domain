@@ -6,13 +6,13 @@ namespace MsgPhp\Domain\Tests\Infra\Doctrine\Hydration;
 
 use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\Infra\Doctrine\Hydration\ScalarHydrator;
-use MsgPhp\Domain\Tests\Infra\Doctrine\EntityManagerTrait;
+use MsgPhp\Domain\Tests\Infra\Doctrine\EntityManagerTestTrait;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
 use PHPUnit\Framework\TestCase;
 
 final class ScalarHydratorTest extends TestCase
 {
-    use EntityManagerTrait;
+    use EntityManagerTestTrait;
 
     public function testHydrator(): void
     {

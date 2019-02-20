@@ -15,7 +15,7 @@ use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
  *
  * @internal
  */
-trait MessageBusTrait
+trait MessageBusTestTrait
 {
     /**
      * @var MessageBusInterface

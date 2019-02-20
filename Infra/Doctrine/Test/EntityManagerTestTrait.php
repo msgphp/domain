@@ -20,7 +20,7 @@ use MsgPhp\Domain\Infra\Doctrine\MappingConfig;
  *
  * @internal
  */
-trait EntityManagerTrait
+trait EntityManagerTestTrait
 {
     /**
      * @var EntityManagerInterface
