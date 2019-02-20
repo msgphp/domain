@@ -4,29 +4,66 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
-use MsgPhp\Domain\Infra\Doctrine\DomainEntityRepositoryTrait;
+use Doctrine\DBAL\Types\Type;
+use MsgPhp\Domain\DomainId;
+use MsgPhp\Domain\Infra\Doctrine\{DomainEntityRepositoryTrait, DomainIdType};
 use MsgPhp\Domain\Tests\DomainEntityRepositoryTestCase;
-use MsgPhp\Domain\Tests\Fixtures\DomainEntityRepositoryTraitInterface;
-use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\{DomainEntityRepositoryTraitInterface, Entities};
 
 final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCase
 {
     use EntityManagerTestTrait;
 
-    public function testDuplicateFieldParameters(): void
+    public function testGetAlias(): void
+    {
+        $repository = new class(Entities\TestEntity::class, self::$em) {
+            use DomainEntityRepositoryTrait {
+                getAlias as public;
+            }
+        };
+
+        self::assertSame('test_entity', $repository->getAlias());
+    }
+
+    public function testAddFieldParameter(): void
     {
         $repository = new class(Entities\TestEntity::class, self::$em) {
             use DomainEntityRepositoryTrait {
                 createQueryBuilder as public;
-                addFieldCriteria as public;
+                addFieldParameter as public;
             }
         };
         $qb = $repository->createQueryBuilder();
-        $repository->addFieldCriteria($qb, ['foo.bar' => 'bar1']);
-        $repository->addFieldCriteria($qb, ['foo.bar' => 'bar2']);
-        $repository->addFieldCriteria($qb, ['foo.bar' => 'bar3']);
 
-        self::assertCount(3, $qb->getParameters());
+        self::assertSame(':id', $repository->addFieldParameter($qb, 'id', 1));
+        self::assertSame(':id1', $repository->addFieldParameter($qb, 'id', '1'));
+        self::assertSame(':id2', $repository->addFieldParameter($qb, 'id', new DomainId('1')));
+
+        $parameters = $qb->getParameters();
+
+        self::assertSame(Type::INTEGER, $parameters->get(0)->getType());
+        self::assertSame(\PDO::PARAM_STR, $parameters->get(1)->getType());
+        self::assertSame(DomainIdType::NAME, $parameters->get(2)->getType());
+    }
+
+    public function testToIdentity(): void
+    {
+        $repository = new class(Entities\TestEntity::class, self::$em) {
+            use DomainEntityRepositoryTrait {
+                toIdentity as public;
+            }
+        };
+
+        self::assertSame(['id' => 1], $repository->toIdentity(1));
+        self::assertSame(['id' => '1'], $repository->toIdentity('1'));
+        self::assertSame(['id' => 1], $repository->toIdentity(new DomainId('1')));
+        self::assertSame(['id' => 1], $repository->toIdentity(['id' => 1]));
+        self::assertSame(['id' => '1'], $repository->toIdentity(['id' => '1']));
+        self::assertSame(['id' => 1], $repository->toIdentity(['id' => new DomainId('1')]));
+        self::assertNull($repository->toIdentity(['id' => 1, 'foo' => 'bar']));
+        self::assertNull($repository->toIdentity(null));
+        self::assertNull($repository->toIdentity([]));
+        self::assertNull($repository->toIdentity(['foo' => 'bar']));
     }
 
     protected function equalsEntity($expected, $actual): bool

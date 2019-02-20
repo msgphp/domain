@@ -268,13 +268,14 @@ trait DomainEntityRepositoryTrait
 
         $identity = [];
         foreach ($fields as $field) {
-            if (!isset($id[$field])) {
+            if (null === ($id[$field] ?? null)) {
                 return null;
             }
 
             $identity[$field] = $id[$field];
+            unset($id[$field]);
         }
 
-        return $identity ?: null;
+        return !$id && $identity ? $identity : null;
     }
 }
