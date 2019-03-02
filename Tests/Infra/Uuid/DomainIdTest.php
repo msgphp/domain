@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Infra\Uuid;
 
-use MsgPhp\Domain\Infra\Uuid\DomainId;
+use MsgPhp\Domain\Infra\Uuid\DomainIdTrait;
 use MsgPhp\Domain\Tests\Fixtures\{TestDomainUuid, TestOtherDomainUuid};
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -30,7 +30,7 @@ final class DomainIdTest extends TestCase
     {
         $this->expectException(InvalidUuidStringException::class);
 
-        DomainId::fromValue('00000000-0000-0000-0000-00000000000');
+        DomainIdTrait::fromValue('00000000-0000-0000-0000-00000000000');
     }
 
     public function testIsEmpty(): void

@@ -11,7 +11,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class DomainId implements DomainIdInterface
+trait DomainIdTrait
 {
     /**
      * @var UuidInterface
@@ -19,8 +19,6 @@ class DomainId implements DomainIdInterface
     private $uuid;
 
     /**
-     * @inheritdoc
-     *
      * @return static
      */
     final public static function fromValue($value): DomainIdInterface
@@ -44,7 +42,15 @@ class DomainId implements DomainIdInterface
 
     final public function equals(DomainIdInterface $id): bool
     {
-        return $id === $this ? true : ($id instanceof self && static::class === \get_class($id) ? $this->uuid->equals($id->uuid) : false);
+        if ($id === $this) {
+            return true;
+        }
+
+        if (static::class !== \get_class($id)) {
+            return false;
+        }
+
+        return $this->uuid->equals(Uuid::fromString($id->toString()));
     }
 
     final public function toString(): string
