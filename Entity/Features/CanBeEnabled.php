@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Entity\Features;
 
 use MsgPhp\Domain\Entity\Fields\EnabledField;
-use MsgPhp\Domain\Event\{DisableEvent, EnableEvent};
+use MsgPhp\Domain\Event\DisableEvent;
+use MsgPhp\Domain\Event\EnableEvent;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

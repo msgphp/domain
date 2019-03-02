@@ -7,7 +7,8 @@ namespace MsgPhp\Domain\Infra\Doctrine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use MsgPhp\Domain\DomainCollectionInterface;
-use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
+use MsgPhp\Domain\Exception\EmptyCollectionException;
+use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

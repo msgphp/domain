@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
-use MsgPhp\Domain\Infra\Doctrine\{DomainEntityRepositoryTrait, DomainIdType};
+use MsgPhp\Domain\Infra\Doctrine\DomainEntityRepositoryTrait;
+use MsgPhp\Domain\Infra\Doctrine\DomainIdType;
 use MsgPhp\Domain\Tests\DomainEntityRepositoryTestCase;
-use MsgPhp\Domain\Tests\Fixtures\{DomainEntityRepositoryTraitInterface, Entities, TestDomainId};
+use MsgPhp\Domain\Tests\Fixtures\DomainEntityRepositoryTraitInterface;
+use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 
 final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCase
 {

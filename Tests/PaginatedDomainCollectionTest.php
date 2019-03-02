@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests;
 
-use MsgPhp\Domain\PaginatedDomainCollection;
 use MsgPhp\Domain\DomainCollectionInterface;
+use MsgPhp\Domain\PaginatedDomainCollection;
 
 final class PaginatedDomainCollectionTest extends DomainCollectionTestCase
 {

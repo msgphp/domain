@@ -7,8 +7,10 @@ namespace MsgPhp\Domain\Command\Handler;
 use MsgPhp\Domain\Command\SaveProjectionDocumentCommand;
 use MsgPhp\Domain\Event\ProjectionDocumentSavedEvent;
 use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
-use MsgPhp\Domain\Message\{DomainMessageBusInterface, MessageDispatchingTrait};
-use MsgPhp\Domain\Projection\{ProjectionDocument, ProjectionRepositoryInterface};
+use MsgPhp\Domain\Message\DomainMessageBusInterface;
+use MsgPhp\Domain\Message\MessageDispatchingTrait;
+use MsgPhp\Domain\Projection\ProjectionDocument;
+use MsgPhp\Domain\Projection\ProjectionRepositoryInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

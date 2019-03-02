@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\DependencyInjection;
 
-use MsgPhp\Domain\Infra\{Console as ConsoleInfra};
 use Doctrine\DBAL\Types\Type as DoctrineType;
+use MsgPhp\Domain\Infra\{Console as ConsoleInfra};
 use Ramsey\Uuid\Doctrine as DoctrineUuid;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

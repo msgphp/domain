@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests;
 
-use MsgPhp\Domain\{DomainCollectionInterface, DomainIdInterface};
-use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException, InvalidClassException};
-use MsgPhp\Domain\Tests\Fixtures\{DomainEntityRepositoryTraitInterface, Entities, TestDomainId};
+use MsgPhp\Domain\DomainCollectionInterface;
+use MsgPhp\Domain\DomainIdInterface;
+use MsgPhp\Domain\Exception\DuplicateEntityException;
+use MsgPhp\Domain\Exception\EntityNotFoundException;
+use MsgPhp\Domain\Exception\InvalidClassException;
+use MsgPhp\Domain\Tests\Fixtures\DomainEntityRepositoryTraitInterface;
+use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use PHPUnit\Framework\TestCase;
 
 abstract class DomainEntityRepositoryTestCase extends TestCase

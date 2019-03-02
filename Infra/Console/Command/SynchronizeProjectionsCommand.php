@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\Console\Command;
 
-use MsgPhp\Domain\Projection\{ProjectionDocument, ProjectionSynchronization};
+use MsgPhp\Domain\Projection\ProjectionDocument;
+use MsgPhp\Domain\Projection\ProjectionSynchronization;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

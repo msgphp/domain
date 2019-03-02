@@ -6,7 +6,8 @@ namespace MsgPhp\Domain\Tests;
 
 use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\DomainCollectionInterface;
-use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
+use MsgPhp\Domain\Exception\EmptyCollectionException;
+use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 
 final class DomainCollectionTest extends DomainCollectionTestCase
 {

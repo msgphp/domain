@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\Console\Context;
 
-use MsgPhp\Domain\{DomainCollectionInterface, DomainIdInterface};
+use MsgPhp\Domain\DomainCollectionInterface;
+use MsgPhp\Domain\DomainIdInterface;
 use MsgPhp\Domain\Factory\ClassMethodResolver;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;

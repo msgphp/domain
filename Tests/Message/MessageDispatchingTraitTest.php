@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Message;
 
 use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
-use MsgPhp\Domain\Message\{DomainMessageBusInterface, MessageDispatchingTrait};
+use MsgPhp\Domain\Message\DomainMessageBusInterface;
+use MsgPhp\Domain\Message\MessageDispatchingTrait;
 use PHPUnit\Framework\TestCase;
 
 final class MessageDispatchingTraitTest extends TestCase

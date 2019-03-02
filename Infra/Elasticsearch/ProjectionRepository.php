@@ -6,8 +6,10 @@ namespace MsgPhp\Domain\Infra\Elasticsearch;
 
 use Elasticsearch\Client;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
-use MsgPhp\Domain\{PaginatedDomainCollection, PaginatedDomainCollectionInterface};
-use MsgPhp\Domain\Projection\{ProjectionDocument, ProjectionRepositoryInterface};
+use MsgPhp\Domain\PaginatedDomainCollection;
+use MsgPhp\Domain\PaginatedDomainCollectionInterface;
+use MsgPhp\Domain\Projection\ProjectionDocument;
+use MsgPhp\Domain\Projection\ProjectionRepositoryInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

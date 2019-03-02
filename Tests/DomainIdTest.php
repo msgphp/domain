@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests;
 
 use MsgPhp\Domain\DomainIdInterface;
-use MsgPhp\Domain\Tests\Fixtures\{TestDomainId, TestOtherDomainId};
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
+use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainId;
 use PHPUnit\Framework\TestCase;
 
 final class DomainIdTest extends TestCase

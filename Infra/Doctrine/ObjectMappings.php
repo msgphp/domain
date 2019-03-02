@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\Doctrine;
 
-use MsgPhp\Domain\Entity\{Features, Fields};
+use MsgPhp\Domain\Entity\Features;
+use MsgPhp\Domain\Entity\Fields;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain;
 
-use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
+use MsgPhp\Domain\Exception\EmptyCollectionException;
+use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

@@ -6,8 +6,9 @@ namespace MsgPhp\Domain\Tests\Infra\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use MsgPhp\Domain\Tests\Fixtures\{TestDomainId, TestOtherDomainId};
 use MsgPhp\Domain\Infra\Doctrine\DomainIdType;
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
+use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainId;
 use PHPUnit\Framework\TestCase;
 
 final class DomainIdTypeTest extends TestCase

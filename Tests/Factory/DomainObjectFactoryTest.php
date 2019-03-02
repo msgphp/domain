@@ -6,7 +6,8 @@ namespace MsgPhp\Domain\Tests\Factory;
 
 use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\Exception\InvalidClassException;
-use MsgPhp\Domain\Factory\{DomainObjectFactory, DomainObjectFactoryInterface};
+use MsgPhp\Domain\Factory\DomainObjectFactory;
+use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use PHPUnit\Framework\TestCase;
 

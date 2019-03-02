@@ -9,8 +9,12 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use MsgPhp\Domain\{DomainCollection, DomainCollectionInterface, DomainIdInterface};
-use MsgPhp\Domain\Exception\{DuplicateEntityException, EntityNotFoundException, InvalidClassException};
+use MsgPhp\Domain\DomainCollection;
+use MsgPhp\Domain\DomainCollectionInterface;
+use MsgPhp\Domain\DomainIdInterface;
+use MsgPhp\Domain\Exception\DuplicateEntityException;
+use MsgPhp\Domain\Exception\EntityNotFoundException;
+use MsgPhp\Domain\Exception\InvalidClassException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

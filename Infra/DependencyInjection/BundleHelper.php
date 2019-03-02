@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infra\DependencyInjection;
 
 use Doctrine\ORM\Events as DoctrineOrmEvents;
-use MsgPhp\Domain\Factory\{DomainObjectFactory, DomainObjectFactoryInterface};
-use MsgPhp\Domain\Infra\{Console as ConsoleInfra, Doctrine as DoctrineInfra, Messenger as MessengerInfra};
+use MsgPhp\Domain\Factory\DomainObjectFactory;
+use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
+use MsgPhp\Domain\Infra\Console as ConsoleInfra;
+use MsgPhp\Domain\Infra\Doctrine as DoctrineInfra;
+use MsgPhp\Domain\Infra\Messenger as MessengerInfra;
 use MsgPhp\Domain\Message\DomainMessageBusInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\Alias;

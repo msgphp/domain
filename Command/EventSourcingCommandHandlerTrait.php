@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Command;
 
-use MsgPhp\Domain\Event\{DomainEventInterface, DomainEventHandlerInterface};
+use MsgPhp\Domain\Event\DomainEventHandlerInterface;
+use MsgPhp\Domain\Event\DomainEventInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

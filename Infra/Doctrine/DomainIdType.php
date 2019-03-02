@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infra\Doctrine;
 
-use MsgPhp\Domain\DomainIdInterface;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+use MsgPhp\Domain\DomainIdInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Exception;
 
-use MsgPhp\Domain\Event\{DomainEventHandlerInterface, DomainEventInterface};
+use MsgPhp\Domain\Event\DomainEventHandlerInterface;
+use MsgPhp\Domain\Event\DomainEventInterface;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>

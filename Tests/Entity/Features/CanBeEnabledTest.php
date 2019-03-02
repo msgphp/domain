@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Entity\Features;
 
 use MsgPhp\Domain\Entity\Features\CanBeEnabled;
-use MsgPhp\Domain\Event\{DisableEvent, EnableEvent};
+use MsgPhp\Domain\Event\DisableEvent;
+use MsgPhp\Domain\Event\EnableEvent;
 use PHPUnit\Framework\TestCase;
 
 final class CanBeEnabledTest extends TestCase

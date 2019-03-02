@@ -7,7 +7,8 @@ namespace MsgPhp\Domain\Command\Handler;
 use MsgPhp\Domain\Command\DeleteProjectionDocumentCommand;
 use MsgPhp\Domain\Event\ProjectionDocumentDeletedEvent;
 use MsgPhp\Domain\Factory\DomainObjectFactoryInterface;
-use MsgPhp\Domain\Message\{DomainMessageBusInterface, MessageDispatchingTrait};
+use MsgPhp\Domain\Message\DomainMessageBusInterface;
+use MsgPhp\Domain\Message\MessageDispatchingTrait;
 use MsgPhp\Domain\Projection\ProjectionRepositoryInterface;
 
 /**

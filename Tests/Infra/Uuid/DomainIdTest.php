@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\Uuid;
 
 use MsgPhp\Domain\Infra\Uuid\DomainIdTrait;
-use MsgPhp\Domain\Tests\Fixtures\{TestDomainUuid, TestOtherDomainUuid};
+use MsgPhp\Domain\Tests\Fixtures\TestDomainUuid;
+use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainUuid;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;

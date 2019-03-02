@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Event;
 
-use MsgPhp\Domain\Event\{DomainEventHandlerInterface, DomainEventHandlerTrait, DomainEventInterface};
+use MsgPhp\Domain\Event\DomainEventHandlerInterface;
+use MsgPhp\Domain\Event\DomainEventHandlerTrait;
+use MsgPhp\Domain\Event\DomainEventInterface;
 use MsgPhp\Domain\Exception\UnexpectedDomainEventException;
 use PHPUnit\Framework\TestCase;
 

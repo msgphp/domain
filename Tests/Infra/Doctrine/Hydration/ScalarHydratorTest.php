@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infra\Doctrine\Hydration;
 
 use MsgPhp\Domain\Infra\Doctrine\Hydration\ScalarHydrator;
+use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use MsgPhp\Domain\Tests\Infra\Doctrine\EntityManagerTestTrait;
-use MsgPhp\Domain\Tests\Fixtures\{Entities, TestDomainId};
 use PHPUnit\Framework\TestCase;
 
 final class ScalarHydratorTest extends TestCase

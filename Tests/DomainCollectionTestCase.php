@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests;
 
 use MsgPhp\Domain\DomainCollectionInterface;
-use MsgPhp\Domain\Exception\{EmptyCollectionException, UnknownCollectionElementException};
+use MsgPhp\Domain\Exception\EmptyCollectionException;
+use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 use PHPUnit\Framework\TestCase;
 
 abstract class DomainCollectionTestCase extends TestCase
