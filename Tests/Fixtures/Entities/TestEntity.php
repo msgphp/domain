@@ -13,14 +13,6 @@ use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 class TestEntity extends BaseTestEntity
 {
     /**
-     * @var DomainIdInterface|null
-     * @Doctrine\ORM\Mapping\Id()
-     * @Doctrine\ORM\Mapping\GeneratedValue()
-     * @Doctrine\ORM\Mapping\Column(type="msgphp_domain_id")
-     */
-    private $id;
-
-    /**
      * @var string|null
      * @Doctrine\ORM\Mapping\Column(type="string", nullable=true)
      */
@@ -43,6 +35,14 @@ class TestEntity extends BaseTestEntity
      * @Doctrine\ORM\Mapping\Column(type="boolean", nullable=false)
      */
     public $boolField;
+
+    /**
+     * @var DomainIdInterface|null
+     * @Doctrine\ORM\Mapping\Id()
+     * @Doctrine\ORM\Mapping\GeneratedValue()
+     * @Doctrine\ORM\Mapping\Column(type="msgphp_domain_id")
+     */
+    private $id;
 
     public static function getIdFields(): array
     {

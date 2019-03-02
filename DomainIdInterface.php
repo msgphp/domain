@@ -9,6 +9,8 @@ namespace MsgPhp\Domain;
  */
 interface DomainIdInterface
 {
+    public function __toString(): string;
+
     /**
      * @param mixed $value
      */
@@ -19,6 +21,4 @@ interface DomainIdInterface
     public function equals(self $id): bool;
 
     public function toString(): string;
-
-    public function __toString(): string;
 }

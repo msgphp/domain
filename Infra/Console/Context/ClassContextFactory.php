@@ -66,6 +66,21 @@ final class ClassContextFactory implements ContextFactoryInterface
      */
     private $generatedValues = [];
 
+    /**
+     * @psalm-param class-string $class
+     * @psalm-param array<class-string, class-string> $classMapping
+     *
+     * @param string[] $classMapping
+     */
+    public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactoryInterface $elementFactory = null)
+    {
+        $this->class = $class;
+        $this->method = $method;
+        $this->classMapping = $classMapping;
+        $this->flags = $flags;
+        $this->elementFactory = $elementFactory ?? new ClassContextElementFactory();
+    }
+
     public static function getFieldName(string $argument, bool $isOption = true): string
     {
         $field = strtolower((string) preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], $argument));
@@ -83,21 +98,6 @@ final class ClassContextFactory implements ContextFactoryInterface
         }
 
         return $field;
-    }
-
-    /**
-     * @psalm-param class-string $class
-     * @psalm-param array<class-string, class-string> $classMapping
-     *
-     * @param string[] $classMapping
-     */
-    public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactoryInterface $elementFactory = null)
-    {
-        $this->class = $class;
-        $this->method = $method;
-        $this->classMapping = $classMapping;
-        $this->flags = $flags;
-        $this->elementFactory = $elementFactory ?? new ClassContextElementFactory();
     }
 
     public function configure(InputDefinition $definition): void

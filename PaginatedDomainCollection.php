@@ -34,11 +34,6 @@ final class PaginatedDomainCollection implements PaginatedDomainCollectionInterf
      */
     private $totalCount;
 
-    public static function fromValue(?iterable $value): DomainCollectionInterface
-    {
-        return new self($value ?? []);
-    }
-
     public function __construct(iterable $elements, float $offset = .0, float $limit = .0, float $count = null, float $totalCount = null)
     {
         if (null !== $count) {
@@ -50,6 +45,11 @@ final class PaginatedDomainCollection implements PaginatedDomainCollectionInterf
         $this->limit = $limit;
         $this->count = $count;
         $this->totalCount = $totalCount;
+    }
+
+    public static function fromValue(?iterable $value): DomainCollectionInterface
+    {
+        return new self($value ?? []);
     }
 
     public function getIterator(): \Traversable

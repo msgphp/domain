@@ -15,6 +15,16 @@ trait EntityManagerTestTrait
         destroyEm as public tearDownAfterClass;
     }
 
+    protected function setUp(): void
+    {
+        self::prepareEm();
+    }
+
+    protected function tearDown(): void
+    {
+        self::cleanEm();
+    }
+
     protected static function createSchema(): bool
     {
         return true;
@@ -30,15 +40,5 @@ trait EntityManagerTestTrait
     protected static function getEntityIdTypes(): iterable
     {
         yield DomainIdType::class => TestDomainId::class;
-    }
-
-    protected function setUp(): void
-    {
-        self::prepareEm();
-    }
-
-    protected function tearDown(): void
-    {
-        self::cleanEm();
     }
 }

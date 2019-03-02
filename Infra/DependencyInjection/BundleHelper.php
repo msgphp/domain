@@ -31,6 +31,10 @@ final class BundleHelper
      */
     private static $initialized = [];
 
+    private function __construct()
+    {
+    }
+
     public static function build(ContainerBuilder $container): void
     {
         if ($initialized = &self::getInitialized($container, __FUNCTION__)) {
@@ -191,9 +195,5 @@ final class BundleHelper
         }
 
         return self::$initialized[$hash];
-    }
-
-    private function __construct()
-    {
     }
 }

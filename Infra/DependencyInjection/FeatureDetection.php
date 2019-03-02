@@ -24,6 +24,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 final class FeatureDetection
 {
+    private function __construct()
+    {
+    }
+
     public static function isSymfonyFullStack(): bool
     {
         return class_exists('Symfony\Bundle\FullStack');
@@ -72,9 +76,5 @@ final class FeatureDetection
     public static function isDoctrineOrmAvailable(ContainerInterface $container): bool
     {
         return self::hasDoctrineBundle($container) && class_exists(DoctrineOrmVersion::class);
-    }
-
-    private function __construct()
-    {
     }
 }

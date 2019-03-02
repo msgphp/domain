@@ -15,6 +15,16 @@ trait EventSourcingCommandHandlerTrait
     /**
      * @param object $command
      */
+    abstract protected function getDomainEvent($command): DomainEventInterface;
+
+    /**
+     * @param object $command
+     */
+    abstract protected function getDomainEventHandler($command): DomainEventHandlerInterface;
+
+    /**
+     * @param object $command
+     */
     private function handle($command, callable $onHandled = null): void
     {
         /** @psalm-suppress TypeCoercion */
@@ -26,14 +36,4 @@ trait EventSourcingCommandHandlerTrait
             $onHandled($handler);
         }
     }
-
-    /**
-     * @param object $command
-     */
-    abstract protected function getDomainEvent($command): DomainEventInterface;
-
-    /**
-     * @param object $command
-     */
-    abstract protected function getDomainEventHandler($command): DomainEventHandlerInterface;
 }

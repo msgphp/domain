@@ -14,6 +14,20 @@ trait DomainIdTrait
      */
     private $id;
 
+    public function __construct(string $id = null)
+    {
+        if ('' === $id) {
+            throw new \LogicException('A domain ID cannot be empty.');
+        }
+
+        $this->id = $id;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id ?? '';
+    }
+
     /**
      * @return static
      */
@@ -24,15 +38,6 @@ trait DomainIdTrait
         }
 
         return new static($value);
-    }
-
-    public function __construct(string $id = null)
-    {
-        if ('' === $id) {
-            throw new \LogicException('A domain ID cannot be empty.');
-        }
-
-        $this->id = $id;
     }
 
     public function isEmpty(): bool
@@ -54,11 +59,6 @@ trait DomainIdTrait
     }
 
     public function toString(): string
-    {
-        return $this->id ?? '';
-    }
-
-    public function __toString(): string
     {
         return $this->id ?? '';
     }

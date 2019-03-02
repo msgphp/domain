@@ -20,6 +20,11 @@ final class DomainCollection implements DomainCollectionInterface
      */
     private $collection;
 
+    public function __construct(Collection $collection)
+    {
+        $this->collection = $collection;
+    }
+
     public static function fromValue(?iterable $value): DomainCollectionInterface
     {
         if ($value instanceof Collection) {
@@ -31,11 +36,6 @@ final class DomainCollection implements DomainCollectionInterface
         }
 
         return new self(new ArrayCollection($value ?? []));
-    }
-
-    public function __construct(Collection $collection)
-    {
-        $this->collection = $collection;
     }
 
     public function getIterator(): \Traversable

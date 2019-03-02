@@ -28,6 +28,12 @@ trait EntityManagerTestTrait
      */
     private static $em;
 
+    abstract protected static function createSchema(): bool;
+
+    abstract protected static function getEntityMappings(): iterable;
+
+    abstract protected static function getEntityIdTypes(): iterable;
+
     private static function getEmCacheDir(): string
     {
         static $dir;
@@ -148,10 +154,4 @@ trait EntityManagerTestTrait
 
         return $target;
     }
-
-    abstract protected static function createSchema(): bool;
-
-    abstract protected static function getEntityMappings(): iterable;
-
-    abstract protected static function getEntityIdTypes(): iterable;
 }

@@ -19,6 +19,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class ExtensionHelper
 {
+    private function __construct()
+    {
+    }
+
     public static function configureDomain(ContainerBuilder $container, array $classMapping, array $identityMapping): void
     {
         foreach ($identityMapping as $class => $mapping) {
@@ -167,9 +171,5 @@ final class ExtensionHelper
         }
 
         return $definition;
-    }
-
-    private function __construct()
-    {
     }
 }

@@ -22,6 +22,10 @@ final class ContainerHelper
      */
     private static $counter = 0;
 
+    private function __construct()
+    {
+    }
+
     public static function hasBundle(ContainerInterface $container, string $class): bool
     {
         return \in_array($class, $container->getParameter('kernel.bundles'), true);
@@ -79,9 +83,5 @@ final class ContainerHelper
                 ->addTag('messenger.message_handler', ['bus' => $busId, 'handles' => $handles])
             ;
         }
-    }
-
-    private function __construct()
-    {
     }
 }

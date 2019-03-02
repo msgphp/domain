@@ -18,10 +18,20 @@ trait DomainIdTrait
      */
     private $uuid;
 
+    public function __construct(UuidInterface $uuid = null)
+    {
+        $this->uuid = $uuid ?? Uuid::uuid4();
+    }
+
+    public function __toString(): string
+    {
+        return $this->uuid->toString();
+    }
+
     /**
      * @return static
      */
-    final public static function fromValue($value): DomainIdInterface
+    public static function fromValue($value): DomainIdInterface
     {
         if (null !== $value && !$value instanceof UuidInterface) {
             $value = Uuid::fromString((string) $value);
@@ -30,17 +40,12 @@ trait DomainIdTrait
         return new static($value);
     }
 
-    final public function __construct(UuidInterface $uuid = null)
-    {
-        $this->uuid = $uuid ?? Uuid::uuid4();
-    }
-
-    final public function isEmpty(): bool
+    public function isEmpty(): bool
     {
         return false;
     }
 
-    final public function equals(DomainIdInterface $id): bool
+    public function equals(DomainIdInterface $id): bool
     {
         if ($id === $this) {
             return true;
@@ -53,12 +58,7 @@ trait DomainIdTrait
         return $this->uuid->equals(Uuid::fromString($id->toString()));
     }
 
-    final public function toString(): string
-    {
-        return $this->uuid->toString();
-    }
-
-    final public function __toString(): string
+    public function toString(): string
     {
         return $this->uuid->toString();
     }

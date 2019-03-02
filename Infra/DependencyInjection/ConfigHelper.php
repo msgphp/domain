@@ -15,6 +15,10 @@ final class ConfigHelper
 {
     public const DEFAULT_ID_TYPE = 'integer';
 
+    private function __construct()
+    {
+    }
+
     public static function defaultBundleConfig(array $idTypeMapping): \Closure
     {
         return function (array $value) use ($idTypeMapping): array {
@@ -89,9 +93,5 @@ final class ConfigHelper
         }
 
         return $mapping;
-    }
-
-    private function __construct()
-    {
     }
 }

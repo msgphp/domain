@@ -17,14 +17,14 @@ final class DomainCollection implements DomainCollectionInterface
      */
     private $elements;
 
-    public static function fromValue(?iterable $value): DomainCollectionInterface
-    {
-        return new self($value ?? []);
-    }
-
     public function __construct(iterable $elements)
     {
         $this->elements = $elements;
+    }
+
+    public static function fromValue(?iterable $value): DomainCollectionInterface
+    {
+        return new self($value ?? []);
     }
 
     public function getIterator(): \Traversable
