@@ -49,6 +49,7 @@ final class ClassMethodResolver
                     $type = $name;
                 } else {
                     try {
+                        /** @psalm-suppress TypeCoercion */
                         $type = (new \ReflectionClass($name))->getName();
                     } catch (\ReflectionException $e) {
                         $type = $name;
