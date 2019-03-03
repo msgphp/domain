@@ -42,10 +42,10 @@ final class DomainObjectFactoryTest extends TestCase
     public function testCreateWithAlias(): void
     {
         $object = (new DomainObjectFactory([
-            EmptyTestObject::class => ExtendedEmptyTestObject::class,
-        ]))->create(EmptyTestObject::class);
+            TestEmptyObject::class => TestExtendedEmptyObject::class,
+        ]))->create(TestEmptyObject::class);
 
-        self::assertInstanceOf(ExtendedEmptyTestObject::class, $object);
+        self::assertInstanceOf(TestExtendedEmptyObject::class, $object);
     }
 
     public function testCreateWithDomainId(): void
@@ -70,24 +70,24 @@ final class DomainObjectFactoryTest extends TestCase
 
         $this->expectException(InvalidClassException::class);
 
-        $factory->create(UnknownTestObject::class);
+        $factory->create(TestUnknownObject::class);
     }
 
     public function testCreateWithUnknownNestedObject(): void
     {
         $factory = new DomainObjectFactory();
 
-        self::assertInstanceOf(KnownTestObject::class, $factory->create(KnownTestObject::class));
-        self::assertInstanceOf(KnownTestObject::class, $factory->create(KnownTestObject::class, ['unknown' => 'foo']));
+        self::assertInstanceOf(TestKnownObject::class, $factory->create(TestKnownObject::class));
+        self::assertInstanceOf(TestKnownObject::class, $factory->create(TestKnownObject::class, ['unknown' => 'foo']));
 
         $this->expectException(\TypeError::class);
 
-        $factory->create(KnownTestObject::class, ['arg' => []]);
+        $factory->create(TestKnownObject::class, ['arg' => []]);
     }
 
     public function testCreateWithoutConstructor(): void
     {
-        self::assertInstanceOf(EmptyTestObject::class, (new DomainObjectFactory())->create(EmptyTestObject::class, ['arg']));
+        self::assertInstanceOf(TestEmptyObject::class, (new DomainObjectFactory())->create(TestEmptyObject::class, ['arg']));
     }
 
     public function testCreateWithPrivateConstructor(): void
@@ -96,21 +96,21 @@ final class DomainObjectFactoryTest extends TestCase
 
         $this->expectException(\Error::class);
 
-        $factory->create(PrivateTestObject::class, ['arg']);
+        $factory->create(TestPrivateObject::class, ['arg']);
     }
 
     public function testNestedCreate(): void
     {
-        $object = (new DomainObjectFactory())->create(NestedTestObject::class, [
+        $object = (new DomainObjectFactory())->create(TestNestedObject::class, [
             'test' => ['argA' => 'nested_a', 'argB' => 'nested_b', 'arg_b' => 'ignore'],
             'self' => ['test' => ['argA' => 'foo', 'argB' => 'bar'], 'other' => $other = new TestObject(1, 2)],
         ]);
 
-        self::assertInstanceOf(NestedTestObject::class, $object);
+        self::assertInstanceOf(TestNestedObject::class, $object);
         self::assertInstanceOf(TestObject::class, $object->test);
         self::assertSame('nested_a', $object->test->a);
         self::assertSame('nested_b', $object->test->b);
-        self::assertInstanceOf(NestedTestObject::class, $object->self);
+        self::assertInstanceOf(TestNestedObject::class, $object->self);
         self::assertSame('foo', $object->self->test->a);
         self::assertSame('bar', $object->self->test->b);
         self::assertSame($other, $object->self->other);
@@ -122,7 +122,7 @@ final class DomainObjectFactoryTest extends TestCase
 
         $this->expectException(\LogicException::class);
 
-        $factory->create(NestedTestObject::class);
+        $factory->create(TestNestedObject::class);
     }
 
     public function testNestedCreateWithNestedFactory(): void
@@ -136,7 +136,7 @@ final class DomainObjectFactoryTest extends TestCase
         $factory = new DomainObjectFactory();
         $factory->setNestedFactory($nestedFactory);
 
-        self::assertInstanceOf(NestedTestObject::class, $object = $factory->create(NestedTestObject::class, ['test' => null]));
+        self::assertInstanceOf(TestNestedObject::class, $object = $factory->create(TestNestedObject::class, ['test' => null]));
         self::assertSame($nested, $object->test);
     }
 
@@ -153,14 +153,14 @@ final class DomainObjectFactoryTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $factory->create(NestedTestObject::class, ['test' => ['irrelevant']]);
+        $factory->create(TestNestedObject::class, ['test' => ['irrelevant']]);
     }
 
     public function testReference(): void
     {
-        $reference = (new DomainObjectFactory())->reference(ReferenceTestObject::class, ['fieldA' => 1, 'fieldB' => 2]);
+        $reference = (new DomainObjectFactory())->reference(TestReferenceObject::class, ['fieldA' => 1, 'fieldB' => 2]);
 
-        self::assertInstanceOf(ReferenceTestObject::class, $reference);
+        self::assertInstanceOf(TestReferenceObject::class, $reference);
         self::assertSame([1, 2], $reference->get());
     }
 
@@ -170,16 +170,16 @@ final class DomainObjectFactoryTest extends TestCase
 
         $this->expectException(InvalidClassException::class);
 
-        $factory->reference(UnknownTestObject::class);
+        $factory->reference(TestUnknownObject::class);
     }
 
     public function testGetClass(): void
     {
         $factory = new DomainObjectFactory([
-            EmptyTestObject::class => ExtendedEmptyTestObject::class,
+            TestEmptyObject::class => TestExtendedEmptyObject::class,
         ]);
 
-        self::assertSame(ExtendedEmptyTestObject::class, $factory->getClass(EmptyTestObject::class));
+        self::assertSame(TestExtendedEmptyObject::class, $factory->getClass(TestEmptyObject::class));
         self::assertSame(\stdClass::class, $factory->getClass(\stdClass::class));
     }
 }
@@ -196,7 +196,7 @@ class TestObject
     }
 }
 
-class NestedTestObject
+class TestNestedObject
 {
     public $test;
     public $self;
@@ -210,29 +210,29 @@ class NestedTestObject
     }
 }
 
-class EmptyTestObject
+class TestEmptyObject
 {
 }
 
-class ExtendedEmptyTestObject extends EmptyTestObject
+class TestExtendedEmptyObject extends TestEmptyObject
 {
 }
 
-class PrivateTestObject
+class TestPrivateObject
 {
     private function __construct()
     {
     }
 }
 
-class KnownTestObject
+class TestKnownObject
 {
-    public function __construct(UnknownTestObject $arg = null)
+    public function __construct(TestUnknownObject $arg = null)
     {
     }
 }
 
-class ReferenceTestObject
+class TestReferenceObject
 {
     private $fieldA;
     private $fieldB = 'default B';
