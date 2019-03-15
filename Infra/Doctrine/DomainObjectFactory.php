@@ -48,7 +48,7 @@ final class DomainObjectFactory implements DomainObjectFactoryInterface
             return $this->factory->reference($class, $context);
         }
 
-        if (null == $ref = $this->em->getReference($class, $context)) {
+        if (null === $ref = $this->em->getReference($class, $context)) {
             throw InvalidClassException::create($class);
         }
 
