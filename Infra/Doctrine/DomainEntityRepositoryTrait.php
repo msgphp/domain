@@ -110,9 +110,7 @@ trait DomainEntityRepositoryTrait
      */
     private function doExists($id): bool
     {
-        $id = $this->toIdentity($id);
-
-        if (null === $id) {
+        if (null === $id = $this->toIdentity($id)) {
             return false;
         }
 

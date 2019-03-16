@@ -32,18 +32,15 @@ final class DeleteProjectionDocumentHandler
 
     public function __invoke(DeleteProjectionDocumentCommand $command): void
     {
-        $document = $document = $this->repository->find($command->type, $command->id);
-        if (null === $document) {
+        if (null === $document = $this->repository->find($command->type, $command->id)) {
             return;
         }
 
-        $type = $document->getType();
-        if (null === $type) {
+        if (null === $type = $document->getType()) {
             throw new \LogicException('Document must have a type.');
         }
 
-        $id = $document->getId();
-        if (null === $id) {
+        if (null === $id = $document->getId()) {
             throw new \LogicException('Document must have an ID.');
         }
 
