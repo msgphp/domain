@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Entity\Features;
+namespace MsgPhp\Domain\Model;
 
 use MsgPhp\Domain\Event\DisableEvent;
 use MsgPhp\Domain\Event\EnableEvent;

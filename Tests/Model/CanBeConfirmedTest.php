@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Tests\Entity\Features;
+namespace MsgPhp\Domain\Tests\Model;
 
-use MsgPhp\Domain\Entity\Features\CanBeConfirmed;
 use MsgPhp\Domain\Event\ConfirmEvent;
+use MsgPhp\Domain\Model\CanBeConfirmed;
 use PHPUnit\Framework\TestCase;
 
 final class CanBeConfirmedTest extends TestCase

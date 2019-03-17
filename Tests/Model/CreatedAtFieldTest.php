@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Tests\Entity\Fields;
+namespace MsgPhp\Domain\Tests\Model;
 
-use MsgPhp\Domain\Entity\Fields\CreatedAtField;
+use MsgPhp\Domain\Model\CreatedAtField;
 use PHPUnit\Framework\TestCase;
 
 final class CreatedAtFieldTest extends TestCase
