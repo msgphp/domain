@@ -9,7 +9,7 @@ use MsgPhp\Domain\Projection\ProjectionDocument;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class SaveProjectionDocumentCommand
+class SaveProjectionDocument
 {
     /**
      * @var string|null
@@ -26,7 +26,7 @@ class SaveProjectionDocumentCommand
      */
     public $body;
 
-    final public function __construct(ProjectionDocument $document)
+    public function __construct(ProjectionDocument $document)
     {
         $this->type = $document->getType();
         $this->id = $document->getId();

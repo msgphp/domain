@@ -7,8 +7,8 @@ namespace MsgPhp\Domain\Projection\Command\Handler;
 use MsgPhp\Domain\Factory\DomainObjectFactory;
 use MsgPhp\Domain\Message\DomainMessageBus;
 use MsgPhp\Domain\Message\MessageDispatchingTrait;
-use MsgPhp\Domain\Projection\Command\SaveProjectionDocumentCommand;
-use MsgPhp\Domain\Projection\Event\ProjectionDocumentSavedEvent;
+use MsgPhp\Domain\Projection\Command\SaveProjectionDocument;
+use MsgPhp\Domain\Projection\Event\ProjectionDocumentSaved;
 use MsgPhp\Domain\Projection\ProjectionDocument;
 use MsgPhp\Domain\Projection\ProjectionRepository;
 
@@ -31,11 +31,11 @@ final class SaveProjectionDocumentHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(SaveProjectionDocumentCommand $command): void
+    public function __invoke(SaveProjectionDocument $command): void
     {
         $document = new ProjectionDocument($command->type, $command->id, $command->body);
 
         $this->repository->save($document);
-        $this->dispatch(ProjectionDocumentSavedEvent::class, compact('document'));
+        $this->dispatch(ProjectionDocumentSaved::class, compact('document'));
     }
 }

@@ -59,12 +59,12 @@ class TestEntity extends BaseTestEntity
         ];
     }
 
-    final public function setId(DomainId $id): void
+    public function setId(DomainId $id): void
     {
         $this->id = $id;
     }
 
-    final public function getId(): DomainId
+    public function getId(): DomainId
     {
         return $this->id ?? ($this->id = new TestDomainId());
     }

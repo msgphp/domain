@@ -9,14 +9,14 @@ use MsgPhp\Domain\Projection\ProjectionDocument;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-class ProjectionDocumentDeletedEvent
+class ProjectionDocumentSaved
 {
     /**
      * @var ProjectionDocument
      */
     public $document;
 
-    final public function __construct(ProjectionDocument $document)
+    public function __construct(ProjectionDocument $document)
     {
         $this->document = $document;
     }
