@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Projection;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface ProjectionInterface
+interface Projection
 {
     public static function fromDocument(array $document): self;
 }

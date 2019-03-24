@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Projection;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface ProjectionDocumentTransformerInterface
+interface ProjectionDocumentTransformer
 {
     /**
      * @param object $object

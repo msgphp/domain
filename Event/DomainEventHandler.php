@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Event;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainEventHandlerInterface
+interface DomainEventHandler
 {
-    public function handleEvent(DomainEventInterface $event): bool;
+    public function handleEvent(DomainEvent $event): bool;
 }

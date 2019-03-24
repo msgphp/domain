@@ -7,7 +7,7 @@ namespace MsgPhp\Domain;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainIdInterface
+interface DomainId
 {
     public function __toString(): string;
 

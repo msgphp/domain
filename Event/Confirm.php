@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Exception;
+namespace MsgPhp\Domain\Event;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainExceptionInterface
+class Confirm implements DomainEvent
 {
 }

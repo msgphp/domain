@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Infrastructure\Elasticsearch;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DocumentMappingProviderInterface
+interface DocumentMappingProvider
 {
     public static function provideDocumentMappings(): iterable;
 }

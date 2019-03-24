@@ -9,7 +9,7 @@ namespace MsgPhp\Domain\Message;
  *
  * @internal
  */
-interface MessageReceivingInterface
+interface MessageReceiving
 {
     /**
      * @param object $message

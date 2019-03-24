@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Message;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainMessageBusInterface
+interface DomainMessageBus
 {
     /**
      * @param object $message

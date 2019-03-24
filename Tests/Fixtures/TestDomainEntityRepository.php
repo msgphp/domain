@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Tests\Fixtures;
 
-use MsgPhp\Domain\DomainCollectionInterface;
+use MsgPhp\Domain\DomainCollection;
 
-interface DomainEntityRepositoryTraitInterface
+interface TestDomainEntityRepository
 {
-    public function doFindAll(int $offset = 0, int $limit = 0): DomainCollectionInterface;
+    public function doFindAll(int $offset = 0, int $limit = 0): DomainCollection;
 
-    public function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollectionInterface;
+    public function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection;
 
     public function doFind($id);
 

@@ -7,7 +7,7 @@ namespace MsgPhp\Domain;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface PaginatedDomainCollectionInterface extends DomainCollectionInterface
+interface PaginatedDomainCollection extends DomainCollection
 {
     public function getOffset(): float;
 

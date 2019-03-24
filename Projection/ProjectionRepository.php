@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Projection;
 
-use MsgPhp\Domain\PaginatedDomainCollectionInterface;
+use MsgPhp\Domain\PaginatedDomainCollection;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface ProjectionRepositoryInterface
+interface ProjectionRepository
 {
     /**
-     * @return PaginatedDomainCollectionInterface|ProjectionDocument[]
+     * @return PaginatedDomainCollection|ProjectionDocument[]
      */
-    public function findAll(string $type, int $offset = 0, int $limit = 0): PaginatedDomainCollectionInterface;
+    public function findAll(string $type, int $offset = 0, int $limit = 0): PaginatedDomainCollection;
 
     public function find(string $type, string $id): ?ProjectionDocument;
 

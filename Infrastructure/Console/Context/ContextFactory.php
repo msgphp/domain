@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\StyleInterface;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface ContextFactoryInterface
+interface ContextFactory
 {
     public function configure(InputDefinition $definition): void;
 

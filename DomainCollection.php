@@ -7,7 +7,7 @@ namespace MsgPhp\Domain;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainCollectionInterface extends \Countable, \IteratorAggregate
+interface DomainCollection extends \Countable, \IteratorAggregate
 {
     public static function fromValue(?iterable $value): self;
 

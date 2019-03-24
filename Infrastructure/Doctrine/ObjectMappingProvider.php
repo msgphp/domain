@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Infrastructure\Doctrine;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface ObjectMappingProviderInterface
+interface ObjectMappingProvider
 {
     public const TYPE_EMBEDDED = 'embedded';
     public const TYPE_MANY_TO_MANY = 'manyToMany';

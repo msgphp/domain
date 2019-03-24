@@ -7,7 +7,7 @@ namespace MsgPhp\Domain\Factory;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-interface DomainObjectFactoryInterface
+interface DomainObjectFactory
 {
     /**
      * @psalm-template T
