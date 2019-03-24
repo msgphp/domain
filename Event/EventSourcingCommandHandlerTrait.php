@@ -15,8 +15,6 @@ trait EventSourcingCommandHandlerTrait
     abstract protected function getDomainEvent($command): DomainEventInterface;
 
     /**
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     *
      * @param object $command
      *
      * @return object
