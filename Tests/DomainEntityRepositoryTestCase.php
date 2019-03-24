@@ -431,7 +431,28 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
     protected function equalsEntity($expected, $actual): bool
     {
-        return $expected == $actual;
+        $equals = true;
+        foreach (($r = (new \ReflectionObject($expected)))->getProperties() as $property) {
+            $property->setAccessible(true);
+            $expectedValue = $property->getValue($expected);
+            $actualValue = $property->getValue($actual);
+
+            if (\is_object($expectedValue) && \is_object($actualValue)) {
+                if (!$this->equalsEntity($expectedValue, $actualValue)) {
+                    $equals = false;
+                    break;
+                }
+
+                continue;
+            }
+
+            if ($expectedValue !== $actualValue) {
+                $equals = false;
+                break;
+            }
+        }
+
+        return $equals;
     }
 
     private function loadEntities(Entities\BaseTestEntity ...$context): void

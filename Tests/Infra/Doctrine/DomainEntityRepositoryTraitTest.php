@@ -68,32 +68,6 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
         self::assertNull($repository->toIdentity(['foo' => 'bar']));
     }
 
-    protected function equalsEntity($expected, $actual): bool
-    {
-        $equals = true;
-        foreach (($r = (new \ReflectionObject($expected)))->getProperties() as $property) {
-            $property->setAccessible(true);
-            $expectedValue = $property->getValue($expected);
-            $actualValue = $property->getValue($actual);
-
-            if (\is_object($expectedValue) && \is_object($actualValue)) {
-                if (!$this->equalsEntity($expectedValue, $actualValue)) {
-                    $equals = false;
-                    break;
-                }
-
-                continue;
-            }
-
-            if ($expectedValue !== $actualValue) {
-                $equals = false;
-                break;
-            }
-        }
-
-        return $equals;
-    }
-
     /**
      * @inheritdoc
      */
