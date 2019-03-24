@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infrastructure\Doctrine;
 
 use Doctrine\ORM\Proxy\Proxy;
-use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\Factory\DomainObjectFactory as BaseDomainObjectFactory;
 use MsgPhp\Domain\Infrastructure\Doctrine\DomainObjectFactory;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
