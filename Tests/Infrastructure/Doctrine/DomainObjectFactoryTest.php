@@ -9,6 +9,7 @@ use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\Factory\DomainObjectFactory as BaseDomainObjectFactory;
 use MsgPhp\Domain\Infrastructure\Doctrine\DomainObjectFactory;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use PHPUnit\Framework\TestCase;
 
 final class DomainObjectFactoryTest extends TestCase
@@ -67,8 +68,12 @@ final class DomainObjectFactoryTest extends TestCase
         self::assertSame($obj, $factory->create(\stdClass::class));
     }
 
-    public function testReference(): void
+    public function testReference2(): void
     {
+        self::$em->persist($entity = Entities\TestEntity::create(['intField' => 1, 'boolField' => false]));
+        self::$em->flush();
+        self::$em->clear();
+
         $innerFactory = $this->createMock(BaseDomainObjectFactory::class);
         $innerFactory->expects(self::once())
             ->method('getClass')
@@ -76,9 +81,11 @@ final class DomainObjectFactoryTest extends TestCase
         ;
         $factory = new DomainObjectFactory($innerFactory, self::$em);
 
-        self::assertInstanceOf(Proxy::class, $ref = $factory->reference(Entities\TestEntity::class, ['id' => $id = $this->createMock(DomainId::class)]));
+        self::assertInstanceOf(Proxy::class, $ref = $factory->reference(Entities\TestEntity::class, ['id' => $id = new TestDomainId('1')]));
         self::assertInstanceOf(Entities\TestEntity::class, $ref);
-        self::assertSame($id, $ref->getId());
+        self::assertSame('1', $entity->getId()->toString());
+        self::assertSame(1, $entity->intField);
+        self::assertSame(false, $entity->boolField);
     }
 
     public function testReferenceWithDiscriminator(): void
