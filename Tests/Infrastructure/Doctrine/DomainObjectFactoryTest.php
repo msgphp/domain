@@ -68,7 +68,7 @@ final class DomainObjectFactoryTest extends TestCase
         self::assertSame($obj, $factory->create(\stdClass::class));
     }
 
-    public function testReference2(): void
+    public function testReference(): void
     {
         self::$em->persist($entity = Entities\TestEntity::create(['intField' => 1, 'boolField' => false]));
         self::$em->flush();
@@ -85,7 +85,7 @@ final class DomainObjectFactoryTest extends TestCase
         self::assertInstanceOf(Entities\TestEntity::class, $ref);
         self::assertSame('1', $entity->getId()->toString());
         self::assertSame(1, $entity->intField);
-        self::assertSame(false, $entity->boolField);
+        self::assertFalse($entity->boolField);
     }
 
     public function testReferenceWithDiscriminator(): void
