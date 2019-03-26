@@ -56,7 +56,7 @@ final class PackageMetadata
         $classes = [];
 
         foreach ($this->findPaths('Event') as $path) {
-            if ('Event.php' === substr($path, -9) && is_file($path)) {
+            if ('.php' === substr($path, -4) && is_file($path)) {
                 $classes[] = $this->namespace.'Event\\'.basename($path, '.php');
             }
         }
