@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MsgPhp\Domain\Infrastructure\DependencyInjection\Compiler;
 
-use MsgPhp\Domain\Event\DomainEvent;
 use MsgPhp\Domain\Infrastructure\DependencyInjection\ContainerHelper;
 use MsgPhp\Domain\Infrastructure\DependencyInjection\FeatureDetection;
 use MsgPhp\Domain\Message\DomainMessageBus;
