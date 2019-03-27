@@ -117,7 +117,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $this->validate()->always(function (array $value) use ($classes): array {
             foreach ($value as $class => $classValue) {
                 foreach ($classes as $subClass) {
-                    if (!is_subclass_of($class, $subClass)) {
+                    if (!is_subclass_of((string) $class, $subClass)) {
                         throw new \LogicException(sprintf('Class "%s" must be a sub class of "%s".', $class, $subClass));
                     }
                 }
