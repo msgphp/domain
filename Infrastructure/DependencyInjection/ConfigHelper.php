@@ -49,10 +49,10 @@ final class ConfigHelper
             $handlerAvailable = $available && is_subclass_of($classMapping[$class], DomainEventHandler::class);
 
             foreach ($features as $feature => $info) {
-                if (!\is_array($info)) {
-                    $config += [$info => $available];
-                } else {
+                if (\is_array($info)) {
                     $config += array_fill_keys($info, $available && self::uses($classMapping[$class], $feature) ? $handlerAvailable : false);
+                } else {
+                    $config += [$info => $available];
                 }
             }
         }
