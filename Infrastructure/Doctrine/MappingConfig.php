@@ -46,6 +46,6 @@ final class MappingConfig
      */
     public function interpolate(string $contents): string
     {
-        return str_replace('%msgphp.doctrine.mapping_config.key_max_length%', (string) ($this->keyMaxLength ?? self::DEFAULT_KEY_MAX_LENGTH), $contents);
+        return str_replace('{{ key_max_length }}', (string) ($this->keyMaxLength ?? self::DEFAULT_KEY_MAX_LENGTH), $contents);
     }
 }
