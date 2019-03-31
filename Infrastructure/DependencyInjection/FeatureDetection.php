@@ -6,6 +6,7 @@ namespace MsgPhp\Domain\Infrastructure\DependencyInjection;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\ORM\Version as DoctrineOrmVersion;
+use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -51,6 +53,16 @@ final class FeatureDetection
     public static function hasDoctrineBundle(ContainerInterface $container): bool
     {
         return ContainerHelper::hasBundle($container, DoctrineBundle::class);
+    }
+
+    public static function hasSensioFrameworkExtraBundle(ContainerInterface $container): bool
+    {
+        return ContainerHelper::hasBundle($container, SensioFrameworkExtraBundle::class);
+    }
+
+    public static function isRouterAvailable(ContainerInterface $container): bool
+    {
+        return !self::isSymfonyFullStack() && self::hasFrameworkBundle($container) && interface_exists(RouterInterface::class);
     }
 
     public static function isFormAvailable(ContainerInterface $container): bool
