@@ -42,7 +42,7 @@ final class ExtensionHelper
 
             if (isset($uuidMapping[$type])) {
                 if (!class_exists($uuidClass = $uuidMapping[$type])) {
-                    throw new \LogicException(sprintf('Type "%s" for identifier "%s" requires "ramsey/uuid-doctrine".', $type, $idClass));
+                    throw new \LogicException('Type "'.$type.'" for identifier "'.$idClass.'" requires "ramsey/uuid-doctrine".');
                 }
 
                 $dbalTypes[$uuidClass::NAME] = $uuidClass;
@@ -53,7 +53,7 @@ final class ExtensionHelper
             }
 
             if (!\defined($typeClass.'::NAME')) {
-                throw new \LogicException(sprintf('Type class "%s" for identifier "%s" requires a "NAME" constant.', $typeClass, $idClass));
+                throw new \LogicException('Type class "'.$typeClass.'" for identifier "'.$idClass.'" requires a "NAME" constant.');
             }
 
             $dbalTypes[$typeClass::NAME] = $typeClass;
@@ -81,7 +81,7 @@ final class ExtensionHelper
             $param = (new \ReflectionMethod($definition->getClass() ?? (string) $id, '__invoke'))->getParameters()[0] ?? null;
 
             if (null === $param || null === $command = $param->getClass()) {
-                throw new \LogicException(sprintf('Missing command class type-hint for handler service "%s".', $id));
+                throw new \LogicException('Missing command class type-hint for handler service "'.$id.'".');
             }
 
             $command = $command->getName();

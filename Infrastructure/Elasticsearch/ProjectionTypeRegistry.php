@@ -129,7 +129,7 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
         foreach ($this->mappings as $type => $mapping) {
             if (\is_string($mapping)) {
                 if (!class_exists($mapping) || !is_subclass_of($mapping, DocumentMappingProvider::class)) {
-                    throw new \LogicException(sprintf('The class "%s" does not exists or is not a sub class of "%s".', $mapping, DocumentMappingProvider::class));
+                    throw new \LogicException('Class "'.$mapping.'" does not exists or is not a sub class of "'.DocumentMappingProvider::class.'".');
                 }
 
                 yield from $mapping::provideDocumentMappings();

@@ -33,8 +33,11 @@ final class ContainerHelper
 
     public static function getClassReflection(ContainerBuilder $container, ?string $class): \ReflectionClass
     {
-        if (!$class || !($reflection = $container->getReflectionClass($class))) {
-            throw new InvalidArgumentException(sprintf('Invalid class "%s".', $class));
+        if (null === $class) {
+            throw new InvalidArgumentException('Missing class.');
+        }
+        if (null === $reflection = $container->getReflectionClass($class)) {
+            throw new InvalidArgumentException('Invalid class "'.$class.'".');
         }
 
         return $reflection;

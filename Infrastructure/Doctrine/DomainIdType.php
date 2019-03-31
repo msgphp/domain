@@ -27,7 +27,7 @@ abstract class DomainIdType extends Type
     final public static function setClass(string $class): void
     {
         if (!is_subclass_of($class, DomainId::class)) {
-            throw new \LogicException(sprintf('Domain ID class must be a sub class of "%s", got "%s".', DomainId::class, $class));
+            throw new \LogicException('Domain ID class must be a sub class of "'.DomainId::class.'", got "'.$class.'".');
         }
 
         self::$mapping[static::class]['class'] = $class;
@@ -39,7 +39,7 @@ abstract class DomainIdType extends Type
     final public static function getClass(): string
     {
         if (!isset(self::$mapping[static::class]['class'])) {
-            throw new \LogicException(sprintf('No class set for type "%s".', static::class));
+            throw new \LogicException('No class set for type "'.static::class.'".');
         }
 
         return self::$mapping[static::class]['class'];

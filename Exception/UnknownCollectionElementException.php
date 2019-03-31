@@ -14,6 +14,6 @@ final class UnknownCollectionElementException extends \OutOfBoundsException impl
      */
     public static function createForKey($key): self
     {
-        return new self(sprintf('Collection element with key "%s" does not exists.', (string) $key));
+        return new self('Collection element with key "'.$key.'" does not exists.');
     }
 }

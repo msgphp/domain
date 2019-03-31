@@ -73,7 +73,7 @@ final class ProjectionDocument
         }
 
         if (!is_subclass_of($this->type, Projection::class)) {
-            throw new \LogicException(sprintf('Document type must be a sub class of "%s", got "%s".', Projection::class, $this->type));
+            throw new \LogicException('Document type must be a sub class of "'.Projection::class.'", got "'.$this->type.'".');
         }
 
         return $this->type::fromDocument($this->body);

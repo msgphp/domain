@@ -67,7 +67,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
     public function reference(string $class, array $context = [])
     {
         if (!class_exists(Instantiator::class)) {
-            throw new \LogicException(sprintf('Method "%s()" requires "symfony/var-exporter".', __METHOD__));
+            throw new \LogicException('Method "'.__METHOD__.'()" requires "symfony/var-exporter".');
         }
 
         $class = $this->getClass($class, $context);
@@ -109,7 +109,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
                 $given = false;
                 $value = $metadata['default'];
             } else {
-                throw new \LogicException(sprintf('No value available for argument $%s in class method "%s::%s()".', $argument, $class, $method));
+                throw new \LogicException('No value available for argument $'.$argument.' in class method "'.$class.'::'.$method.'()".');
             }
 
             $type = $metadata['type'];

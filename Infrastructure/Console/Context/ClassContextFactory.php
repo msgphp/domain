@@ -181,7 +181,7 @@ final class ClassContextFactory implements ContextFactory
 
             if ($required || $given) {
                 if (!$interactive) {
-                    throw new \LogicException(sprintf('No value provided for "%s".', $field));
+                    throw new \LogicException('No value provided for "'.$field.'".');
                 }
 
                 if ($element->generate($io, $generated)) {

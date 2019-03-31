@@ -33,7 +33,7 @@ final class ConfigHelper
             }
             foreach ($value['id_type_mapping'] as $id => $type) {
                 if (!isset($value['class_mapping'][$id])) {
-                    throw new \LogicException(sprintf('No class available for ID "%s" of data-type "%s".', $id, $type));
+                    throw new \LogicException('No class available for ID "'.$id.'" of data-type "'.$type.'".');
                 }
             }
             unset($value['default_id_type']);

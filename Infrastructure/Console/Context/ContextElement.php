@@ -81,7 +81,7 @@ final class ContextElement
         $generated = null;
         $result = false;
 
-        if (null !== $this->generator && $result = $io->confirm(sprintf('Generate a value for "%s"?', $this->label))) {
+        if (null !== $this->generator && $result = $io->confirm('Generate a value for <comment>'.$this->label.'</comment>?')) {
             $generated = ($this->generator)();
         }
 

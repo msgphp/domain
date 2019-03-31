@@ -15,7 +15,7 @@ trait EventSourcingCommandHandlerTrait
     private function handleEvent($target, DomainEvent $event): bool
     {
         if (!$target instanceof DomainEventHandler) {
-            throw new \LogicException(sprintf('Event target "%s" must be an instance of "%s" to handle event "%s".', \get_class($target), DomainEventHandler::class, \get_class($event)));
+            throw new \LogicException('Event target "'.\get_class($target).'" must be an instance of "'.DomainEventHandler::class.'" to handle event "'.\get_class($event).'".');
         }
 
         return $target->handleEvent($event);

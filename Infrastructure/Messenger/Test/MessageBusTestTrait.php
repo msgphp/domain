@@ -60,7 +60,7 @@ trait MessageBusTestTrait
     private static function assertMessageIsDispatched(string $class, callable $assertion = null): void
     {
         if (!isset(self::$dispatchedMessages[$class])) {
-            throw new \LogicException(sprintf('Message "%s" is not dispatched.', $class));
+            throw new \LogicException('Message "'.$class.'" is not dispatched, but was expected to.');
         }
 
         if (null === $assertion) {
@@ -74,8 +74,8 @@ trait MessageBusTestTrait
 
     private static function assertMessageIsDispatchedOnce(string $class, callable $assertion = null): void
     {
-        if (1 !== \count(self::$dispatchedMessages[$class] ?? [])) {
-            throw new \LogicException(sprintf('Message "%s" is not dispatched exactly once.', $class));
+        if (1 !== $count = \count(self::$dispatchedMessages[$class] ?? [])) {
+            throw new \LogicException('Message "'.$class.'" is dispatched '.$count.' times, but was expected only once.');
         }
 
         self::assertMessageIsDispatched($class, $assertion);
@@ -84,7 +84,7 @@ trait MessageBusTestTrait
     private static function assertMessageIsNotDispatched(string $class): void
     {
         if (isset(self::$dispatchedMessages[$class])) {
-            throw new \LogicException(sprintf('Message "%s" is dispatched.', $class));
+            throw new \LogicException('Message "'.$class.'" is dispatched, but was not expected to.');
         }
     }
 }

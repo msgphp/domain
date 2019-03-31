@@ -35,7 +35,7 @@ final class ClassMappingNode extends PrototypedArrayNode
         parent::validateType($value);
 
         if (!\is_array($value)) {
-            throw new \UnexpectedValueException(sprintf('Expected configuration value to be type array, got "%s".', \gettype($value)));
+            throw new \UnexpectedValueException('Expected configuration value to be type array, got "'.\gettype($value).'".');
         }
 
         foreach ($value as $k => $v) {
@@ -43,7 +43,7 @@ final class ClassMappingNode extends PrototypedArrayNode
                 continue;
             }
 
-            $e = new InvalidConfigurationException(sprintf('A class or interface named "%s" does not exists at path "%s".%s', $k, $this->getPath(), isset($this->hints[$k]) ? ' '.$this->hints[$k] : ''));
+            $e = new InvalidConfigurationException('A class or interface named "'.$k.'" does not exists at path "'.$this->getPath().'".'.(isset($this->hints[$k]) ? ' '.$this->hints[$k] : ''));
             $e->setPath($this->getPath());
             if ($hint = $this->getInfo()) {
                 $e->addHint($hint);

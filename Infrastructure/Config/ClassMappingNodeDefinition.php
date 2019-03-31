@@ -47,7 +47,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
                 ->ifTrue(function (array $value) use ($class): bool {
                     return !isset($value[$class]);
                 })
-                ->thenInvalid(sprintf('Class "%s" must be configured.', $class))
+                ->thenInvalid('Class "'.$class.'" must be configured.')
             ;
         }
 
@@ -65,7 +65,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
                 ->ifTrue(function (array $value) use ($class): bool {
                     return isset($value[$class]);
                 })
-                ->thenInvalid(sprintf('Class "%s" is not applicable to be configured.', $class))
+                ->thenInvalid('Class "'.$class.'" is not applicable to be configured.')
             ;
         }
 
@@ -77,7 +77,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $this->validate()->always(function (array $value) use ($classes): array {
             if ($classes !== ($missing = array_diff($classes, array_keys($value))) && $missing) {
                 foreach (array_diff($classes, $missing) as $known) {
-                    throw new \LogicException(sprintf('Class "%s" requires "%s" to be configured.', $known, implode('", "', $missing)));
+                    throw new \LogicException('Class "'.$known.'" requires "'.implode('", "', $missing).'" to be configured.');
                 }
             }
 
@@ -99,10 +99,10 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $this->validate()->always(function (array $value): array {
             foreach ($value as $class => $mappedClass) {
                 if (!\is_string($mappedClass)) {
-                    throw new \LogicException(sprintf('Class "%s" must be configured to a mapped sub class value, got type "%s".', $class, \gettype($mappedClass)));
+                    throw new \LogicException('Class "'.$class.'" must be configured to a mapped sub class value, got type "'.\gettype($mappedClass).'".');
                 }
                 if (!is_subclass_of($mappedClass, $class)) {
-                    throw new \LogicException(sprintf('Class "%s" must be configured to a mapped sub class value, got "%s".', $class, $mappedClass));
+                    throw new \LogicException('Class "'.$class.'" must be configured to a mapped sub class value, got "'.$mappedClass.'".');
                 }
             }
 
@@ -118,7 +118,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
             foreach ($value as $class => $classValue) {
                 foreach ($classes as $subClass) {
                     if (!is_subclass_of((string) $class, $subClass)) {
-                        throw new \LogicException(sprintf('Class "%s" must be a sub class of "%s".', $class, $subClass));
+                        throw new \LogicException('Class "%s" must be a sub class of "%s".', $class, $subClass);
                     }
                 }
             }
@@ -155,17 +155,17 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 
     public function children(): BaseNodeBuilder
     {
-        throw new \BadMethodCallException(sprintf('Method "%s" is not applicable.', __METHOD__));
+        throw new \BadMethodCallException('Method "'.__METHOD__.'" is not applicable.');
     }
 
     public function append(NodeDefinition $node): self
     {
-        throw new \BadMethodCallException(sprintf('Method "%s" is not applicable.', __METHOD__));
+        throw new \BadMethodCallException('Method "'.__METHOD__.'" is not applicable.');
     }
 
     public function getChildNodeDefinitions(): array
     {
-        throw new \BadMethodCallException(sprintf('Method "%s" is not applicable.', __METHOD__));
+        throw new \BadMethodCallException('Method "'.__METHOD__.'" is not applicable.');
     }
 
     public function setBuilder(BaseNodeBuilder $builder): void
@@ -201,7 +201,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $prototypedNode = $prototype->getNode();
 
         if (!$prototypedNode instanceof PrototypeNodeInterface) {
-            throw new \LogicException(sprintf('Prototyped node must be an instance of "%s", got "%s".', PrototypeNodeInterface::class, \get_class($prototypedNode)));
+            throw new \LogicException('Prototyped node must be an instance of "'.PrototypeNodeInterface::class.'", got "'.\get_class($prototypedNode).'".');
         }
 
         $node->setPrototype($prototypedNode);
