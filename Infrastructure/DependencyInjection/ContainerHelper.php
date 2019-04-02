@@ -66,6 +66,13 @@ final class ContainerHelper
         }
     }
 
+    public static function clearTag(ContainerBuilder $container, string $tag): void
+    {
+        foreach ($container->findTaggedServiceIds($tag) as $id => $attr) {
+            $container->getDefinition($id)->clearTag($tag);
+        }
+    }
+
     public static function registerAnonymous(ContainerBuilder $container, string $class, bool $child = false, string &$id = null): Definition
     {
         $definition = $child ? new ChildDefinition($class) : new Definition($class);
