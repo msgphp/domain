@@ -13,17 +13,15 @@ final class DomainEventHandlerTraitTest extends TestCase
 {
     public function testHandleEvent(): void
     {
-        $object = $this->getObject();
+        self::assertTrue($this->getObject()->handleEvent(new TestAction()));
+    }
 
-        self::assertTrue($object->handleEvent($event = new TestAction()));
-        self::assertTrue($event->handled);
-
-        $event = $this->getMockBuilder(DomainEvent::class)
+    public function testHandleRootEvent(): void
+    {
+        self::assertFalse($this->getObject()->handleEvent($this->getMockBuilder(DomainEvent::class)
             ->setMockClassName('MsgPhp_Test_Action')
-            ->getMock()
+            ->getMock()))
         ;
-        self::assertFalse($object->handleEvent($event));
-        self::assertTrue($event->handled);
     }
 
     public function testHandleEventWithUnknownEvent(): void
@@ -42,15 +40,11 @@ final class DomainEventHandlerTraitTest extends TestCase
 
             private function onTestActionEvent(TestAction $event): bool
             {
-                $event->handled = true;
-
                 return true;
             }
 
-            private function onMsgPhp_Test_ActionEvent(\MsgPhp_Test_Action $event): bool
+            private function onMsgPhp_Test_ActionEvent($event): bool
             {
-                $event->handled = true;
-
                 return false;
             }
         };
@@ -59,5 +53,4 @@ final class DomainEventHandlerTraitTest extends TestCase
 
 class TestAction implements DomainEvent
 {
-    public $handled = false;
 }
