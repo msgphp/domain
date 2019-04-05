@@ -57,7 +57,7 @@ abstract class BaseTestEntity
     final public static function getFields(): iterable
     {
         $fieldNames = array_keys($fieldValues = static::getFieldValues());
-        $cartesian = function (array $set) use (&$cartesian): array {
+        $cartesian = static function (array $set) use (&$cartesian): array {
             if (!$set) {
                 return [[]];
             }

@@ -21,7 +21,7 @@ final class ConfigHelper
 
     public static function defaultBundleConfig(array $idTypeMapping): \Closure
     {
-        return function (array $value) use ($idTypeMapping): array {
+        return static function (array $value) use ($idTypeMapping): array {
             foreach ($idTypeMapping as $id => $mapping) {
                 $types = array_keys($mapping);
                 $type = $value['id_type_mapping'][$id] ?? ($value['id_type_mapping'][$id] = $value['default_id_type'] ?? reset($types));
@@ -63,7 +63,7 @@ final class ConfigHelper
         static $uses = [];
 
         if (!isset($uses[$class])) {
-            $resolve = function (string $class) use (&$resolve): array {
+            $resolve = static function (string $class) use (&$resolve): array {
                 $resolved = [];
 
                 foreach (class_uses($class) as $used) {

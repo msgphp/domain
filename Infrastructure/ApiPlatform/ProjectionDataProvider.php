@@ -47,7 +47,7 @@ final class ProjectionDataProvider implements CollectionDataProviderInterface, I
     {
         $collection = $this->repository->findAll($resourceClass);
 
-        return new Paginator(new GenericPaginatedDomainCollection((function () use ($collection): iterable {
+        return new Paginator(new GenericPaginatedDomainCollection((static function () use ($collection): iterable {
             foreach ($collection as $document) {
                 yield $document->toProjection();
             }

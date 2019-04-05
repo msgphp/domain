@@ -19,7 +19,7 @@ final class ResolveDomainPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $container->setParameter($param = 'msgphp.domain.event_classes', array_merge(($container->hasParameter($param) ? $container->getParameter($param) : []), array_values(array_map(function (string $file): string {
+        $container->setParameter($param = 'msgphp.domain.event_classes', array_merge(($container->hasParameter($param) ? $container->getParameter($param) : []), array_values(array_map(static function (string $file): string {
             return 'MsgPhp\\Domain\\Projection\\Event\\'.basename($file, '.php');
         }, glob(\dirname(__DIR__, 3).'/Projection/Event/*.php')))));
 

@@ -19,7 +19,7 @@ abstract class DomainCollectionTestCase extends TestCase
         self::assertSame([1], iterator_to_array($class::fromValue([1])));
         self::assertSame([1, 'k' => '2'], iterator_to_array($class::fromValue([1, 'k' => '2'])));
         self::assertSame([1, 2, 3], iterator_to_array($class::fromValue(new \ArrayIterator([1, 2, 3]))));
-        self::assertSame(['k' => 1, 2, '3' => 'v'], iterator_to_array($class::fromValue((function () {
+        self::assertSame(['k' => 1, 2, '3' => 'v'], iterator_to_array($class::fromValue((static function () {
             yield from ['k' => 1, 2];
             yield '3' => 'v';
         })())));
@@ -119,11 +119,11 @@ abstract class DomainCollectionTestCase extends TestCase
 
     public function testFilter(): void
     {
-        self::assertNotSame($collection = static::createCollection([]), $filtered = $collection->filter(function (): bool {
+        self::assertNotSame($collection = static::createCollection([]), $filtered = $collection->filter(static function (): bool {
             return true;
         }));
         self::assertSame([], iterator_to_array($filtered));
-        self::assertSame([1, 2 => 3], iterator_to_array(static::createCollection([1, null, 3])->filter(function ($v): bool {
+        self::assertSame([1, 2 => 3], iterator_to_array(static::createCollection([1, null, 3])->filter(static function ($v): bool {
             return null !== $v;
         })));
     }
@@ -141,10 +141,10 @@ abstract class DomainCollectionTestCase extends TestCase
 
     public function testMap(): void
     {
-        self::assertSame([], iterator_to_array(static::createCollection([])->map(function ($v) {
+        self::assertSame([], iterator_to_array(static::createCollection([])->map(static function ($v) {
             return $v;
         })));
-        self::assertSame(['k' => 2, 4, 6], iterator_to_array(static::createCollection(['k' => 1, 2, 3])->map(function (int $v): int {
+        self::assertSame(['k' => 2, 4, 6], iterator_to_array(static::createCollection(['k' => 1, 2, 3])->map(static function (int $v): int {
             return $v * 2;
         })));
     }

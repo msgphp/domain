@@ -44,7 +44,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
     {
         foreach ($classes as $class) {
             $this->validate()
-                ->ifTrue(function (array $value) use ($class): bool {
+                ->ifTrue(static function (array $value) use ($class): bool {
                     return !isset($value[$class]);
                 })
                 ->thenInvalid('Class "'.$class.'" must be configured.')
@@ -62,7 +62,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
     {
         foreach ($classes as $class) {
             $this->validate()
-                ->ifTrue(function (array $value) use ($class): bool {
+                ->ifTrue(static function (array $value) use ($class): bool {
                     return isset($value[$class]);
                 })
                 ->thenInvalid('Class "'.$class.'" is not applicable to be configured.')
@@ -74,7 +74,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 
     public function groupClasses(array $classes): self
     {
-        $this->validate()->always(function (array $value) use ($classes): array {
+        $this->validate()->always(static function (array $value) use ($classes): array {
             if ($classes !== ($missing = array_diff($classes, array_keys($value))) && $missing) {
                 foreach (array_diff($classes, $missing) as $known) {
                     throw new \LogicException('Class "'.$known.'" requires "'.implode('", "', $missing).'" to be configured.');
@@ -96,7 +96,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 
     public function subClassValues(): self
     {
-        $this->validate()->always(function (array $value): array {
+        $this->validate()->always(static function (array $value): array {
             foreach ($value as $class => $mappedClass) {
                 if (!\is_string($mappedClass)) {
                     throw new \LogicException('Class "'.$class.'" must be configured to a mapped sub class value, got type "'.\gettype($mappedClass).'".');
@@ -114,7 +114,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 
     public function subClassKeys(array $classes): self
     {
-        $this->validate()->always(function (array $value) use ($classes): array {
+        $this->validate()->always(static function (array $value) use ($classes): array {
             foreach ($value as $class => $classValue) {
                 foreach ($classes as $subClass) {
                     if (!is_subclass_of((string) $class, $subClass)) {
@@ -132,7 +132,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
     public function defaultMapping(array $mapping): self
     {
         $this->defaultValue($mapping);
-        $this->validate()->always(function (array $value) use ($mapping): array {
+        $this->validate()->always(static function (array $value) use ($mapping): array {
             return $value + $mapping;
         });
 

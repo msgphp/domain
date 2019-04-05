@@ -138,11 +138,11 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyFilter(): void
     {
-        self::assertNotSame($collection = self::createLazyCollection([]), $filtered = $collection->filter(function (): bool {
+        self::assertNotSame($collection = self::createLazyCollection([]), $filtered = $collection->filter(static function (): bool {
             return true;
         }));
         self::assertSame([], iterator_to_array($filtered));
-        self::assertSame([1, 2 => 3], iterator_to_array(($collection = static::createLazyCollection([1, null, 3], $visited))->filter($filter = function ($v): bool {
+        self::assertSame([1, 2 => 3], iterator_to_array(($collection = static::createLazyCollection([1, null, 3], $visited))->filter($filter = static function ($v): bool {
             return null !== $v;
         })));
         self::assertSame([1, null, 3], $visited);
@@ -168,10 +168,10 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyMap(): void
     {
-        self::assertSame([], iterator_to_array(self::createLazyCollection([])->map(function ($v) {
+        self::assertSame([], iterator_to_array(self::createLazyCollection([])->map(static function ($v) {
             return $v;
         })));
-        self::assertSame([2], iterator_to_array($collection = self::createLazyCollection([1])->map($mapper = function (int $v): int {
+        self::assertSame([2], iterator_to_array($collection = self::createLazyCollection([1])->map($mapper = static function (int $v): int {
             return $v * 2;
         })));
 

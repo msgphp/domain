@@ -31,7 +31,7 @@ trait MessageBusTestTrait
 
     private static function initBus(): void
     {
-        self::$bus = new MessageBus([new HandleMessageMiddleware(new HandlersLocator(['*' => [function ($message): void {
+        self::$bus = new MessageBus([new HandleMessageMiddleware(new HandlersLocator(['*' => [static function ($message): void {
             self::$dispatchedMessages[$messageClass = \get_class($message)][] = $message;
 
             foreach (self::getMessageHandlers() as $class => $handler) {
