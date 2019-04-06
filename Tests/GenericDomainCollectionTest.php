@@ -27,6 +27,17 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         iterator_to_array($collection);
     }
 
+    public function testDecoratedGetIterator(): void
+    {
+        $iterator = $this->createMock(\IteratorAggregate::class);
+        $iterator->expects(self::once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([1]))
+        ;
+
+        self::assertSame([1], iterator_to_array(new GenericDomainCollection($iterator)));
+    }
+
     public function testLazyIsEmpty(): void
     {
         self::assertTrue(self::createLazyCollection([])->isEmpty());
@@ -38,6 +49,17 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $this->assertClosedGenerator();
 
         $collection->isEmpty();
+    }
+
+    public function testDecoratedIsEmpty(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('isEmpty')
+            ->willReturn(true)
+        ;
+
+        self::assertTrue((new GenericDomainCollection($collection))->isEmpty());
     }
 
     public function testLazyContains(): void
@@ -55,6 +77,18 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $collection->contains(null);
     }
 
+    public function testDecoratedContains(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('contains')
+            ->with(1)
+            ->willReturn(false)
+        ;
+
+        self::assertFalse((new GenericDomainCollection($collection))->contains(1));
+    }
+
     public function testLazyContainsKey(): void
     {
         self::assertFalse(static::createLazyCollection([])->containsKey(1));
@@ -64,6 +98,18 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $this->assertUnrewindableGenerator();
 
         $collection->containsKey(0);
+    }
+
+    public function testDecoratedContainsKey(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('containsKey')
+            ->with(1)
+            ->willReturn(false)
+        ;
+
+        self::assertFalse((new GenericDomainCollection($collection))->containsKey(1));
     }
 
     public function testLazyFirst(): void
@@ -87,6 +133,17 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $collection->first();
     }
 
+    public function testDecoratedFirst(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('first')
+            ->willReturn(null)
+        ;
+
+        self::assertNull((new GenericDomainCollection($collection))->first());
+    }
+
     public function testLazyLast(): void
     {
         self::assertSame(2, ($collection = static::createLazyCollection([1, 2], $visited))->last());
@@ -104,6 +161,17 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $this->expectException(EmptyCollectionException::class);
 
         $collection->last();
+    }
+
+    public function testDecoratedLast(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('last')
+            ->willReturn(null)
+        ;
+
+        self::assertNull((new GenericDomainCollection($collection))->last());
     }
 
     public function testLazyGet(): void
@@ -136,6 +204,18 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $collection->get('foo');
     }
 
+    public function testDecoratedGet(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('get')
+            ->with(1)
+            ->willReturn(null)
+        ;
+
+        self::assertNull((new GenericDomainCollection($collection))->get(1));
+    }
+
     public function testLazyFilter(): void
     {
         self::assertNotSame($collection = self::createLazyCollection([]), $filtered = $collection->filter(static function (): bool {
@@ -153,6 +233,20 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         iterator_to_array($result);
     }
 
+    public function testDecoratedFilter(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('filter')
+            ->with($filter = static function (): bool {
+                return true;
+            })
+            ->willReturn($filtered = new GenericDomainCollection([]))
+        ;
+
+        self::assertSame($filtered, (new GenericDomainCollection($collection))->filter($filter));
+    }
+
     public function testLazySlice(): void
     {
         self::assertNotSame($collection = self::createLazyCollection([]), $slice = $collection->slice(0));
@@ -164,6 +258,18 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
         $this->assertUnrewindableGenerator();
         iterator_to_array($result);
+    }
+
+    public function testDecoratedSlice(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('slice')
+            ->with(0, 1)
+            ->willReturn($sliced = new GenericDomainCollection([]))
+        ;
+
+        self::assertSame($sliced, (new GenericDomainCollection($collection))->slice(0, 1));
     }
 
     public function testLazyMap(): void
@@ -181,6 +287,20 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         iterator_to_array($result);
     }
 
+    public function testDecoratedMap(): void
+    {
+        $collection = $this->createMock(DomainCollection::class);
+        $collection->expects(self::once())
+            ->method('map')
+            ->with($mapper = static function (): int {
+                return 1;
+            })
+            ->willReturn($mapped = new GenericDomainCollection([]))
+        ;
+
+        self::assertSame($mapped, (new GenericDomainCollection($collection))->map($mapper));
+    }
+
     public function testLazyCount(): void
     {
         self::assertCount(0, self::createLazyCollection([]));
@@ -190,6 +310,17 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         $this->assertClosedGenerator();
 
         \count($collection);
+    }
+
+    public function testDecoratedCount(): void
+    {
+        $countable = $this->createMock([\Iterator::class, \Countable::class]);
+        $countable->expects(self::once())
+            ->method('count')
+            ->willReturn(0)
+        ;
+
+        self::assertCount(0, new GenericDomainCollection($countable));
     }
 
     protected static function createCollection(array $elements): DomainCollection
