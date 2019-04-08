@@ -37,7 +37,7 @@ final class BundleHelper
 
     public static function build(ContainerBuilder $container): void
     {
-        if ($initialized = &self::getInitialized($container, __FUNCTION__)) {
+        if ($container->isCompiled() || $initialized = &self::getInitialized($container, __FUNCTION__)) {
             return;
         }
 
