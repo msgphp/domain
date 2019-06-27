@@ -86,6 +86,10 @@ final class ObjectMappingListener
     private function processClassFields(ClassMetadataInfo $metadata, \ReflectionClass $class = null): void
     {
         $class = $class ?? $metadata->getReflectionClass();
+        
+        if (null === $class) {
+            return;
+        }
 
         if (isset($this->mappings[$name = $class->getName()])) {
             $this->processFieldMapping($metadata, $this->mappings[$name]);
