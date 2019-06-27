@@ -146,6 +146,11 @@ abstract class DomainIdType extends Type
         return null === $value ? null : static::getClass()::fromValue($value);
     }
 
+    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    {
+        return true;
+    }
+
     final protected static function getInnerType(): Type
     {
         return self::getType(static::getDataType());
