@@ -16,10 +16,7 @@ final class LastUpdatedAtFieldTest extends TestCase
         self::assertSame($value, $object->getLastUpdatedAt());
     }
 
-    /**
-     * @return object
-     */
-    private function getObject($value)
+    private function getObject($value): object
     {
         return new class($value) {
             use LastUpdatedAtField;

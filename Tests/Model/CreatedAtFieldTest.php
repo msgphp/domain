@@ -16,10 +16,7 @@ final class CreatedAtFieldTest extends TestCase
         self::assertSame($value, $object->getCreatedAt());
     }
 
-    /**
-     * @return object
-     */
-    private function getObject($value)
+    private function getObject($value): object
     {
         return new class($value) {
             use CreatedAtField;

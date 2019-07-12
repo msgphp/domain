@@ -13,19 +13,15 @@ interface DomainObjectFactory
      * @psalm-template T
      * @psalm-param class-string<T> $class
      * @psalm-return T
-     *
-     * @return object
      */
-    public function create(string $class, array $context = []);
+    public function create(string $class, array $context = []): object;
 
     /**
      * @psalm-template T
      * @psalm-param class-string<T> $class
      * @psalm-return T
-     *
-     * @return object
      */
-    public function reference(string $class, array $context = []);
+    public function reference(string $class, array $context = []): object;
 
     /**
      * @psalm-param class-string $class

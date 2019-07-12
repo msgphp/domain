@@ -37,10 +37,7 @@ final class CanBeConfirmedTest extends TestCase
         self::assertTrue($object->isConfirmed());
     }
 
-    /**
-     * @return object
-     */
-    private function getObject($confirmationToken, $confirmedAt)
+    private function getObject($confirmationToken, $confirmedAt): object
     {
         return new class($confirmationToken, $confirmedAt) {
             use CanBeConfirmed {

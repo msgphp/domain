@@ -28,10 +28,7 @@ final class MessageDispatchingTraitTest extends TestCase
         self::assertNull($this->getObject($factory, $bus)->dispatch('class', ['context']));
     }
 
-    /**
-     * @return object
-     */
-    private function getObject(DomainObjectFactory $factory, DomainMessageBus $bus)
+    private function getObject(DomainObjectFactory $factory, DomainMessageBus $bus): object
     {
         return new class($factory, $bus) {
             use MessageDispatchingTrait {

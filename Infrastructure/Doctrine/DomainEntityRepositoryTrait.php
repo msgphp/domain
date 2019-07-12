@@ -70,10 +70,8 @@ trait DomainEntityRepositoryTrait
 
     /**
      * @param mixed $id
-     *
-     * @return object
      */
-    private function doFind($id)
+    private function doFind($id): object
     {
         $id = $this->toIdentity($id);
         $entity = null === $id ? null : $this->em->find($this->class, $id);
@@ -85,10 +83,7 @@ trait DomainEntityRepositoryTrait
         return $entity;
     }
 
-    /**
-     * @return object
-     */
-    private function doFindByFields(array $fields)
+    private function doFindByFields(array $fields): object
     {
         if (!$fields) {
             throw new \LogicException('No fields provided.');
