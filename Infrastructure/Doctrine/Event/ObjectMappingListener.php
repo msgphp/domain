@@ -86,7 +86,7 @@ final class ObjectMappingListener
     private function processClassFields(ClassMetadataInfo $metadata, \ReflectionClass $class = null): void
     {
         $class = $class ?? $metadata->getReflectionClass();
-        
+
         if (null === $class) {
             return;
         }
