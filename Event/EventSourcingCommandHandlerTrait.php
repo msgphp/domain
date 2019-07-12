@@ -6,6 +6,8 @@ namespace MsgPhp\Domain\Event;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @internal
  */
 trait EventSourcingCommandHandlerTrait
 {
