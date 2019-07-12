@@ -9,8 +9,5 @@ namespace MsgPhp\Domain\Projection;
  */
 interface ProjectionDocumentTransformer
 {
-    /**
-     * @param object $object
-     */
-    public function transform($object): ProjectionDocument;
+    public function transform(object $object): ProjectionDocument;
 }

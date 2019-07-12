@@ -20,7 +20,7 @@ interface TestDomainEntityRepository
 
     public function doExistsByFields(array $fields): bool;
 
-    public function doSave($entity): void;
+    public function doSave(object $entity): void;
 
-    public function doDelete($entity): void;
+    public function doDelete(object $entity): void;
 }

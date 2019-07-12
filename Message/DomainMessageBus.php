@@ -9,8 +9,5 @@ namespace MsgPhp\Domain\Message;
  */
 interface DomainMessageBus
 {
-    /**
-     * @param object $message
-     */
-    public function dispatch($message): void;
+    public function dispatch(object $message): void;
 }

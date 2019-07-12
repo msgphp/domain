@@ -9,10 +9,7 @@ namespace MsgPhp\Domain\Event;
  */
 trait EventSourcingCommandHandlerTrait
 {
-    /**
-     * @param object $target
-     */
-    private function handleEvent($target, DomainEvent $event): bool
+    private function handleEvent(object $target, DomainEvent $event): bool
     {
         if (!$target instanceof DomainEventHandler) {
             throw new \LogicException('Event target "'.\get_class($target).'" must be an instance of "'.DomainEventHandler::class.'" to handle event "'.\get_class($event).'".');

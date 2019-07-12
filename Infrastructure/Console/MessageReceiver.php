@@ -19,10 +19,7 @@ final class MessageReceiver
      */
     private $receiver;
 
-    /**
-     * @param object $message
-     */
-    public function receive($message): void
+    public function receive(object $message): void
     {
         if (null === $this->receiver) {
             return;

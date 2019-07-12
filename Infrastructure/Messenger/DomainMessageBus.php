@@ -42,7 +42,7 @@ final class DomainMessageBus implements BaseDomainMessageBus
         $this->eventClasses = array_flip($eventClasses);
     }
 
-    public function dispatch($message): void
+    public function dispatch(object $message): void
     {
         if (isset($this->eventClasses[$message instanceof Envelope ? \get_class($message->getMessage()) : \get_class($message)])) {
             $this->eventBus->dispatch($message);

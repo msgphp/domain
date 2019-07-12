@@ -11,8 +11,5 @@ namespace MsgPhp\Domain\Message;
  */
 interface MessageReceiving
 {
-    /**
-     * @param object $message
-     */
-    public function onMessageReceived($message): void;
+    public function onMessageReceived(object $message): void;
 }

@@ -126,10 +126,7 @@ trait DomainEntityRepositoryTrait
         return (bool) $qb->getQuery()->getScalarResult();
     }
 
-    /**
-     * @param object $entity
-     */
-    private function doSave($entity): void
+    private function doSave(object $entity): void
     {
         if (!$entity instanceof $this->class) {
             throw InvalidClassException::create(\get_class($entity));
@@ -144,10 +141,7 @@ trait DomainEntityRepositoryTrait
         }
     }
 
-    /**
-     * @param object $entity
-     */
-    private function doDelete($entity): void
+    private function doDelete(object $entity): void
     {
         if (!$entity instanceof $this->class) {
             throw InvalidClassException::create(\get_class($entity));
