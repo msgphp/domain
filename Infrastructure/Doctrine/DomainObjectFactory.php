@@ -31,16 +31,18 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
 
     /**
      * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
-    public function create(string $class, array $context = [])
+    public function create(string $class, array $context = []): object
     {
         return $this->factory->create($this->resolveDiscriminatorClass($class, $context), $context);
     }
 
     /**
      * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
-    public function reference(string $class, array $context = [])
+    public function reference(string $class, array $context = []): object
     {
         $class = $this->factory->getClass($class, $context);
 

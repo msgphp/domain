@@ -44,8 +44,9 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
 
     /**
      * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
-    public function create(string $class, array $context = [])
+    public function create(string $class, array $context = []): object
     {
         $class = $this->getClass($class, $context);
 
@@ -63,8 +64,9 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
 
     /**
      * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
-    public function reference(string $class, array $context = [])
+    public function reference(string $class, array $context = []): object
     {
         if (!class_exists(Instantiator::class)) {
             throw new \LogicException('Method "'.__METHOD__.'()" requires "symfony/var-exporter".');
