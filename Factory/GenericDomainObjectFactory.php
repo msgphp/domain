@@ -107,7 +107,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
 
             $type = $metadata['type'];
             if ($given && null !== $type && !\is_object($value) && (class_exists($type) || interface_exists($type, false))) {
-                $arguments[] = ($this->factory ?? $this)->create($metadata['type'], (array) $value);
+                $arguments[] = ($this->factory ?? $this)->create($type, (array) $value);
                 continue;
             }
 

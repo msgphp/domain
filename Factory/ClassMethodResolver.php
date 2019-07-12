@@ -20,6 +20,7 @@ final class ClassMethodResolver
 
     /**
      * @psalm-param class-string $class
+     * @psalm-return array<string, array{index:int,required:bool,default:mixed,type:string}>
      */
     public static function resolve(string $class, string $method): array
     {
