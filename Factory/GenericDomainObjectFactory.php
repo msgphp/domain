@@ -42,10 +42,6 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         $this->factory = $factory;
     }
 
-    /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     */
     public function create(string $class, array $context = []): object
     {
         $class = $this->getClass($class, $context);
@@ -59,13 +55,10 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
             throw InvalidClassException::create($class);
         }
 
+        /** @psalm-var T */
         return new $class(...$this->resolveArguments($class, '__construct', $context));
     }
 
-    /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     */
     public function reference(string $class, array $context = []): object
     {
         if (!class_exists(Instantiator::class)) {
@@ -82,6 +75,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         }
 
         try {
+            /** @psalm-var T */
             return Instantiator::instantiate($class, $properties);
         } catch (ClassNotFoundException $e) {
             throw InvalidClassException::create($class);

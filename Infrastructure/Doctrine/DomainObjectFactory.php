@@ -29,24 +29,18 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
         $this->em = $em;
     }
 
-    /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     */
     public function create(string $class, array $context = []): object
     {
+        /** @psalm-var T */
         return $this->factory->create($this->resolveDiscriminatorClass($class, $context), $context);
     }
 
-    /**
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
-     */
     public function reference(string $class, array $context = []): object
     {
         $class = $this->factory->getClass($class, $context);
 
         if ($this->em->getMetadataFactory()->isTransient($class)) {
+            /** @psalm-var T */
             return $this->factory->reference($class, $context);
         }
 
@@ -54,6 +48,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
             throw InvalidClassException::create($class);
         }
 
+        /** @psalm-var T */
         return $ref;
     }
 
