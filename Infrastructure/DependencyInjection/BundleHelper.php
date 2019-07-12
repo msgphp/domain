@@ -26,14 +26,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class BundleHelper
 {
-    /**
-     * @var bool[]
-     */
+    /** @var array<string, bool> */
     private static $initialized = [];
-
-    private function __construct()
-    {
-    }
 
     public static function build(ContainerBuilder $container): void
     {

@@ -9,23 +9,13 @@ namespace MsgPhp\Domain\Projection;
  */
 final class ProjectionSynchronization
 {
-    /**
-     * @var ProjectionTypeRegistry
-     */
     private $typeRegistry;
-
-    /**
-     * @var ProjectionRepository
-     */
     private $repository;
-
-    /**
-     * @var iterable|ProjectionDocument[]
-     */
+    /** @var iterable<int, ProjectionDocument> */
     private $documentProvider;
 
     /**
-     * @param iterable|ProjectionDocument[] $documentProvider
+     * @param iterable<int, ProjectionDocument> $documentProvider
      */
     public function __construct(ProjectionTypeRegistry $typeRegistry, ProjectionRepository $repository, iterable $documentProvider)
     {
@@ -35,7 +25,7 @@ final class ProjectionSynchronization
     }
 
     /**
-     * @return iterable|ProjectionDocument[]
+     * @return iterable<int, ProjectionDocument>
      */
     public function synchronize(): iterable
     {

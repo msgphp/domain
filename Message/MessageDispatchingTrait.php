@@ -8,17 +8,12 @@ use MsgPhp\Domain\Factory\DomainObjectFactory;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @internal
  */
 trait MessageDispatchingTrait
 {
-    /**
-     * @var DomainObjectFactory
-     */
     private $factory;
-
-    /**
-     * @var DomainMessageBus
-     */
     private $bus;
 
     public function __construct(DomainObjectFactory $factory, DomainMessageBus $bus)
@@ -28,7 +23,7 @@ trait MessageDispatchingTrait
     }
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
      */
     private function dispatch(string $class, array $context = []): void
     {

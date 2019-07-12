@@ -26,10 +26,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 final class FeatureDetection
 {
-    private function __construct()
-    {
-    }
-
     public static function isSymfonyFullStack(): bool
     {
         return class_exists('Symfony\Bundle\FullStack');

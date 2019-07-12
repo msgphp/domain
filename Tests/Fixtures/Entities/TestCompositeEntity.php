@@ -18,7 +18,6 @@ class TestCompositeEntity extends BaseTestEntity
      * @Doctrine\ORM\Mapping\Column(type="domain_id")
      */
     public $idA;
-
     /**
      * @var string
      * @Doctrine\ORM\Mapping\Id()

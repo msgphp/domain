@@ -13,41 +13,35 @@ use Symfony\Component\Messenger\MessageBusInterface;
  */
 final class DomainMessageBus implements BaseDomainMessageBus
 {
-    /**
-     * @var MessageBusInterface
-     */
     private $commandBus;
-
-    /**
-     * @var MessageBusInterface
-     */
     private $eventBus;
-
-    /**
-     * @psalm-var array<class-string, int>
-     *
-     * @var int[]
-     */
+    /** @var array<int, class-string> */
     private $eventClasses;
+    /** @var array<class-string, int>|null */
+    private $eventClassMap;
 
     /**
-     * @psalm-param array<int, class-string> $eventClasses
-     *
-     * @param string[] $eventClasses
+     * @param array<int, class-string> $eventClasses
      */
     public function __construct(MessageBusInterface $commandBus, MessageBusInterface $eventBus, array $eventClasses = [])
     {
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
-        $this->eventClasses = array_flip($eventClasses);
+        $this->eventClasses = $eventClasses;
     }
 
     public function dispatch(object $message): void
     {
-        if (isset($this->eventClasses[$message instanceof Envelope ? \get_class($message->getMessage()) : \get_class($message)])) {
-            $this->eventBus->dispatch($message);
-        } else {
-            $this->commandBus->dispatch($message);
+        if (null === $this->eventClassMap) {
+            $this->eventClassMap = array_flip($this->eventClasses);
         }
+
+        if (isset($this->eventClassMap[$message instanceof Envelope ? \get_class($message->getMessage()) : \get_class($message)])) {
+            $this->eventBus->dispatch($message);
+
+            return;
+        }
+
+        $this->commandBus->dispatch($message);
     }
 }

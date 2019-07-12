@@ -17,14 +17,9 @@ use Symfony\Component\Messenger\Middleware\HandleMessageMiddleware;
  */
 trait MessageBusTestTrait
 {
-    /**
-     * @var MessageBusInterface
-     */
+    /** @var MessageBusInterface */
     private static $bus;
-
-    /**
-     * @var object[][]
-     */
+    /** @var array<class-string, array<int, object>> */
     private static $dispatchedMessages = [];
 
     abstract protected static function getMessageHandlers(): iterable;
@@ -57,6 +52,9 @@ trait MessageBusTestTrait
         return new DomainMessageBus(self::$bus, self::$bus);
     }
 
+    /**
+     * @param class-string $class
+     */
     private static function assertMessageIsDispatched(string $class, callable $assertion = null): void
     {
         if (!isset(self::$dispatchedMessages[$class])) {
@@ -72,6 +70,9 @@ trait MessageBusTestTrait
         }
     }
 
+    /**
+     * @param class-string $class
+     */
     private static function assertMessageIsDispatchedOnce(string $class, callable $assertion = null): void
     {
         if (1 !== $count = \count(self::$dispatchedMessages[$class] ?? [])) {
@@ -81,6 +82,9 @@ trait MessageBusTestTrait
         self::assertMessageIsDispatched($class, $assertion);
     }
 
+    /**
+     * @param class-string $class
+     */
     private static function assertMessageIsNotDispatched(string $class): void
     {
         if (isset(self::$dispatchedMessages[$class])) {

@@ -9,9 +9,7 @@ namespace MsgPhp\Domain\Model;
  */
 trait CreatedAtField
 {
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $createdAt;
 
     public function getCreatedAt(): \DateTimeInterface

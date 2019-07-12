@@ -120,7 +120,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntities
      */
@@ -142,7 +142,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntityFields
      */
@@ -200,7 +200,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntities
      */
@@ -216,7 +216,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntityFields
      */
@@ -257,7 +257,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntities
      */
@@ -341,7 +341,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string<Entities\BaseTestEntity> $class
+     * @param class-string<Entities\BaseTestEntity> $class
      *
      * @dataProvider provideEntities
      */
@@ -398,7 +398,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
      */
     abstract protected static function createRepository(string $class): TestDomainEntityRepository;
 

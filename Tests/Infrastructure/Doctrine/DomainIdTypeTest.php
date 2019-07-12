@@ -15,19 +15,11 @@ use PHPUnit\Framework\TestCase;
 
 final class DomainIdTypeTest extends TestCase
 {
-    /**
-     * @var Type
-     */
+    /** @var Type */
     private $type;
-
-    /**
-     * @var Type
-     */
+    /** @var Type */
     private $otherType;
-
-    /**
-     * @var AbstractPlatform
-     */
+    /** @var AbstractPlatform */
     private $platform;
 
     public static function setUpBeforeClass(): void

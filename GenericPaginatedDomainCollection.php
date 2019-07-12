@@ -9,37 +9,19 @@ namespace MsgPhp\Domain;
  */
 final class GenericPaginatedDomainCollection implements PaginatedDomainCollection
 {
-    /**
-     * @var DomainCollection
-     */
+    /** @var DomainCollection */
     private $collection;
-
-    /**
-     * @var float
-     */
+    /** @var float */
     private $offset;
-
-    /**
-     * @var float
-     */
+    /** @var float */
     private $limit;
-
-    /**
-     * @var int|null
-     */
+    /** @var float|null */
     private $count;
-
-    /**
-     * @var float|null
-     */
+    /** @var float|null */
     private $totalCount;
 
     public function __construct(iterable $elements, float $offset = .0, float $limit = .0, float $count = null, float $totalCount = null)
     {
-        if (null !== $count) {
-            $count = (int) $count;
-        }
-
         $this->collection = $elements instanceof DomainCollection ? $elements : GenericDomainCollection::fromValue($elements);
         $this->offset = $offset;
         $this->limit = $limit;
@@ -104,7 +86,11 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
 
     public function count(): int
     {
-        return $this->count ?? $this->count = \count($this->collection);
+        if (null === $this->count) {
+            return \count($this->collection);
+        }
+
+        return (int) $this->count;
     }
 
     public function getOffset(): float
@@ -137,6 +123,6 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
 
     public function getTotalCount(): float
     {
-        return $this->totalCount ?? $this->totalCount = (float) \count($this);
+        return $this->totalCount ?? (float) \count($this);
     }
 }

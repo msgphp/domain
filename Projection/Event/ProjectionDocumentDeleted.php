@@ -11,9 +11,6 @@ use MsgPhp\Domain\Projection\ProjectionDocument;
  */
 class ProjectionDocumentDeleted
 {
-    /**
-     * @var ProjectionDocument
-     */
     public $document;
 
     public function __construct(ProjectionDocument $document)

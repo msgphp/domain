@@ -13,14 +13,13 @@ use MsgPhp\Domain\Exception\InvalidClassException;
  */
 final class ClassMethodResolver
 {
-    /**
-     * @var array[][]
-     */
+    /** @var array<string, array> */
     private static $cache = [];
 
     /**
-     * @psalm-param class-string $class
-     * @psalm-return array<string, array{index:int,required:bool,default:mixed,type:string}>
+     * @param class-string $class
+     *
+     * @return array<string, array{index:int,required:bool,default:mixed,type:string|class-string}>
      */
     public static function resolve(string $class, string $method): array
     {
@@ -40,21 +39,20 @@ final class ClassMethodResolver
         }
 
         foreach ($reflection->getParameters() as $i => $param) {
-            $type = $param->getType();
-
-            if (null !== $type) {
-                if ('self' === strtolower($name = $type->getName())) {
-                    /** @psalm-suppress PossiblyNullReference */
-                    $type = $param->getClass()->getName();
-                } elseif ($type->isBuiltin()) {
+            if (null === $type = $param->getType()) {
+                $type = 'mixed';
+            } elseif ('self' === strtolower($name = $type->getName())) {
+                /** @psalm-suppress PossiblyNullReference */
+                $type = $param->getClass()->getName();
+            } elseif ($type->isBuiltin()) {
+                /** @psalm-suppress UndefinedVariable */
+                $type = $name;
+            } else {
+                try {
+                    /** @psalm-suppress TypeCoercion */
+                    $type = (new \ReflectionClass($name))->getName();
+                } catch (\ReflectionException $e) {
                     $type = $name;
-                } else {
-                    try {
-                        /** @psalm-suppress TypeCoercion */
-                        $type = (new \ReflectionClass($name))->getName();
-                    } catch (\ReflectionException $e) {
-                        $type = $name;
-                    }
                 }
             }
 

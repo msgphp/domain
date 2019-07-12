@@ -11,19 +11,11 @@ use MsgPhp\Domain\Projection\ProjectionDocument;
  */
 class SaveProjectionDocument
 {
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $type;
-
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $id;
-
-    /**
-     * @var array
-     */
+    /** @var array */
     public $body;
 
     public function __construct(ProjectionDocument $document)

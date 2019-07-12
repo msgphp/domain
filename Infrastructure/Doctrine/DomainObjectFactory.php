@@ -13,14 +13,7 @@ use MsgPhp\Domain\Factory\DomainObjectFactory as BaseDomainObjectFactory;
  */
 final class DomainObjectFactory implements BaseDomainObjectFactory
 {
-    /**
-     * @var BaseDomainObjectFactory
-     */
     private $factory;
-
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
 
     public function __construct(BaseDomainObjectFactory $factory, EntityManagerInterface $em)
@@ -31,7 +24,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
 
     public function create(string $class, array $context = []): object
     {
-        /** @psalm-var T */
+        /** @var T */
         return $this->factory->create($this->resolveDiscriminatorClass($class, $context), $context);
     }
 
@@ -40,7 +33,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
         $class = $this->factory->getClass($class, $context);
 
         if ($this->em->getMetadataFactory()->isTransient($class)) {
-            /** @psalm-var T */
+            /** @var T */
             return $this->factory->reference($class, $context);
         }
 
@@ -48,7 +41,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
             throw InvalidClassException::create($class);
         }
 
-        /** @psalm-var T */
+        /** @var T */
         return $ref;
     }
 
@@ -58,8 +51,9 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
     }
 
     /**
-     * @psalm-param class-string $class
-     * @psalm-return class-string
+     * @param class-string $class
+     *
+     * @return class-string
      */
     private function resolveDiscriminatorClass(string $class, array $context): string
     {

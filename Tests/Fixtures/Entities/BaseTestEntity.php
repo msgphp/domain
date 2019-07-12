@@ -26,6 +26,9 @@ abstract class BaseTestEntity
         return $entity;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     final public static function getPrimaryIds(self $entity, &$primitives = null): array
     {
         $ids = $primitives = [];
@@ -47,6 +50,9 @@ abstract class BaseTestEntity
         return $ids;
     }
 
+    /**
+     * @return iterable<int, self>
+     */
     final public static function createEntities(): iterable
     {
         foreach (self::getFields() as $fields) {
@@ -54,6 +60,9 @@ abstract class BaseTestEntity
         }
     }
 
+    /**
+     * @return iterable<int, array<string, mixed>>
+     */
     final public static function getFields(): iterable
     {
         $fieldNames = array_keys($fieldValues = static::getFieldValues());
@@ -80,7 +89,13 @@ abstract class BaseTestEntity
         }
     }
 
+    /**
+     * @return array<int, string>
+     */
     abstract public static function getIdFields(): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     abstract public static function getFieldValues(): array;
 }

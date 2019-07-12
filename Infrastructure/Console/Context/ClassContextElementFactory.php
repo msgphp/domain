@@ -10,7 +10,7 @@ namespace MsgPhp\Domain\Infrastructure\Console\Context;
 interface ClassContextElementFactory
 {
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
      */
     public function getElement(string $class, string $method, string $argument): ContextElement;
 }

@@ -19,10 +19,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class ExtensionHelper
 {
-    private function __construct()
-    {
-    }
-
     public static function configureDomain(ContainerBuilder $container, array $classMapping): void
     {
         $container->setParameter($param = 'msgphp.domain.class_mapping', $container->hasParameter($param) ? $classMapping + $container->getParameter($param) : $classMapping);

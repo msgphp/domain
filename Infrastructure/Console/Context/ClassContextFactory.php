@@ -22,55 +22,26 @@ final class ClassContextFactory implements ContextFactory
     public const NO_DEFAULTS = 2;
     public const REUSE_DEFINITION = 4;
 
-    /**
-     * @psalm-var class-string
-     *
-     * @var string
-     */
+    /** @var class-string */
     private $class;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $method;
-
-    /**
-     * @psalm-var array<class-string, class-string>
-     *
-     * @var string[]
-     */
+    /** @var array<class-string, class-string> */
     private $classMapping;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     private $flags;
-
-    /**
-     * @var ClassContextElementFactory
-     */
+    /** @var ClassContextElementFactory */
     private $elementFactory;
-
-    /**
-     * @var array[]|null
-     */
+    /** @var array<string, array>|null */
     private $resolved;
-
-    /**
-     * @var array[]
-     */
+    /** @var array<string, array{0:string,1:bool}> */
     private $fieldMapping = [];
-
-    /**
-     * @var array[]
-     */
+    /** @var array<int, array{0:string,1:string}> */
     private $generatedValues = [];
 
     /**
-     * @psalm-param class-string $class
-     * @psalm-param array<class-string, class-string> $classMapping
-     *
-     * @param string[] $classMapping
+     * @param class-string                      $class
+     * @param array<class-string, class-string> $classMapping
      */
     public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactory $elementFactory = null)
     {
@@ -127,13 +98,10 @@ final class ClassContextFactory implements ContextFactory
             $field = self::getFieldName($argument, $isOption);
             if (!isset($origOptions[$field]) && !isset($origArgs[$field])) {
                 $field = self::getUniqueFieldName($definition, $field, $isOption);
-                /** @var ContextElement $element */
-                $element = $metadata['element'];
-
                 if ($isOption) {
-                    $definition->addOption(new InputOption($field, null, $mode, $element->description));
+                    $definition->addOption(new InputOption($field, null, $mode, $metadata['element']->description));
                 } else {
-                    $definition->addArgument(new InputArgument($field, $mode, $element->description));
+                    $definition->addArgument(new InputArgument($field, $mode, $metadata['element']->description));
                 }
             } else {
                 $isOption = isset($origOptions[$field]);
@@ -143,7 +111,10 @@ final class ClassContextFactory implements ContextFactory
         }
     }
 
-    public function getContext(InputInterface $input, StyleInterface $io, array $values = [], iterable $resolved = null): array
+    /**
+     * @param array<string, array{index:int,required:bool,default:mixed,type:string|class-string,element:ContextElement,value:mixed}>|null $resolved
+     */
+    public function getContext(InputInterface $input, StyleInterface $io, array $values = [], array $resolved = null): array
     {
         $context = $normalizers = [];
         $interactive = $input->isInteractive();
@@ -166,10 +137,10 @@ final class ClassContextFactory implements ContextFactory
             $given = !$isEmpty || $input->hasParameterOption('--'.$field);
             $required = $metadata['required'] && !($this->flags & self::ALWAYS_OPTIONAL);
             $type = $metadata['type'];
-            /** @var ContextElement $element */
             $element = $metadata['element'];
 
             if (\is_array($value) && self::isObject($type) && ($required || $given)) {
+                /** @var class-string $type */
                 $context[$argument] = $this->getContext($input, $io, [], $this->resolveNested($type, $value, $element));
                 continue;
             }
@@ -184,8 +155,8 @@ final class ClassContextFactory implements ContextFactory
                     throw new \LogicException('No value provided for "'.$field.'".');
                 }
 
+                $this->generatedValues[] = [$element->label, (string) json_encode(1)]; // @todo use Dumper
                 if ($element->generate($io, $generated)) {
-                    $this->generatedValues[] = [$element->label, json_encode($generated)];
                     $context[$argument] = $element->normalize($generated);
                 } else {
                     $context[$argument] = self::askRequiredValue($io, $element, $value);
@@ -209,14 +180,14 @@ final class ClassContextFactory implements ContextFactory
         return $context;
     }
 
-    private static function isComplex(?string $type): bool
+    private static function isComplex(string $type): bool
     {
         return 'array' === $type || 'iterable' === $type || self::isObject($type);
     }
 
-    private static function isObject(?string $type): bool
+    private static function isObject(string $type): bool
     {
-        return null !== $type && (class_exists($type) || interface_exists($type, false));
+        return class_exists($type) || interface_exists($type, false);
     }
 
     /**
@@ -241,28 +212,31 @@ final class ClassContextFactory implements ContextFactory
         return $emptyValue;
     }
 
-    private function resolve(): iterable
+    /**
+     * @return array<string, array{index:int,required:bool,default:mixed,type:string|class-string,element:ContextElement}>
+     */
+    private function resolve(): array
     {
-        if (null !== $this->resolved) {
-            return $this->resolved;
-        }
+        if (null === $this->resolved) {
+            $this->resolved = [];
 
-        $this->resolved = [];
-
-        foreach (ClassMethodResolver::resolve($this->class, $this->method) as $argument => $metadata) {
-            $this->resolved[$argument] = [
-                'element' => $this->elementFactory->getElement($this->class, $this->method, $argument),
-                'type' => isset($metadata['type']) ? ($this->classMapping[$metadata['type']] ?? $metadata['type']) : null,
-            ] + $metadata;
+            foreach (ClassMethodResolver::resolve($this->class, $this->method) as $argument => $metadata) {
+                $this->resolved[$argument] = [
+                    'element' => $this->elementFactory->getElement($this->class, $this->method, $argument),
+                    'type' => $this->classMapping[$metadata['type']] ?? $metadata['type'],
+                ] + $metadata;
+            }
         }
 
         return $this->resolved;
     }
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
+     *
+     * @return array<string, array{index:int,required:bool,default:mixed,type:string|class-string,element:ContextElement,value:mixed}>
      */
-    private function resolveNested(string $class, array $parentValue, ContextElement $parentElement): iterable
+    private function resolveNested(string $class, array $parentValue, ContextElement $parentElement): array
     {
         $method = is_subclass_of($class, DomainCollection::class) || is_subclass_of($class, DomainId::class) ? 'fromValue' : '__construct';
         $resolved = [];
@@ -285,7 +259,7 @@ final class ClassContextFactory implements ContextFactory
 
             $resolved[$argument] = [
                 'element' => $element,
-                'type' => isset($metadata['type']) ? ($this->classMapping[$metadata['type']] ?? $metadata['type']) : null,
+                'type' => $this->classMapping[$metadata['type']] ?? $metadata['type'],
                 'value' => $value,
             ] + $metadata;
         }

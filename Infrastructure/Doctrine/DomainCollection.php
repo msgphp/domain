@@ -15,9 +15,6 @@ use MsgPhp\Domain\Exception\UnknownCollectionElementException;
  */
 final class DomainCollection implements BaseDomainCollection
 {
-    /**
-     * @var Collection
-     */
     private $collection;
 
     public function __construct(Collection $collection)

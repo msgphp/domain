@@ -17,7 +17,6 @@ class TestDerivedCompositeEntity extends BaseTestEntity
      * @Doctrine\ORM\Mapping\ManyToOne(targetEntity="TestPrimitiveEntity", cascade={"all"})
      */
     public $entity;
-
     /**
      * @var int
      * @Doctrine\ORM\Mapping\Id()

@@ -12,9 +12,6 @@ use MsgPhp\Domain\Exception\UnknownCollectionElementException;
  */
 final class GenericDomainCollection implements DomainCollection
 {
-    /**
-     * @var iterable
-     */
     private $elements;
 
     public function __construct(iterable $elements)

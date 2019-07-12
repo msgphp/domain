@@ -10,22 +10,27 @@ namespace MsgPhp\Domain\Factory;
 interface DomainObjectFactory
 {
     /**
-     * @psalm-template T
-     * @psalm-param class-string<T> $class
-     * @psalm-return T
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
      */
     public function create(string $class, array $context = []): object;
 
     /**
-     * @psalm-template T
-     * @psalm-param class-string<T> $class
-     * @psalm-return T
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
      */
     public function reference(string $class, array $context = []): object;
 
     /**
-     * @psalm-param class-string $class
-     * @psalm-return class-string
+     * @param class-string $class
+     *
+     * @return class-string
      */
     public function getClass(string $class, array $context = []): string;
 }

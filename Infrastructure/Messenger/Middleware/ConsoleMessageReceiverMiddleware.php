@@ -16,9 +16,6 @@ use Symfony\Component\Messenger\Middleware\StackInterface;
  */
 final class ConsoleMessageReceiverMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var MessageReceiver
-     */
     private $receiver;
 
     public function __construct(MessageReceiver $receiver)

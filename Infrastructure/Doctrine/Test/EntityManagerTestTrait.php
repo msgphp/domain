@@ -23,9 +23,7 @@ use MsgPhp\Domain\Infrastructure\Doctrine\MappingConfig;
  */
 trait EntityManagerTestTrait
 {
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private static $em;
 
     abstract protected static function createSchema(): bool;

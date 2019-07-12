@@ -9,31 +9,21 @@ namespace MsgPhp\Domain\Infrastructure\DependencyInjection;
  */
 final class PackageMetadata
 {
-    /**
-     * @var string
-     */
     private $namespace;
-
-    /**
-     * @var string[]
-     */
+    /** @var array<int, string> */
     private $dirs;
 
     /**
-     * @param string[] $dirs
+     * @param array<int, string> $dirs
      */
     public function __construct(string $namespace, array $dirs)
     {
-        if (!$dirs) {
-            throw new \LogicException('Missing package directory.');
-        }
-
         $this->namespace = $namespace;
         $this->dirs = $dirs;
     }
 
     /**
-     * @return iterable|string[]
+     * @return iterable<string, string>
      */
     public function findPaths(string $baseDir = null): iterable
     {
@@ -51,7 +41,7 @@ final class PackageMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getEventClasses(): array
     {
@@ -69,7 +59,7 @@ final class PackageMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getDoctrineMappingFiles(): array
     {
@@ -87,7 +77,7 @@ final class PackageMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getDoctrineServicePrototypes(): array
     {
@@ -106,7 +96,7 @@ final class PackageMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getConsoleServicePrototypes(): array
     {
@@ -122,7 +112,7 @@ final class PackageMetadata
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     public function getMessageServicePrototypes(): array
     {

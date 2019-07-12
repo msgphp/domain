@@ -17,14 +17,7 @@ use MsgPhp\Domain\Projection\ProjectionTypeRegistry;
  */
 final class ProjectionDataProvider implements CollectionDataProviderInterface, ItemDataProviderInterface, RestrictedDataProviderInterface
 {
-    /**
-     * @var ProjectionTypeRegistry
-     */
     private $typeRegistry;
-
-    /**
-     * @var ProjectionRepository
-     */
     private $repository;
 
     public function __construct(ProjectionTypeRegistry $typeRegistry, ProjectionRepository $repository)

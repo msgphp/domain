@@ -14,9 +14,7 @@ use Symfony\Component\Console\Event\ConsoleCommandEvent;
  */
 final class MessageReceiver
 {
-    /**
-     * @var MessageReceiving|null
-     */
+    /** @var MessageReceiving|null */
     private $receiver;
 
     public function receive(object $message): void

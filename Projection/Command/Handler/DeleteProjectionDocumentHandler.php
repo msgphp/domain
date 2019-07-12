@@ -18,9 +18,7 @@ final class DeleteProjectionDocumentHandler
 {
     use MessageDispatchingTrait;
 
-    /**
-     * @var ProjectionRepository
-     */
+    /** @var ProjectionRepository */
     private $repository;
 
     public function __construct(DomainObjectFactory $factory, DomainMessageBus $bus, ProjectionRepository $repository)

@@ -15,38 +15,19 @@ use MsgPhp\Domain\Infrastructure\Doctrine\ObjectMappingProvider;
  */
 final class ObjectMappingListener
 {
-    /**
-     * @var iterable|ObjectMappingProvider[]
-     */
+    /** @var iterable<int, ObjectMappingProvider> */
     private $providers;
-
-    /**
-     * @var MappingConfig
-     */
     private $mappingConfig;
-
-    /**
-     * @psalm-var array<class-string, class-string>
-     *
-     * @var string[]
-     */
+    /** @var array<class-string, class-string> */
     private $classMapping;
-
-    /**
-     * @var ClassMetadataFactory|null
-     */
+    /** @var ClassMetadataFactory|null */
     private $metadataFactory;
-
-    /**
-     * @var array[]|null
-     */
+    /** @var array<class-string, array>|null */
     private $mappings;
 
     /**
-     * @psalm-param array<class-string, class-string> $classMapping
-     *
-     * @param iterable|ObjectMappingProvider[] $providers
-     * @param string[]                         $classMapping
+     * @param iterable<int, ObjectMappingProvider> $providers
+     * @param array<class-string, class-string>    $classMapping
      */
     public function __construct(iterable $providers, MappingConfig $mappingConfig, array $classMapping = [])
     {
@@ -178,9 +159,7 @@ final class ObjectMappingListener
             throw new \LogicException('Metadata factory not set.');
         }
 
-        /** @var ClassMetadataInfo $metadata */
-        $metadata = $this->metadataFactory->getMetadataFor($class);
-
-        return $metadata;
+        /** @var ClassMetadataInfo */
+        return $this->metadataFactory->getMetadataFor($class);
     }
 }

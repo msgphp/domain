@@ -12,9 +12,7 @@ use Symfony\Component\Config\Definition\PrototypedArrayNode;
  */
 final class ClassMappingNode extends PrototypedArrayNode
 {
-    /**
-     * @psalm-var array<class-string, string>
-     */
+    /** @var array<class-string, string> */
     private $hints = [];
 
     public function setAllowEmptyValue(bool $allowEmptyValue): void

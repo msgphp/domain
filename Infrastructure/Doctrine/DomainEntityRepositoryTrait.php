@@ -21,25 +21,14 @@ use MsgPhp\Domain\GenericDomainCollection;
  */
 trait DomainEntityRepositoryTrait
 {
-    /**
-     * @psalm-var class-string
-     *
-     * @var string
-     */
+    /** @var class-string */
     private $class;
-
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
-
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $alias;
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
      */
     public function __construct(string $class, EntityManagerInterface $em)
     {

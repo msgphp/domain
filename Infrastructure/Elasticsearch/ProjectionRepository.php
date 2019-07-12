@@ -16,14 +16,7 @@ use MsgPhp\Domain\Projection\ProjectionRepository as BaseProjectionRepository;
  */
 final class ProjectionRepository implements BaseProjectionRepository
 {
-    /**
-     * @var Client
-     */
     private $client;
-
-    /**
-     * @var string
-     */
     private $index;
 
     public function __construct(Client $client, string $index)
@@ -33,7 +26,7 @@ final class ProjectionRepository implements BaseProjectionRepository
     }
 
     /**
-     * @return PaginatedDomainCollection|ProjectionDocument[]
+     * @return PaginatedDomainCollection<int, ProjectionDocument>
      */
     public function findAll(string $type, int $offset = 0, int $limit = 0): PaginatedDomainCollection
     {

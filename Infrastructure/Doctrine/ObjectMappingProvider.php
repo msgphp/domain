@@ -15,5 +15,8 @@ interface ObjectMappingProvider
     public const TYPE_ONE_TO_MANY = 'oneToMany';
     public const TYPE_ONE_TO_ONE = 'oneToOne';
 
+    /**
+     * @return iterable<class-string, array>
+     */
     public static function provideObjectMappings(MappingConfig $config): iterable;
 }

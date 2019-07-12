@@ -9,9 +9,7 @@ namespace MsgPhp\Domain;
  */
 trait DomainIdTrait
 {
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $id;
 
     public function __construct(string $id = null)

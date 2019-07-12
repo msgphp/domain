@@ -11,29 +11,13 @@ use Symfony\Component\Console\Style\StyleInterface;
  */
 final class ContextElement
 {
-    /**
-     * @var string
-     */
     public $label;
-
-    /**
-     * @var string
-     */
     public $description;
-
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hide = false;
-
-    /**
-     * @var callable|null
-     */
+    /** @var callable|null */
     private $generator;
-
-    /**
-     * @var callable|null
-     */
+    /** @var callable|null */
     private $normalizer;
 
     public function __construct(string $label, string $description = '')

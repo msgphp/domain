@@ -13,9 +13,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 trait DomainIdTrait
 {
-    /**
-     * @var UuidInterface
-     */
+    /** @var UuidInterface */
     private $uuid;
 
     public function __construct(UuidInterface $uuid = null)

@@ -17,30 +17,14 @@ use Symfony\Component\Console\Style\StyleInterface;
  */
 final class DoctrineEntityContextFactory implements ContextFactory
 {
-    /**
-     * @var ContextFactory
-     */
     private $factory;
-
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
-
-    /**
-     * @psalm-var class-string
-     *
-     * @var string
-     */
     private $class;
-
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $discriminatorField;
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
      */
     public function __construct(ContextFactory $factory, EntityManagerInterface $em, string $class)
     {

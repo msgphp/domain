@@ -14,14 +14,7 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
  */
 final class MappingCacheWarmer implements CacheWarmerInterface
 {
-    /**
-     * @var string
-     */
     private $dirName;
-
-    /**
-     * @var MappingConfig
-     */
     private $mappingConfig;
 
     public function __construct(string $dirName, MappingConfig $mappingConfig)

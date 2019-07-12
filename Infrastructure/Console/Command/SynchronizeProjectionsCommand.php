@@ -19,14 +19,9 @@ final class SynchronizeProjectionsCommand extends Command
 {
     protected static $defaultName = 'projection:synchronize';
 
-    /**
-     * @var ProjectionSynchronization
-     */
+    /** @var ProjectionSynchronization */
     private $synchronization;
-
-    /**
-     * @var LoggerInterface|null
-     */
+    /** @var LoggerInterface|null */
     private $logger;
 
     public function __construct(ProjectionSynchronization $synchronization, LoggerInterface $logger = null)

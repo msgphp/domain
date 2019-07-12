@@ -11,33 +11,26 @@ final class MappingConfig
 {
     private const DEFAULT_KEY_MAX_LENGTH = 191;
 
-    /**
-     * @var string[]
-     */
+    /** @var array<int, string> */
     public $mappingFiles;
-
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $mappingDir;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     public $keyMaxLength = self::DEFAULT_KEY_MAX_LENGTH;
 
     /**
-     * @param string[] $mappingFiles
+     * @param array<int, string>                               $mappingFiles
+     * @param array{mapping_dir?:?string,key_max_length?:?int} $mappingConfig
      */
     public function __construct(array $mappingFiles, array $mappingConfig = [])
     {
         $this->mappingFiles = $mappingFiles;
 
         if (isset($mappingConfig['mapping_dir'])) {
-            $this->mappingDir = (string) $mappingConfig['mapping_dir'];
+            $this->mappingDir = $mappingConfig['mapping_dir'];
         }
         if (isset($mappingConfig['key_max_length'])) {
-            $this->keyMaxLength = (int) $mappingConfig['key_max_length'];
+            $this->keyMaxLength = $mappingConfig['key_max_length'];
         }
     }
 
@@ -46,6 +39,6 @@ final class MappingConfig
      */
     public function interpolate(string $contents): string
     {
-        return str_replace('{{ key_max_length }}', (string) ($this->keyMaxLength ?? self::DEFAULT_KEY_MAX_LENGTH), $contents);
+        return str_replace('{{ key_max_length }}', (string) $this->keyMaxLength, $contents);
     }
 }

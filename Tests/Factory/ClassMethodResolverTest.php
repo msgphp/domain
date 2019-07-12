@@ -17,7 +17,7 @@ final class ClassMethodResolverTest extends TestCase
         self::assertSame([
             'fooBar' => ['index' => 0, 'required' => true, 'default' => null, 'type' => 'string'],
             'foo_bar' => ['index' => 1, 'required' => false, 'default' => null, 'type' => TestClassWrongCase::class],
-            'fooBar_Baz' => ['index' => 2, 'required' => false, 'default' => null, 'type' => null],
+            'fooBar_Baz' => ['index' => 2, 'required' => false, 'default' => null, 'type' => 'mixed'],
             'it' => ['index' => 3, 'required' => true, 'default' => [], 'type' => 'iterable'],
             '_stdClass' => ['index' => 4, 'required' => true, 'default' => null, 'type' => \stdClass::class],
             'foo' => ['index' => 5, 'required' => false, 'default' => 1, 'type' => 'int'],

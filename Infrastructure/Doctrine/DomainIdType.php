@@ -16,13 +16,11 @@ abstract class DomainIdType extends Type
 {
     public const NAME = 'msgphp_domain_id';
 
-    /**
-     * @var array[]
-     */
+    /** @var array<class-string<DomainIdType>, array> */
     private static $mapping = [];
 
     /**
-     * @psalm-param class-string<DomainId> $class
+     * @param class-string<DomainId> $class
      */
     final public static function setClass(string $class): void
     {
@@ -34,7 +32,7 @@ abstract class DomainIdType extends Type
     }
 
     /**
-     * @psalm-return class-string<DomainId>
+     * @return class-string<DomainId>
      */
     final public static function getClass(): string
     {
@@ -73,9 +71,8 @@ abstract class DomainIdType extends Type
         if ($value instanceof DomainId) {
             $class = \get_class($value);
 
-            /** @var string $type */
             foreach (self::$mapping as $type => $mapping) {
-                if ($class === $mapping['class']) {
+                if ($class === $mapping['class'] ?? null) {
                     return $type::NAME;
                 }
             }
@@ -100,7 +97,7 @@ abstract class DomainIdType extends Type
             $type = Type::INTEGER;
 
             foreach (self::$mapping as $mapping) {
-                if ($class === $mapping['class']) {
+                if ($class === $mapping['class'] ?? null) {
                     $type = $mapping['data_type'] ?? $type;
                     break;
                 }

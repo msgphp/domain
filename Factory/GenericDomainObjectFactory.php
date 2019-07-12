@@ -15,22 +15,13 @@ use Symfony\Component\VarExporter\Instantiator;
  */
 final class GenericDomainObjectFactory implements DomainObjectFactory
 {
-    /**
-     * @psalm-var array<class-string, class-string>
-     *
-     * @var string[]
-     */
+    /** @var array<class-string, class-string> $classMapping */
     private $classMapping;
-
-    /**
-     * @var DomainObjectFactory|null
-     */
+    /** @var DomainObjectFactory|null */
     private $factory;
 
     /**
-     * @psalm-param array<class-string, class-string> $classMapping
-     *
-     * @param string[] $classMapping
+     * @param array<class-string, class-string> $classMapping
      */
     public function __construct(array $classMapping = [])
     {
@@ -55,7 +46,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
             throw InvalidClassException::create($class);
         }
 
-        /** @psalm-var T */
+        /** @var T */
         return new $class(...$this->resolveArguments($class, '__construct', $context));
     }
 
@@ -75,7 +66,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         }
 
         try {
-            /** @psalm-var T */
+            /** @var T */
             return Instantiator::instantiate($class, $properties);
         } catch (ClassNotFoundException $e) {
             throw InvalidClassException::create($class);
@@ -88,7 +79,9 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
     }
 
     /**
-     * @psalm-param class-string $class
+     * @param class-string $class
+     *
+     * @return array<int, mixed>
      */
     private function resolveArguments(string $class, string $method, array $context): array
     {
@@ -106,7 +99,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
             }
 
             $type = $metadata['type'];
-            if ($given && null !== $type && !\is_object($value) && (class_exists($type) || interface_exists($type, false))) {
+            if ($given && !\is_object($value) && (class_exists($type) || interface_exists($type, false))) {
                 $arguments[] = ($this->factory ?? $this)->create($type, (array) $value);
                 continue;
             }

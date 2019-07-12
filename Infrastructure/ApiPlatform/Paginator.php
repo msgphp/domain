@@ -12,9 +12,6 @@ use MsgPhp\Domain\PaginatedDomainCollection;
  */
 final class Paginator implements \IteratorAggregate, PaginatorInterface
 {
-    /**
-     * @var PaginatedDomainCollection
-     */
     private $collection;
 
     public function __construct(PaginatedDomainCollection $collection)

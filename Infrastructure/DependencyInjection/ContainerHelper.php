@@ -17,14 +17,8 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
  */
 final class ContainerHelper
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private static $counter = 0;
-
-    private function __construct()
-    {
-    }
 
     public static function hasBundle(ContainerInterface $container, string $class): bool
     {

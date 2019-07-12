@@ -15,41 +15,20 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
 {
     private const DEFAULT_PROPERTY_TYPE = 'text';
 
-    /**
-     * @var Client
-     */
     private $client;
-
-    /**
-     * @var string
-     */
     private $index;
-
-    /**
-     * @var array
-     */
+    /** @var array<string, class-string<DocumentMappingProvider>|array> */
     private $mappings;
-
-    /**
-     * @var array
-     */
     private $settings;
-
-    /**
-     * @var LoggerInterface|null
-     */
     private $logger;
-
-    /**
-     * @var string[]|null
-     */
+    /** @var array<int, string>|null */
     private $types;
-
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $indexParams;
 
+    /**
+     * @param array<string, class-string<DocumentMappingProvider>|array> $mappings
+     */
     public function __construct(Client $client, string $index, array $mappings, array $settings = [], LoggerInterface $logger = null)
     {
         $this->client = $client;
@@ -60,7 +39,7 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function all(): array
     {
@@ -128,10 +107,6 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
     {
         foreach ($this->mappings as $type => $mapping) {
             if (\is_string($mapping)) {
-                if (!class_exists($mapping) || !is_subclass_of($mapping, DocumentMappingProvider::class)) {
-                    throw new \LogicException('Class "'.$mapping.'" does not exists or is not a sub class of "'.DocumentMappingProvider::class.'".');
-                }
-
                 yield from $mapping::provideDocumentMappings();
             } else {
                 yield $type => $mapping;

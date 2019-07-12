@@ -185,9 +185,15 @@ final class GenericDomainObjectFactoryTest extends TestCase
 
 class TestObject
 {
+    /** @var mixed */
     public $a = 'default-a';
+    /** @var mixed */
     public $b;
 
+    /**
+     * @param mixed $argA
+     * @param mixed $argB
+     */
     public function __construct($argA, $argB = 'default-b')
     {
         $this->a = $argA;

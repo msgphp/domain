@@ -20,9 +20,7 @@ final class NodeBuilder extends BaseNodeBuilder
 
     public function classMappingNode(string $name): ClassMappingNodeDefinition
     {
-        /** @var ClassMappingNodeDefinition $node */
-        $node = $this->node($name, ClassMappingNodeDefinition::NAME);
-
-        return $node;
+        /** @var ClassMappingNodeDefinition */
+        return $this->node($name, ClassMappingNodeDefinition::NAME);
     }
 }
