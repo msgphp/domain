@@ -8,6 +8,7 @@ use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\Exception\EmptyCollectionException;
 use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 use MsgPhp\Domain\GenericDomainCollection;
+use PHPUnit\Framework\MockObject\MockObject;
 
 final class GenericDomainCollectionTest extends DomainCollectionTestCase
 {
@@ -314,6 +315,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testDecoratedCount(): void
     {
+        /** @var \Iterator&\Countable&MockObject $countable */
         $countable = $this->createMock([\Iterator::class, \Countable::class]);
         $countable->expects(self::once())
             ->method('count')

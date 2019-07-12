@@ -30,7 +30,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
     }
 
     /**
-     * @inheritdoc
+     * @psalm-suppress InvalidReturnType
      */
     public function create(string $class, array $context = [])
     {
@@ -38,7 +38,7 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
     }
 
     /**
-     * @inheritdoc
+     * @psalm-suppress InvalidReturnType
      */
     public function reference(string $class, array $context = [])
     {
@@ -55,9 +55,6 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
         return $ref;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getClass(string $class, array $context = []): string
     {
         return $this->resolveDiscriminatorClass($class, $context);

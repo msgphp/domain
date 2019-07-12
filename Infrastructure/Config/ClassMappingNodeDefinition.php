@@ -186,7 +186,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
      */
     protected function instantiateNode(): ClassMappingNode
     {
-        return new ClassMappingNode($this->name, $this->parent, $this->pathSeparator ?? '.');
+        return new ClassMappingNode($this->name, $this->parent instanceof NodeInterface ? $this->parent : null, $this->pathSeparator ?? '.');
     }
 
     protected function createNode(): NodeInterface
@@ -197,7 +197,6 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $node->setHints($this->hints);
 
         $prototype = $this->getPrototype();
-        $prototype->parent = $node;
         $prototypedNode = $prototype->getNode();
 
         if (!$prototypedNode instanceof PrototypeNodeInterface) {

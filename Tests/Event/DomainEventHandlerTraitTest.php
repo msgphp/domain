@@ -7,6 +7,7 @@ namespace MsgPhp\Domain\Tests\Event;
 use MsgPhp\Domain\Event\DomainEvent;
 use MsgPhp\Domain\Event\DomainEventHandler;
 use MsgPhp\Domain\Event\DomainEventHandlerTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class DomainEventHandlerTraitTest extends TestCase
@@ -18,10 +19,13 @@ final class DomainEventHandlerTraitTest extends TestCase
 
     public function testHandleRootEvent(): void
     {
-        self::assertFalse($this->getObject()->handleEvent($this->getMockBuilder(DomainEvent::class)
+        /** @var DomainEvent&MockObject $event */
+        $event = $this->getMockBuilder(DomainEvent::class)
             ->setMockClassName('MsgPhp_Test_Action')
-            ->getMock()))
+            ->getMock()
         ;
+
+        self::assertFalse($this->getObject()->handleEvent($event));
     }
 
     public function testHandleEventWithUnknownEvent(): void

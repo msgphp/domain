@@ -87,6 +87,7 @@ final class ObjectMappingListener
     {
         $class = $class ?? $metadata->getReflectionClass();
 
+        /** @psalm-suppress DocblockTypeContradiction */
         if (null === $class) {
             return;
         }

@@ -43,7 +43,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
     }
 
     /**
-     * @inheritdoc
+     * @psalm-suppress InvalidReturnType
      */
     public function create(string $class, array $context = [])
     {
@@ -62,7 +62,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
     }
 
     /**
-     * @inheritdoc
+     * @psalm-suppress InvalidReturnType
      */
     public function reference(string $class, array $context = [])
     {
@@ -86,9 +86,6 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getClass(string $class, array $context = []): string
     {
         return $this->classMapping[$class] ?? $class;

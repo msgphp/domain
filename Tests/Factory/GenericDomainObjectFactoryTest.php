@@ -107,7 +107,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
         ]);
 
         self::assertInstanceOf(TestNestedObject::class, $object);
-        self::assertInstanceOf(TestObject::class, $object->test);
         self::assertSame('nested_a', $object->test->a);
         self::assertSame('nested_b', $object->test->b);
         self::assertInstanceOf(TestNestedObject::class, $object->self);

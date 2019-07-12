@@ -81,10 +81,9 @@ final class DomainObjectFactoryTest extends TestCase
         $factory = new DomainObjectFactory($innerFactory, self::$em);
 
         self::assertInstanceOf(Proxy::class, $ref = $factory->reference(Entities\TestEntity::class, ['id' => $id = new TestDomainId('1')]));
-        self::assertInstanceOf(Entities\TestEntity::class, $ref);
-        self::assertSame('1', $entity->getId()->toString());
-        self::assertSame(1, $entity->intField);
-        self::assertFalse($entity->boolField);
+        self::assertSame('1', $ref->getId()->toString());
+        self::assertSame(1, $ref->intField);
+        self::assertFalse($ref->boolField);
     }
 
     public function testReferenceWithDiscriminator(): void

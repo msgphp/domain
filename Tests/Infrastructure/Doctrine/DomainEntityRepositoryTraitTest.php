@@ -68,9 +68,6 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
         self::assertNull($repository->toIdentity(['foo' => 'bar']));
     }
 
-    /**
-     * @inheritdoc
-     */
     protected static function createRepository(string $class): TestDomainEntityRepository
     {
         /** @psalm-suppress InaccessibleMethod */
