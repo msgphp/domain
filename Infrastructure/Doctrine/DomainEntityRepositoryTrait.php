@@ -230,6 +230,7 @@ trait DomainEntityRepositoryTrait
             $name = $base.++$counter;
         }
 
+        /** @psalm-suppress InternalMethod */
         $qb->setParameter($name, $value, $type ?? DomainIdType::resolveName($value));
 
         return ':'.$name;
@@ -258,6 +259,7 @@ trait DomainEntityRepositoryTrait
                 }
             }
 
+            /** @psalm-suppress InternalMethod */
             $id[$field] = DomainIdType::resolveValue($value, $this->em->getConnection()->getDatabasePlatform());
         }
 

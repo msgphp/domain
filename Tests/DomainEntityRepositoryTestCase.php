@@ -403,9 +403,8 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
      */
     abstract protected static function flushEntities(iterable $entities): void;
 
-    final protected function assertEntityCollectionEquals(array $expected, $actual): void
+    final protected function assertEntityCollectionEquals(array $expected, DomainCollection $actual): void
     {
-        self::assertInstanceOf(DomainCollection::class, $actual);
         self::assertCount(\count($expected), $actual);
 
         $equals = true;
@@ -419,7 +418,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         self::assertTrue($equals);
     }
 
-    final protected function assertEntityEquals($expected, $actual): void
+    final protected function assertEntityEquals(object $expected, object $actual): void
     {
         self::assertSame(\get_class($expected), \get_class($actual));
 
@@ -430,7 +429,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         }
     }
 
-    protected function equalsEntity($expected, $actual): bool
+    protected function equalsEntity(object $expected, object $actual): bool
     {
         $equals = true;
         foreach (($r = (new \ReflectionObject($expected)))->getProperties() as $property) {

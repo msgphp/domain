@@ -13,58 +13,56 @@ final class CanBeEnabledTest extends TestCase
 {
     public function testEnable(): void
     {
-        $object = $this->getObject(false);
+        $model = new TestCanBeEnabledModel(false);
 
-        self::assertFalse($object->isEnabled());
+        self::assertFalse($model->isEnabled());
 
-        $object->enable();
+        $model->enable();
 
-        self::assertTrue($object->isEnabled());
+        self::assertTrue($model->isEnabled());
     }
 
     public function testDisable(): void
     {
-        $object = $this->getObject(true);
+        $model = new TestCanBeEnabledModel(true);
 
-        self::assertTrue($object->isEnabled());
+        self::assertTrue($model->isEnabled());
 
-        $object->disable();
+        $model->disable();
 
-        self::assertFalse($object->isEnabled());
+        self::assertFalse($model->isEnabled());
     }
 
     public function testHandleEnableEvent(): void
     {
-        $object = $this->getObject(false);
+        $model = new TestCanBeEnabledModel(false);
 
-        self::assertTrue($object->onEnableEvent(new Enable()));
-        self::assertTrue($object->isEnabled());
-        self::assertFalse($object->onEnableEvent(new Enable()));
-        self::assertTrue($object->isEnabled());
+        self::assertTrue($model->onEnableEvent(new Enable()));
+        self::assertTrue($model->isEnabled());
+        self::assertFalse($model->onEnableEvent(new Enable()));
+        self::assertTrue($model->isEnabled());
     }
 
     public function testHandleDisableEvent(): void
     {
-        $object = $this->getObject(true);
+        $model = new TestCanBeEnabledModel(true);
 
-        self::assertTrue($object->onDisableEvent(new Disable()));
-        self::assertFalse($object->isEnabled());
-        self::assertFalse($object->onDisableEvent(new Disable()));
-        self::assertFalse($object->isEnabled());
+        self::assertTrue($model->onDisableEvent(new Disable()));
+        self::assertFalse($model->isEnabled());
+        self::assertFalse($model->onDisableEvent(new Disable()));
+        self::assertFalse($model->isEnabled());
+    }
+}
+
+class TestCanBeEnabledModel
+{
+    use CanBeEnabled {
+        onDisableEvent as public;
+        onEnableEvent as public;
     }
 
-    private function getObject($value): object
+    public function __construct(bool $enabled)
     {
-        return new class($value) {
-            use CanBeEnabled {
-                onDisableEvent as public;
-                onEnableEvent as public;
-            }
-
-            public function __construct($value)
-            {
-                $this->enabled = $value;
-            }
-        };
+        $this->enabled = $enabled;
     }
 }

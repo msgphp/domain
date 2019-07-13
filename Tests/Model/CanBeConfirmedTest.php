@@ -12,43 +12,41 @@ final class CanBeConfirmedTest extends TestCase
 {
     public function testConfirm(): void
     {
-        $object = $this->getObject('foo', null);
+        $model = new TestCanBeConfirmedModel('foo', null);
 
-        self::assertSame('foo', $object->getConfirmationToken());
-        self::assertNull($object->getConfirmedAt());
-        self::assertFalse($object->isConfirmed());
+        self::assertSame('foo', $model->getConfirmationToken());
+        self::assertNull($model->getConfirmedAt());
+        self::assertFalse($model->isConfirmed());
 
-        $object->confirm();
+        $model->confirm();
 
-        self::assertNull($object->getConfirmationToken());
-        self::assertInstanceOf(\DateTimeImmutable::class, $object->getConfirmedAt());
-        self::assertTrue($object->isConfirmed());
+        self::assertNull($model->getConfirmationToken());
+        self::assertInstanceOf(\DateTimeImmutable::class, $model->getConfirmedAt());
+        self::assertTrue($model->isConfirmed());
     }
 
     public function testOnConfirmEvent(): void
     {
-        $object = $this->getObject('foo', null);
+        $model = new TestCanBeConfirmedModel('foo', null);
 
-        self::assertTrue($object->onConfirmEvent(new Confirm()));
-        self::assertNull($prevToken = $object->getConfirmationToken());
-        self::assertInstanceOf(\DateTimeImmutable::class, $object->getConfirmedAt());
-        self::assertTrue($object->isConfirmed());
-        self::assertFalse($object->onConfirmEvent(new Confirm()));
-        self::assertTrue($object->isConfirmed());
+        self::assertTrue($model->onConfirmEvent(new Confirm()));
+        self::assertNull($prevToken = $model->getConfirmationToken());
+        self::assertInstanceOf(\DateTimeImmutable::class, $model->getConfirmedAt());
+        self::assertTrue($model->isConfirmed());
+        self::assertFalse($model->onConfirmEvent(new Confirm()));
+        self::assertTrue($model->isConfirmed());
+    }
+}
+
+class TestCanBeConfirmedModel
+{
+    use CanBeConfirmed {
+        onConfirmEvent as public;
     }
 
-    private function getObject($confirmationToken, $confirmedAt): object
+    public function __construct(?string $confirmationToken, ?\DateTimeInterface $confirmedAt)
     {
-        return new class($confirmationToken, $confirmedAt) {
-            use CanBeConfirmed {
-                onConfirmEvent as public;
-            }
-
-            public function __construct($confirmationToken, $confirmedAt)
-            {
-                $this->confirmationToken = $confirmationToken;
-                $this->confirmedAt = $confirmedAt;
-            }
-        };
+        $this->confirmationToken = $confirmationToken;
+        $this->confirmedAt = $confirmedAt;
     }
 }

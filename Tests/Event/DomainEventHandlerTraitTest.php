@@ -14,7 +14,7 @@ final class DomainEventHandlerTraitTest extends TestCase
 {
     public function testHandleEvent(): void
     {
-        self::assertTrue($this->getObject()->handleEvent(new TestAction()));
+        self::assertTrue((new TestDomainEventHandler())->handleEvent(new TestAction()));
     }
 
     public function testHandleRootEvent(): void
@@ -25,36 +25,35 @@ final class DomainEventHandlerTraitTest extends TestCase
             ->getMock()
         ;
 
-        self::assertFalse($this->getObject()->handleEvent($event));
+        self::assertFalse((new TestDomainEventHandler())->handleEvent($event));
     }
 
     public function testHandleEventWithUnknownEvent(): void
     {
-        $object = $this->getObject();
+        $handler = new TestDomainEventHandler();
 
         $this->expectException(\LogicException::class);
 
-        $object->handleEvent($this->createMock(DomainEvent::class));
-    }
-
-    private function getObject(): DomainEventHandler
-    {
-        return new class() implements DomainEventHandler {
-            use DomainEventHandlerTrait;
-
-            private function onTestActionEvent(TestAction $event): bool
-            {
-                return true;
-            }
-
-            private function onMsgPhp_Test_ActionEvent($event): bool
-            {
-                return false;
-            }
-        };
+        $handler->handleEvent($this->createMock(DomainEvent::class));
     }
 }
 
 class TestAction implements DomainEvent
 {
+}
+
+class TestDomainEventHandler implements DomainEventHandler
+{
+    use DomainEventHandlerTrait;
+
+    private function onTestActionEvent(TestAction $event): bool
+    {
+        return true;
+    }
+
+    /** @psalm-suppress UndefinedClass */
+    private function onMsgPhp_Test_ActionEvent(\MsgPhp_Test_Action $event): bool
+    {
+        return false;
+    }
 }

@@ -11,20 +11,16 @@ final class CreatedAtFieldTest extends TestCase
 {
     public function testField(): void
     {
-        $object = $this->getObject($value = new \DateTime());
-
-        self::assertSame($value, $object->getCreatedAt());
+        self::assertSame($createdAt = new \DateTimeImmutable(), (new TestCreatedAtFieldModel($createdAt))->getCreatedAt());
     }
+}
 
-    private function getObject($value): object
+class TestCreatedAtFieldModel
+{
+    use CreatedAtField;
+
+    public function __construct(\DateTimeInterface $createdAt)
     {
-        return new class($value) {
-            use CreatedAtField;
-
-            public function __construct($value)
-            {
-                $this->createdAt = $value;
-            }
-        };
+        $this->createdAt = $createdAt;
     }
 }
