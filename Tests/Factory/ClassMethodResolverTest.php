@@ -39,6 +39,7 @@ final class ClassMethodResolverTest extends TestCase
     {
         $this->expectException(InvalidClassException::class);
 
+        /** @psalm-suppress UndefinedClass */
         ClassMethodResolver::resolve(TestUnknownObject::class, 'bar');
     }
 

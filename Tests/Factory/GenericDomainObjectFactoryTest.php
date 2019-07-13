@@ -17,7 +17,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $object = (new GenericDomainObjectFactory())->create(TestObject::class, ['argB' => 'foo', 'arg_a' => 'ignore', 0 => 'ignore', 'argA' => 1]);
 
-        self::assertInstanceOf(TestObject::class, $object);
         self::assertSame(1, $object->a);
         self::assertSame('foo', $object->b);
     }
@@ -26,7 +25,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $object = (new GenericDomainObjectFactory())->create(TestObject::class);
 
-        self::assertInstanceOf(TestObject::class, $object);
         self::assertNull($object->a);
         self::assertSame('default-b', $object->b);
     }
@@ -35,7 +33,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $object = (new GenericDomainObjectFactory())->create(TestObject::class, ['argB' => null]);
 
-        self::assertInstanceOf(TestObject::class, $object);
         self::assertNull($object->b);
     }
 
@@ -52,7 +49,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $id = (new GenericDomainObjectFactory())->create(TestDomainId::class, ['value' => 123]);
 
-        self::assertInstanceOf(TestDomainId::class, $id);
         self::assertSame('123', $id->toString());
     }
 
@@ -60,7 +56,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $collection = (new GenericDomainObjectFactory())->create(GenericDomainCollection::class, ['value' => [1, 2, 3]]);
 
-        self::assertInstanceOf(GenericDomainCollection::class, $collection);
         self::assertSame([1, 2, 3], iterator_to_array($collection));
     }
 
@@ -70,6 +65,7 @@ final class GenericDomainObjectFactoryTest extends TestCase
 
         $this->expectException(InvalidClassException::class);
 
+        /** @psalm-suppress UndefinedClass */
         $factory->create(TestUnknownObject::class);
     }
 
@@ -106,7 +102,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
             'self' => ['test' => ['argA' => 'foo', 'argB' => 'bar'], 'other' => $other = new TestObject(1, 2)],
         ]);
 
-        self::assertInstanceOf(TestNestedObject::class, $object);
         self::assertSame('nested_a', $object->test->a);
         self::assertSame('nested_b', $object->test->b);
         self::assertInstanceOf(TestNestedObject::class, $object->self);
@@ -134,8 +129,8 @@ final class GenericDomainObjectFactoryTest extends TestCase
 
         $factory = new GenericDomainObjectFactory();
         $factory->setNestedFactory($nestedFactory);
+        $object = $factory->create(TestNestedObject::class, ['test' => null]);
 
-        self::assertInstanceOf(TestNestedObject::class, $object = $factory->create(TestNestedObject::class, ['test' => null]));
         self::assertSame($nested, $object->test);
     }
 
@@ -159,7 +154,6 @@ final class GenericDomainObjectFactoryTest extends TestCase
     {
         $reference = (new GenericDomainObjectFactory())->reference(TestReferenceObject::class, ['fieldA' => 1, 'fieldB' => 2]);
 
-        self::assertInstanceOf(TestReferenceObject::class, $reference);
         self::assertSame([1, 2], $reference->get());
     }
 
@@ -169,6 +163,7 @@ final class GenericDomainObjectFactoryTest extends TestCase
 
         $this->expectException(InvalidClassException::class);
 
+        /** @psalm-suppress UndefinedClass */
         $factory->reference(TestUnknownObject::class);
     }
 
@@ -232,6 +227,7 @@ class TestPrivateObject
 
 class TestKnownObject
 {
+    /** @psalm-suppress UndefinedClass */
     public function __construct(TestUnknownObject $arg = null)
     {
     }
@@ -239,7 +235,9 @@ class TestKnownObject
 
 class TestReferenceObject
 {
+    /** @var mixed */
     private $fieldA;
+    /** @var mixed */
     private $fieldB = 'default B';
 
     public function __construct()
@@ -247,6 +245,9 @@ class TestReferenceObject
         throw new \BadMethodCallException();
     }
 
+    /**
+     * @return array{0:mixed,1:mixed}
+     */
     public function get(): array
     {
         return [$this->fieldA, $this->fieldB];

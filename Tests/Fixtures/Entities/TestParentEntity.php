@@ -13,6 +13,7 @@ namespace MsgPhp\Domain\Tests\Fixtures\Entities;
 class TestParentEntity extends BaseTestEntity
 {
     /**
+     * @var string|null
      * @Doctrine\ORM\Mapping\Id()
      * @Doctrine\ORM\Mapping\Column()
      */
