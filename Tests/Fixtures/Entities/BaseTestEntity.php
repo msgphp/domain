@@ -27,6 +27,8 @@ abstract class BaseTestEntity
     }
 
     /**
+     * @param mixed|null $primitives
+     *
      * @return array<string, mixed>
      */
     final public static function getPrimaryIds(self $entity, &$primitives = null): array

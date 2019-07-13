@@ -30,6 +30,8 @@ trait DomainIdTrait
     }
 
     /**
+     * @param mixed $value
+     *
      * @return static
      */
     public static function fromValue($value): DomainId
