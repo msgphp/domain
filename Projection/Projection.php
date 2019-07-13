@@ -9,5 +9,8 @@ namespace MsgPhp\Domain\Projection;
  */
 interface Projection
 {
+    /**
+     * @return static
+     */
     public static function fromDocument(array $document): self;
 }
