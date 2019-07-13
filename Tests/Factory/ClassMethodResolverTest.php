@@ -52,6 +52,7 @@ final class ClassMethodResolverTest extends TestCase
 
 class TestClass
 {
+    /** @psalm-suppress InvalidClass */
     public function __construct(string $fooBar, ?testclasswrongcase $foo_bar, $fooBar_Baz, iterable $it, \stdClass $_stdClass, int $foo = 1, self $bar = null, array $baz = [1])
     {
     }

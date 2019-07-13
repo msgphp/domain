@@ -184,6 +184,8 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
         $node->setHints($this->hints);
 
         $prototype = $this->getPrototype();
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
+        $prototype->parent = $node;
         $prototypedNode = $prototype->getNode();
 
         if (!$prototypedNode instanceof PrototypeNodeInterface) {
