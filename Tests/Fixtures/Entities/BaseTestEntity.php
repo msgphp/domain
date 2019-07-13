@@ -39,9 +39,10 @@ abstract class BaseTestEntity
             if ($id instanceof DomainId) {
                 $primitives[$field] = $id->isEmpty() ? null : $id->toString();
             } elseif ($id instanceof self) {
-                self::getPrimaryIds($id, $nestedPrimitives);
+                $nestedPrimitiveIds = [];
+                self::getPrimaryIds($id, $nestedPrimitiveIds);
 
-                $primitives[$field] = $nestedPrimitives;
+                $primitives[$field] = $nestedPrimitiveIds;
             } else {
                 $primitives[$field] = $id;
             }

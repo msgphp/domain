@@ -386,6 +386,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         foreach ($this->provideEntityTypes() as $class) {
             $class = $class[0];
             foreach ($class::createEntities() as $entity) {
+                $primitiveIds = [];
                 $ids = Entities\BaseTestEntity::getPrimaryIds($entity, $primitiveIds);
 
                 yield [$class, $entity, $ids, $primitiveIds];
@@ -474,6 +475,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     {
         $entities = [];
         foreach (\func_get_args() as $entity) {
+            $primitiveIds = [];
             Entities\BaseTestEntity::getPrimaryIds($entity, $primitiveIds);
             $entities[serialize($primitiveIds)] = $entity;
         }
