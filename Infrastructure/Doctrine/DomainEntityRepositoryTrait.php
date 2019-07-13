@@ -43,6 +43,8 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @return DomainCollection<array-key, T>
      */
     private function doFindAll(int $offset = 0, int $limit = 0): DomainCollection
@@ -51,6 +53,8 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @return DomainCollection<array-key, T>
      */
     private function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection
@@ -65,6 +69,8 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @param mixed $id
      *
      * @return T
@@ -82,6 +88,8 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @return T
      */
     private function doFindByFields(array $fields): object
