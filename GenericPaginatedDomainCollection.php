@@ -6,6 +6,10 @@ namespace MsgPhp\Domain;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template TKey of array-key
+ * @template T
+ * @implements PaginatedDomainCollection<TKey,T>
  */
 final class GenericPaginatedDomainCollection implements PaginatedDomainCollection
 {
@@ -31,6 +35,7 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
 
     public static function fromValue(?iterable $value): DomainCollection
     {
+        /** @var DomainCollection */
         return new self($value ?? []);
     }
 

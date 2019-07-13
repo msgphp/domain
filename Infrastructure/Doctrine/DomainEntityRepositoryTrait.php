@@ -43,7 +43,7 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @return DomainCollection<T>
+     * @return DomainCollection<array-key, T>
      */
     private function doFindAll(int $offset = 0, int $limit = 0): DomainCollection
     {
@@ -51,7 +51,7 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @return DomainCollection<T>
+     * @return DomainCollection<array-key, T>
      */
     private function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection
     {
@@ -151,7 +151,12 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
+     * @template T2Key of array-key
+     * @template T2 of object
+     *
      * @param string|int $hydrate
+     *
+     * @return DomainCollection<T2Key, T2>
      */
     private function createResultSet(Query $query, int $offset = null, int $limit = null, $hydrate = Query::HYDRATE_OBJECT): DomainCollection
     {

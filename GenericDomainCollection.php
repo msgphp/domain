@@ -9,6 +9,10 @@ use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template TKey of array-key
+ * @template T
+ * @implements DomainCollection<TKey,T>
  */
 final class GenericDomainCollection implements DomainCollection
 {
@@ -21,6 +25,7 @@ final class GenericDomainCollection implements DomainCollection
 
     public static function fromValue(?iterable $value): DomainCollection
     {
+        /** @var DomainCollection */
         return new self($value ?? []);
     }
 

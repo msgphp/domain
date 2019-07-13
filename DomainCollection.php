@@ -6,46 +6,70 @@ namespace MsgPhp\Domain;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template TKey of array-key
+ * @template T
+ * @extends \IteratorAggregate<TKey, T>
  */
 interface DomainCollection extends \Countable, \IteratorAggregate
 {
     /**
-     * @return static
+     * @template T2Key of array-key
+     * @template T2
+     *
+     * @param iterable<T2Key, T2>|null $value
+     *
+     * @return self<T2Key, T2>
      */
     public static function fromValue(?iterable $value): self;
 
     public function isEmpty(): bool;
 
     /**
-     * @param mixed $element
+     * @param T $element
      */
     public function contains($element): bool;
 
     /**
-     * @param string|int $key
+     * @param TKey $key
      */
     public function containsKey($key): bool;
 
     /**
-     * @return mixed
+     * @return T
      */
     public function first();
 
     /**
-     * @return mixed
+     * @return T
      */
     public function last();
 
     /**
-     * @param string|int $key
+     * @param TKey $key
      *
-     * @return mixed
+     * @return T
      */
     public function get($key);
 
+    /**
+     * @param callable(T):bool $filter
+     *
+     * @return DomainCollection<TKey, T>
+     */
     public function filter(callable $filter): self;
 
+    /**
+     * @return DomainCollection<TKey, T>
+     */
     public function slice(int $offset, int $limit = 0): self;
 
+    /**
+     * @template T2
+     *
+     * @param callable(T):T2 $mapper
+     *
+     * @return DomainCollection<TKey, T2>
+     */
     public function map(callable $mapper): self;
 }

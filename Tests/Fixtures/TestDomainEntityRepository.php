@@ -12,12 +12,12 @@ use MsgPhp\Domain\DomainCollection;
 interface TestDomainEntityRepository
 {
     /**
-     * @return DomainCollection<T>
+     * @return DomainCollection<array-key, T>
      */
     public function findAll(int $offset = 0, int $limit = 0): DomainCollection;
 
     /**
-     * @return DomainCollection<T>
+     * @return DomainCollection<array-key, T>
      */
     public function findAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection;
 

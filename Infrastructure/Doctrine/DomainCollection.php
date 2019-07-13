@@ -12,11 +12,19 @@ use MsgPhp\Domain\Exception\UnknownCollectionElementException;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template TKey of array-key
+ * @template T
+ * @implements BaseDomainCollection<TKey, T>
  */
 final class DomainCollection implements BaseDomainCollection
 {
+    /** @var Collection<TKey, T> */
     private $collection;
 
+    /**
+     * @param Collection<TKey, T> $collection
+     */
     public function __construct(Collection $collection)
     {
         $this->collection = $collection;
@@ -25,6 +33,7 @@ final class DomainCollection implements BaseDomainCollection
     public static function fromValue(?iterable $value): BaseDomainCollection
     {
         if ($value instanceof Collection) {
+            /** @var BaseDomainCollection */
             return new self($value);
         }
 
@@ -32,6 +41,7 @@ final class DomainCollection implements BaseDomainCollection
             $value = iterator_to_array($value);
         }
 
+        /** @var BaseDomainCollection */
         return new self(new ArrayCollection($value ?? []));
     }
 
@@ -84,17 +94,17 @@ final class DomainCollection implements BaseDomainCollection
 
     public function filter(callable $filter): BaseDomainCollection
     {
-        return new self($this->collection->filter(\Closure::fromCallable($filter)));
+        return self::fromValue($this->collection->filter(\Closure::fromCallable($filter)));
     }
 
     public function slice(int $offset, int $limit = 0): BaseDomainCollection
     {
-        return new self(new ArrayCollection($this->collection->slice($offset, $limit ?: null)));
+        return self::fromValue(new ArrayCollection($this->collection->slice($offset, $limit ?: null)));
     }
 
     public function map(callable $mapper): BaseDomainCollection
     {
-        return new self($this->collection->map(\Closure::fromCallable($mapper)));
+        return self::fromValue($this->collection->map(\Closure::fromCallable($mapper)));
     }
 
     public function count(): int

@@ -45,6 +45,7 @@ final class ProjectionRepository implements BaseProjectionRepository
         $count = \count($documents);
         $totalCount = $result['hits']['total'] ?? $count;
 
+        /** @var PaginatedDomainCollection<ProjectionDocument> */
         return new GenericPaginatedDomainCollection((function () use ($documents): iterable {
             foreach ($documents as $document) {
                 yield $this->createDocument($document);

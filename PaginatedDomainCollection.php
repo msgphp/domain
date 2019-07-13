@@ -6,6 +6,10 @@ namespace MsgPhp\Domain;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template TKey of array-key
+ * @template T
+ * @implements DomainCollection<TKey,T>
  */
 interface PaginatedDomainCollection extends DomainCollection
 {
