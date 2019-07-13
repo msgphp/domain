@@ -9,7 +9,7 @@ namespace MsgPhp\Domain;
  *
  * @template TKey of array-key
  * @template T
- * @implements DomainCollection<TKey,T>
+ * @extends DomainCollection<TKey, T>
  */
 interface PaginatedDomainCollection extends DomainCollection
 {
