@@ -7,7 +7,6 @@ namespace MsgPhp\Domain\Tests;
 use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\Exception\DuplicateEntityException;
 use MsgPhp\Domain\Exception\EntityNotFoundException;
-use MsgPhp\Domain\Exception\InvalidClassException;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainEntityRepository;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
@@ -37,22 +36,22 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
             $entity3 = Entities\TestPrimitiveEntity::create(['id' => new TestDomainId('3')]),
         ];
 
-        $this->assertEntityCollectionEquals([], $repository->doFindAll());
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(1));
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(1, 1));
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(1, 0));
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(0, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(10, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAll());
+        $this->assertEntityCollectionEquals([], $repository->findAll(1));
+        $this->assertEntityCollectionEquals([], $repository->findAll(1, 1));
+        $this->assertEntityCollectionEquals([], $repository->findAll(1, 0));
+        $this->assertEntityCollectionEquals([], $repository->findAll(0, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAll(10, 10));
 
         static::flushEntities($entities);
 
-        $this->assertEntityCollectionEquals($entities, $repository->doFindAll());
-        $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->doFindAll(1));
-        $this->assertEntityCollectionEquals([$entity2], $repository->doFindAll(1, 1));
-        $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->doFindAll(1, 0));
-        $this->assertEntityCollectionEquals($entities, $repository->doFindAll(0, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAll(10, 10));
-        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->doFindAll(0, 2));
+        $this->assertEntityCollectionEquals($entities, $repository->findAll());
+        $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->findAll(1));
+        $this->assertEntityCollectionEquals([$entity2], $repository->findAll(1, 1));
+        $this->assertEntityCollectionEquals([$entity2, $entity3], $repository->findAll(1, 0));
+        $this->assertEntityCollectionEquals($entities, $repository->findAll(0, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAll(10, 10));
+        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->findAll(0, 2));
     }
 
     public function testFindAllByFields(): void
@@ -66,49 +65,49 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
             $entity4 = Entities\TestEntity::create(['id' => new TestDomainId('1'), 'intField' => 1, 'boolField' => false]),
         ];
 
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => 1]));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => '2']));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => new TestDomainId()], 1));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => [null, 'foo', new TestDomainId('2'), new TestDomainId('3')]], 1, 1));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('1'), new TestDomainId()]], 1, 0));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => [new TestDomainId('1'), new TestDomainId('3')]], 0, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idB' => 'foo'], 0, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idB' => 'bar'], 10, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idB' => 'foo'], 0, 2));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idB' => 'foo']));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => [1, '2'], 'idB' => 'foo']));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => [1, '2'], 'idB' => 'foo'], 1));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => null]));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => '']));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => 'foo']));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => [null, 'foo']]));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['intField' => null]));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['intField' => '1']));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['intField' => [1, 2]]));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => 1]));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => '2']));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => new TestDomainId()], 1));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => [null, 'foo', new TestDomainId('2'), new TestDomainId('3')]], 1, 1));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('1'), new TestDomainId()]], 1, 0));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => [new TestDomainId('1'), new TestDomainId('3')]], 0, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idB' => 'foo'], 0, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idB' => 'bar'], 10, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idB' => 'foo'], 0, 2));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idB' => 'foo']));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => [1, '2'], 'idB' => 'foo']));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => [1, '2'], 'idB' => 'foo'], 1));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => null]));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => '']));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => 'foo']));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => [null, 'foo']]));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['intField' => null]));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['intField' => '1']));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['intField' => [1, 2]]));
 
         static::flushEntities($entities);
 
-        $this->assertEntityCollectionEquals([$entity1], $repository->doFindAllByFields(['idA' => 1]));
-        $this->assertEntityCollectionEquals([$entity2], $repository->doFindAllByFields(['idA' => '2']));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => new TestDomainId()], 1));
-        $this->assertEntityCollectionEquals([$entity3], $repository->doFindAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('3')]], 1, 1));
-        $this->assertEntityCollectionEquals([$entity2], $repository->doFindAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('1'), new TestDomainId()]], 1, 0));
-        $this->assertEntityCollectionEquals([$entity1, $entity3], $repository->doFindAllByFields(['idA' => [new TestDomainId('1'), new TestDomainId('3')]], 0, 10));
-        $this->assertEntityCollectionEquals([$entity3], $repository->doFindAllByFields(['idA' => new TestDomainId('3')], 0, 10));
-        $this->assertEntityCollectionEquals([], $repository->doFindAllByFields(['idA' => new TestDomainId('2')], 10, 10));
-        $this->assertEntityCollectionEquals([$entity1], $repository->doFindAllByFields(['idA' => new TestDomainId('1')], 0, 2));
-        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->doFindAllByFields(['idB' => 'foo']));
-        $this->assertEntityCollectionEquals([$entity1], $repository->doFindAllByFields(['idB' => 'foo'], 0, 1));
-        $this->assertEntityCollectionEquals([$entity2], $repository->doFindAllByFields(['idB' => 'foo'], 1, 1));
-        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->doFindAllByFields(['idA' => [1, '2'], 'idB' => 'foo']));
-        $this->assertEntityCollectionEquals([$entity2], $repository->doFindAllByFields(['idA' => [1, '2'], 'idB' => 'foo'], 1));
-        $this->assertEntityCollectionEquals([$entity4], $repository2->doFindAllByFields(['strField' => null]));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => '']));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => 'foo']));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['strField' => [null, 'foo']]));
-        $this->assertEntityCollectionEquals([], $repository2->doFindAllByFields(['intField' => null]));
-        $this->assertEntityCollectionEquals([$entity4], $repository2->doFindAllByFields(['intField' => '1']));
-        $this->assertEntityCollectionEquals([$entity4], $repository2->doFindAllByFields(['intField' => [1, 2]]));
+        $this->assertEntityCollectionEquals([$entity1], $repository->findAllByFields(['idA' => 1]));
+        $this->assertEntityCollectionEquals([$entity2], $repository->findAllByFields(['idA' => '2']));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => new TestDomainId()], 1));
+        $this->assertEntityCollectionEquals([$entity3], $repository->findAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('3')]], 1, 1));
+        $this->assertEntityCollectionEquals([$entity2], $repository->findAllByFields(['idA' => [new TestDomainId('2'), new TestDomainId('1'), new TestDomainId()]], 1, 0));
+        $this->assertEntityCollectionEquals([$entity1, $entity3], $repository->findAllByFields(['idA' => [new TestDomainId('1'), new TestDomainId('3')]], 0, 10));
+        $this->assertEntityCollectionEquals([$entity3], $repository->findAllByFields(['idA' => new TestDomainId('3')], 0, 10));
+        $this->assertEntityCollectionEquals([], $repository->findAllByFields(['idA' => new TestDomainId('2')], 10, 10));
+        $this->assertEntityCollectionEquals([$entity1], $repository->findAllByFields(['idA' => new TestDomainId('1')], 0, 2));
+        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->findAllByFields(['idB' => 'foo']));
+        $this->assertEntityCollectionEquals([$entity1], $repository->findAllByFields(['idB' => 'foo'], 0, 1));
+        $this->assertEntityCollectionEquals([$entity2], $repository->findAllByFields(['idB' => 'foo'], 1, 1));
+        $this->assertEntityCollectionEquals([$entity1, $entity2], $repository->findAllByFields(['idA' => [1, '2'], 'idB' => 'foo']));
+        $this->assertEntityCollectionEquals([$entity2], $repository->findAllByFields(['idA' => [1, '2'], 'idB' => 'foo'], 1));
+        $this->assertEntityCollectionEquals([$entity4], $repository2->findAllByFields(['strField' => null]));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => '']));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => 'foo']));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['strField' => [null, 'foo']]));
+        $this->assertEntityCollectionEquals([], $repository2->findAllByFields(['intField' => null]));
+        $this->assertEntityCollectionEquals([$entity4], $repository2->findAllByFields(['intField' => '1']));
+        $this->assertEntityCollectionEquals([$entity4], $repository2->findAllByFields(['intField' => [1, 2]]));
     }
 
     public function testFindAllByFieldsWithoutFields(): void
@@ -117,7 +116,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         $this->expectException(\LogicException::class);
 
-        $repository->doFindAllByFields([]);
+        $repository->findAllByFields([]);
     }
 
     /**
@@ -130,7 +129,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         $repository = static::createRepository($class);
 
         try {
-            $repository->doFind($ids);
+            $repository->find($ids);
 
             self::fail();
         } catch (EntityNotFoundException $e) {
@@ -139,7 +138,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         $this->loadEntities($entity);
 
-        $this->assertEntityEquals($entity, $repository->doFind(Entities\BaseTestEntity::getPrimaryIds($entity)));
+        $this->assertEntityEquals($entity, $repository->find(Entities\BaseTestEntity::getPrimaryIds($entity)));
     }
 
     /**
@@ -152,7 +151,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         $repository = static::createRepository($class);
 
         try {
-            $repository->doFindByFields($fields);
+            $repository->findByFields($fields);
 
             self::fail();
         } catch (EntityNotFoundException $e) {
@@ -162,7 +161,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         $entity = $class::create($fields);
         $this->loadEntities($entity);
 
-        $this->assertEntityEquals($entity, $repository->doFindByFields($fields));
+        $this->assertEntityEquals($entity, $repository->findByFields($fields));
     }
 
     public function testFindByFieldsWithoutFields(): void
@@ -171,7 +170,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         $this->expectException(\LogicException::class);
 
-        $repository->doExistsByFields([]);
+        $repository->existsByFields([]);
     }
 
     public function testFindByFieldsWithPrimaryId(): void
@@ -197,7 +196,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         self::assertFalse($entity->getId()->isEmpty());
         self::assertNotSame('IRRELEVANT', $entity->getId()->toString());
-        $this->assertEntityEquals($derivingEntity, $repository->doFindByFields(['entity' => $entity->getId()]));
+        $this->assertEntityEquals($derivingEntity, $repository->findByFields(['entity' => $entity->getId()]));
     }
 
     /**
@@ -209,11 +208,11 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     {
         $repository = static::createRepository($class);
 
-        self::assertFalse($repository->doExists($ids));
+        self::assertFalse($repository->exists($ids));
 
         $this->loadEntities($entity);
 
-        self::assertTrue($repository->doExists(Entities\BaseTestEntity::getPrimaryIds($entity)));
+        self::assertTrue($repository->exists(Entities\BaseTestEntity::getPrimaryIds($entity)));
     }
 
     /**
@@ -225,12 +224,12 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     {
         $repository = static::createRepository($class);
 
-        self::assertFalse($repository->doExistsByFields($fields));
+        self::assertFalse($repository->existsByFields($fields));
 
         $entity = $class::create($fields);
         $this->loadEntities($entity);
 
-        self::assertTrue($repository->doExistsByFields($fields));
+        self::assertTrue($repository->existsByFields($fields));
     }
 
     public function testExistsByFieldsWithoutFields(): void
@@ -239,7 +238,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         $this->expectException(\LogicException::class);
 
-        $repository->doExistsByFields([]);
+        $repository->existsByFields([]);
     }
 
     public function testExistsByFieldsWithEmptyDomainId(): void
@@ -254,7 +253,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         $this->expectException(\LogicException::class);
 
-        $repository->doExistsByFields(['entity' => $entity]);
+        $repository->existsByFields(['entity' => $entity]);
     }
 
     /**
@@ -266,9 +265,9 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     {
         $repository = static::createRepository($class);
 
-        self::assertFalse($repository->doExists($ids));
+        self::assertFalse($repository->exists($ids));
 
-        $repository->doSave($entity);
+        $repository->save($entity);
 
         if (!static::$supportsAutoGeneratedIds) {
             if ($entity instanceof Entities\TestEntity) {
@@ -278,7 +277,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
             }
         }
 
-        self::assertTrue($repository->doExists(Entities\BaseTestEntity::getPrimaryIds($entity)));
+        self::assertTrue($repository->exists(Entities\BaseTestEntity::getPrimaryIds($entity)));
     }
 
     public function testSaveUpdates(): void
@@ -294,7 +293,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
             self::assertFalse($entity->getId()->isEmpty());
         }
 
-        $repository->doSave($entity);
+        $repository->save($entity);
 
         if (static::$supportsAutoGeneratedIds) {
             self::assertFalse($entity->getId()->isEmpty());
@@ -309,9 +308,9 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         $entity->floatField = null;
         $entity->boolField = true;
 
-        $repository->doSave($entity);
+        $repository->save($entity);
 
-        $fresh = $repository->doFind(Entities\BaseTestEntity::getPrimaryIds($entity));
+        $fresh = $repository->find(Entities\BaseTestEntity::getPrimaryIds($entity));
 
         self::assertInstanceOf(Entities\TestEntity::class, $fresh);
         self::assertFalse($fresh->getId()->isEmpty());
@@ -325,20 +324,11 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     {
         $repository = static::createRepository(Entities\TestPrimitiveEntity::class);
 
-        $repository->doSave(Entities\TestPrimitiveEntity::create(['id' => new TestDomainId('999')]));
+        $repository->save(Entities\TestPrimitiveEntity::create(['id' => new TestDomainId('999')]));
 
         $this->expectException(DuplicateEntityException::class);
 
-        $repository->doSave(Entities\TestPrimitiveEntity::create(['id' => new TestDomainId('999')]));
-    }
-
-    public function testSaveWithInvalidClass(): void
-    {
-        $repository = static::createRepository(Entities\TestPrimitiveEntity::class);
-
-        $this->expectException(InvalidClassException::class);
-
-        $repository->doSave(Entities\TestEntity::create());
+        $repository->save(Entities\TestPrimitiveEntity::create(['id' => new TestDomainId('999')]));
     }
 
     /**
@@ -352,20 +342,11 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
         static::flushEntities([$entity]);
 
-        self::assertTrue($repository->doExists($ids = Entities\BaseTestEntity::getPrimaryIds($entity)));
+        self::assertTrue($repository->exists($ids = Entities\BaseTestEntity::getPrimaryIds($entity)));
 
-        $repository->doDelete($entity);
+        $repository->delete($entity);
 
-        self::assertFalse($repository->doExists($ids));
-    }
-
-    public function testDeleteWithInvalidClass(): void
-    {
-        $repository = static::createRepository(Entities\TestPrimitiveEntity::class);
-
-        $this->expectException(InvalidClassException::class);
-
-        $repository->doDelete(Entities\TestEntity::create());
+        self::assertFalse($repository->exists($ids));
     }
 
     /**
@@ -409,7 +390,11 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     }
 
     /**
-     * @param class-string $class
+     * @template T of object
+     *
+     * @param class-string<T> $class
+     *
+     * @return TestDomainEntityRepository<T>
      */
     abstract protected static function createRepository(string $class): TestDomainEntityRepository;
 

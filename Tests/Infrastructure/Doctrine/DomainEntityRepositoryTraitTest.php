@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Tests\Infrastructure\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
+use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\Infrastructure\Doctrine\DomainEntityRepositoryTrait;
 use MsgPhp\Domain\Tests\DomainEntityRepositoryTestCase;
 use MsgPhp\Domain\Tests\Fixtures\Entities;
+use MsgPhp\Domain\Tests\Fixtures\T;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainEntityRepository;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainIdType;
@@ -70,19 +72,7 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
 
     protected static function createRepository(string $class): TestDomainEntityRepository
     {
-        /** @psalm-suppress InaccessibleMethod */
-        return new class($class, self::$em) implements TestDomainEntityRepository {
-            use DomainEntityRepositoryTrait {
-                doFindAll as public;
-                doFindAllByFields as public;
-                doFind as public;
-                doFindByFields as public;
-                doExists as public;
-                doExistsByFields as public;
-                doSave as public;
-                doDelete as public;
-            }
-        };
+        return new TestEntityRepository($class, self::$em);
     }
 
     protected static function flushEntities(iterable $entities): void
@@ -92,5 +82,55 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
         }
 
         self::$em->flush();
+    }
+}
+
+/**
+ * @template T of object
+ * @implements TestDomainEntityRepository<T>
+ */
+final class TestEntityRepository implements TestDomainEntityRepository
+{
+    /** @use DomainEntityRepositoryTrait<T> */
+    use DomainEntityRepositoryTrait;
+
+    public function findAll(int $offset = 0, int $limit = 0): DomainCollection
+    {
+        return $this->doFindAll(...\func_get_args());
+    }
+
+    public function findAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection
+    {
+        return $this->doFindAllByFields(...\func_get_args());
+    }
+
+    public function find($id): object
+    {
+        return $this->doFind(...\func_get_args());
+    }
+
+    public function findByFields(array $fields): object
+    {
+        return $this->doFindByFields(...\func_get_args());
+    }
+
+    public function exists($id): bool
+    {
+        return $this->doExists(...\func_get_args());
+    }
+
+    public function existsByFields(array $fields): bool
+    {
+        return $this->doExistsByFields(...\func_get_args());
+    }
+
+    public function save(object $entity): void
+    {
+        $this->doSave(...\func_get_args());
+    }
+
+    public function delete(object $entity): void
+    {
+        $this->doDelete(...\func_get_args());
     }
 }

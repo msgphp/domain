@@ -6,21 +6,47 @@ namespace MsgPhp\Domain\Tests\Fixtures;
 
 use MsgPhp\Domain\DomainCollection;
 
+/**
+ * @template T of object
+ */
 interface TestDomainEntityRepository
 {
-    public function doFindAll(int $offset = 0, int $limit = 0): DomainCollection;
+    /**
+     * @return DomainCollection<T>
+     */
+    public function findAll(int $offset = 0, int $limit = 0): DomainCollection;
 
-    public function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection;
+    /**
+     * @return DomainCollection<T>
+     */
+    public function findAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection;
 
-    public function doFind($id);
+    /**
+     * @param mixed $id
+     *
+     * @return T
+     */
+    public function find($id): object;
 
-    public function doFindByFields(array $fields);
+    /**
+     * @return T
+     */
+    public function findByFields(array $fields): object;
 
-    public function doExists($id): bool;
+    /**
+     * @param mixed $id
+     */
+    public function exists($id): bool;
 
-    public function doExistsByFields(array $fields): bool;
+    public function existsByFields(array $fields): bool;
 
-    public function doSave(object $entity): void;
+    /**
+     * @param T $entity
+     */
+    public function save(object $entity): void;
 
-    public function doDelete(object $entity): void;
+    /**
+     * @param T $entity
+     */
+    public function delete(object $entity): void;
 }

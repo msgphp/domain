@@ -13,22 +13,23 @@ use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\Exception\DuplicateEntityException;
 use MsgPhp\Domain\Exception\EntityNotFoundException;
-use MsgPhp\Domain\Exception\InvalidClassException;
 use MsgPhp\Domain\GenericDomainCollection;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template T of object
  */
 trait DomainEntityRepositoryTrait
 {
-    /** @var class-string */
+    /** @var class-string<T> */
     private $class;
     private $em;
     /** @var string|null */
     private $alias;
 
     /**
-     * @param class-string $class
+     * @param class-string<T> $class
      */
     public function __construct(string $class, EntityManagerInterface $em)
     {
@@ -41,11 +42,17 @@ trait DomainEntityRepositoryTrait
         return $this->alias ?? ($this->alias = strtolower((string) preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], (string) (false === ($i = strrpos($this->class, '\\')) ? $this->class : substr($this->class, $i + 1)))));
     }
 
+    /**
+     * @return DomainCollection<T>
+     */
     private function doFindAll(int $offset = 0, int $limit = 0): DomainCollection
     {
         return $this->createResultSet($this->createQueryBuilder()->getQuery(), $offset, $limit);
     }
 
+    /**
+     * @return DomainCollection<T>
+     */
     private function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection
     {
         if (!$fields) {
@@ -59,6 +66,8 @@ trait DomainEntityRepositoryTrait
 
     /**
      * @param mixed $id
+     *
+     * @return T
      */
     private function doFind($id): object
     {
@@ -72,6 +81,9 @@ trait DomainEntityRepositoryTrait
         return $entity;
     }
 
+    /**
+     * @return T
+     */
     private function doFindByFields(array $fields): object
     {
         if (!$fields) {
@@ -115,12 +127,11 @@ trait DomainEntityRepositoryTrait
         return (bool) $qb->getQuery()->getScalarResult();
     }
 
+    /**
+     * @param T $entity
+     */
     private function doSave(object $entity): void
     {
-        if (!$entity instanceof $this->class) {
-            throw InvalidClassException::create(\get_class($entity));
-        }
-
         $this->em->persist($entity);
 
         try {
@@ -130,12 +141,11 @@ trait DomainEntityRepositoryTrait
         }
     }
 
+    /**
+     * @param T $entity
+     */
     private function doDelete(object $entity): void
     {
-        if (!$entity instanceof $this->class) {
-            throw InvalidClassException::create(\get_class($entity));
-        }
-
         $this->em->remove($entity);
         $this->em->flush();
     }
