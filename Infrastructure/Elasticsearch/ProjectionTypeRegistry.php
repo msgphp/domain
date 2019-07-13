@@ -38,9 +38,6 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
         $this->logger = $logger;
     }
 
-    /**
-     * @return array<int, string>
-     */
     public function all(): array
     {
         return $this->types ?? ($this->types = array_keys($this->getIndexParams()['body']['mappings'] ?? []));

@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class DomainEntityRepositoryTestCase extends TestCase
 {
+    /** @var array<int, class-string<Entities\BaseTestEntity>> */
     protected static $entityTypes = [
         Entities\TestEntity::class,
         Entities\TestPrimitiveEntity::class,
@@ -367,6 +368,9 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         $repository->doDelete(Entities\TestEntity::create());
     }
 
+    /**
+     * @return \Generator<int, array{0:class-string<Entities\BaseTestEntity>}>
+     */
     public function provideEntityTypes(): iterable
     {
         foreach (static::$entityTypes as $class) {
@@ -374,6 +378,9 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         }
     }
 
+    /**
+     * @return \Generator<int, array{0:class-string<Entities\BaseTestEntity>,1:Entities\BaseTestEntity,2:array<string, mixed>,3:array}>
+     */
     public function provideEntities(): iterable
     {
         foreach ($this->provideEntityTypes() as $class) {
@@ -386,6 +393,9 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         }
     }
 
+    /**
+     * @return \Generator<int, array{0:class-string<Entities\BaseTestEntity>,1:array}>
+     */
     public function provideEntityFields(): iterable
     {
         foreach ($this->provideEntityTypes() as $class) {
@@ -403,7 +413,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
     abstract protected static function createRepository(string $class): TestDomainEntityRepository;
 
     /**
-     * @param object[] $entities
+     * @param iterable<object> $entities
      */
     abstract protected static function flushEntities(iterable $entities): void;
 
@@ -460,7 +470,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         return $equals;
     }
 
-    private function loadEntities(Entities\BaseTestEntity ...$context): void
+    private function loadEntities(Entities\BaseTestEntity ...$entity): void
     {
         $entities = [];
         foreach (\func_get_args() as $entity) {

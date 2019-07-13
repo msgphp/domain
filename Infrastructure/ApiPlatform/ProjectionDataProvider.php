@@ -33,8 +33,6 @@ final class ProjectionDataProvider implements CollectionDataProviderInterface, I
 
     /**
      * @psalm-suppress ImplementedReturnTypeMismatch
-     *
-     * @return iterable|Projection[]
      */
     public function getCollection(string $resourceClass, string $operationName = null): iterable
     {
