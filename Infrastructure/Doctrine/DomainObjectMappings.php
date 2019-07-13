@@ -11,7 +11,7 @@ use MsgPhp\Domain\Model;
  *
  * @internal
  */
-final class ObjectMappings implements ObjectMappingProvider
+final class DomainObjectMappings implements ObjectMappingProvider
 {
     public static function provideObjectMappings(MappingConfig $config): iterable
     {

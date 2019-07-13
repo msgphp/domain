@@ -135,7 +135,7 @@ final class BundleHelper
             ->setArgument('$mappingConfig', '%msgphp.doctrine.mapping_config%')
         ;
 
-        $container->register(DoctrineInfrastructure\ObjectMappings::class)
+        $container->register(DoctrineInfrastructure\DomainObjectMappings::class)
             ->setPublic(false)
             ->addTag('msgphp.doctrine.object_mapping_provider')
         ;
