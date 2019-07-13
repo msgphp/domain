@@ -12,7 +12,7 @@ use MsgPhp\Domain\PaginatedDomainCollection;
 interface ProjectionRepository
 {
     /**
-     * @return PaginatedDomainCollection|ProjectionDocument[]
+     * @return PaginatedDomainCollection<ProjectionDocument>
      */
     public function findAll(string $type, int $offset = 0, int $limit = 0): PaginatedDomainCollection;
 

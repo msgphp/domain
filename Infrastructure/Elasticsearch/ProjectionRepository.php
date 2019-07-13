@@ -25,9 +25,6 @@ final class ProjectionRepository implements BaseProjectionRepository
         $this->index = $index;
     }
 
-    /**
-     * @return PaginatedDomainCollection<int, ProjectionDocument>
-     */
     public function findAll(string $type, int $offset = 0, int $limit = 0): PaginatedDomainCollection
     {
         $params = [
