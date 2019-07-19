@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infrastructure\Console\Context;
+namespace MsgPhp\Domain\Infrastructure\Console\Definition;
 
 use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\Factory\ClassMethodResolver;
+use MsgPhp\Domain\Infrastructure\Console\Context\ContextElement;
+use MsgPhp\Domain\Infrastructure\Console\Context\ClassContextElementFactory;
+use MsgPhp\Domain\Infrastructure\Console\Context\GenericClassContextElementFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +19,7 @@ use Symfony\Component\Console\Style\StyleInterface;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class ClassContextFactory implements ContextFactory
+final class ClassContextDefinition implements DomainContextDefinition
 {
     public const ALWAYS_OPTIONAL = 1;
     public const NO_DEFAULTS = 2;

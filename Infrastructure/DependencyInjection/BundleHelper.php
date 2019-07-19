@@ -155,7 +155,7 @@ final class BundleHelper
 
     private static function initConsole(ContainerBuilder $container): void
     {
-        $container->autowire(ConsoleInfrastructure\Context\ClassContextFactory::class)
+        $container->autowire(ConsoleInfrastructure\Definition\ClassContextDefinition::class)
             ->setPublic(false)
             ->setAbstract(true)
             ->setArgument('$method', '__construct')

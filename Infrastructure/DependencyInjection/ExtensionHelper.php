@@ -144,15 +144,15 @@ final class ExtensionHelper
         }
     }
 
-    public static function registerConsoleClassContextFactory(ContainerBuilder $container, string $class, int $flags = 0): Definition
+    public static function registerConsoleClassContextDefinition(ContainerBuilder $container, string $class, int $flags = 0): Definition
     {
-        $definition = ContainerHelper::registerAnonymous($container, ConsoleInfrastructure\Context\ClassContextFactory::class, true)
+        $definition = ContainerHelper::registerAnonymous($container, ConsoleInfrastructure\Definition\ClassContextDefinition::class, true)
             ->setArgument('$class', $class)
             ->setArgument('$flags', $flags)
         ;
 
         if (FeatureDetection::isDoctrineOrmAvailable($container)) {
-            $definition = ContainerHelper::registerAnonymous($container, ConsoleInfrastructure\Context\DoctrineEntityContextFactory::class)
+            $definition = ContainerHelper::registerAnonymous($container, ConsoleInfrastructure\Definition\DoctrineContextDefinition::class)
                 ->setArgument('$factory', $definition)
                 ->setArgument('$em', new Reference('msgphp.doctrine.entity_manager'))
                 ->setArgument('$class', $class)

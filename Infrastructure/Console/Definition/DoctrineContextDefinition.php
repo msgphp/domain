@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MsgPhp\Domain\Infrastructure\Console\Context;
+namespace MsgPhp\Domain\Infrastructure\Console\Definition;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -15,9 +15,9 @@ use Symfony\Component\Console\Style\StyleInterface;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */
-final class DoctrineEntityContextFactory implements ContextFactory
+final class DoctrineContextDefinition implements DomainContextDefinition
 {
-    private $factory;
+    private $definition;
     private $em;
     private $class;
     /** @var string|null */
@@ -26,9 +26,9 @@ final class DoctrineEntityContextFactory implements ContextFactory
     /**
      * @param class-string $class
      */
-    public function __construct(ContextFactory $factory, EntityManagerInterface $em, string $class)
+    public function __construct(DomainContextDefinition $definition, EntityManagerInterface $em, string $class)
     {
-        $this->factory = $factory;
+        $this->definition = $definition;
         $this->em = $em;
         $this->class = $class;
     }
@@ -40,14 +40,14 @@ final class DoctrineEntityContextFactory implements ContextFactory
 
         if (isset($metadata->discriminatorColumn['fieldName'])) {
             $definition->addOption(new InputOption(
-                $this->discriminatorField = ClassContextFactory::getUniqueFieldName($definition, $metadata->discriminatorColumn['fieldName']),
+                $this->discriminatorField = ClassContextDefinition::getUniqueFieldName($definition, $metadata->discriminatorColumn['fieldName']),
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'The entity discriminator value'
             ));
         }
 
-        $this->factory->configure($definition);
+        $this->definition->configure($definition);
     }
 
     public function getContext(InputInterface $input, StyleInterface $io, array $values = []): array
@@ -74,7 +74,7 @@ final class DoctrineEntityContextFactory implements ContextFactory
             // @todo ask additional context values, required by the provided discriminator class
         }
 
-        return $context + $this->factory->getContext($input, $io, $values);
+        return $context + $this->definition->getContext($input, $io, $values);
     }
 
     private function getMetadata(): ClassMetadata
