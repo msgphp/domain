@@ -9,20 +9,7 @@ use MsgPhp\Domain\Tests\Fixtures;
 
 trait EntityManagerTestTrait
 {
-    use BaseEntityManagerTestTrait {
-        initEm as public setUpBeforeClass;
-        destroyEm as public tearDownAfterClass;
-    }
-
-    protected function setUp(): void
-    {
-        self::prepareEm();
-    }
-
-    protected function tearDown(): void
-    {
-        self::cleanEm();
-    }
+    use BaseEntityManagerTestTrait;
 
     protected static function createSchema(): bool
     {

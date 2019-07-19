@@ -22,9 +22,10 @@ trait MessageBusTestTrait
     /** @var array<class-string, array<int, object>> */
     private static $dispatchedMessages = [];
 
-    abstract protected static function getMessageHandlers(): iterable;
-
-    private static function initBus(): void
+    /**
+     * @beforeClass
+     */
+    public static function initBus(): void
     {
         self::$bus = new MessageBus([new HandleMessageMiddleware(new HandlersLocator(['*' => [static function ($message): void {
             self::$dispatchedMessages[$messageClass = \get_class($message)][] = $message;
@@ -37,15 +38,24 @@ trait MessageBusTestTrait
         }]]))]);
     }
 
-    private static function destroyBus(): void
+    /**
+     * @afterClass
+     */
+    public static function destroyBus(): void
     {
         self::$bus = null;
     }
 
-    private static function cleanBus(): void
+    /**
+     * @before
+     * @after
+     */
+    public static function cleanBus(): void
     {
         self::$dispatchedMessages = [];
     }
+
+    abstract protected static function getMessageHandlers(): iterable;
 
     private static function createDomainMessageBus(): DomainMessageBus
     {

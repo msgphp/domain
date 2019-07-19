@@ -26,20 +26,10 @@ trait EntityManagerTestTrait
     /** @var EntityManagerInterface */
     private static $em;
 
-    abstract protected static function createSchema(): bool;
-
-    abstract protected static function getEntityMappings(): iterable;
-
-    abstract protected static function getEntityIdTypes(): iterable;
-
-    private static function getEmCacheDir(): string
-    {
-        static $dir;
-
-        return $dir ?? $dir = sys_get_temp_dir().'/msgphp_'.md5(static::class);
-    }
-
-    private static function initEm(): void
+    /**
+     * @beforeClass
+     */
+    public static function initEm(): void
     {
         self::cleanEmCache();
 
@@ -77,7 +67,10 @@ trait EntityManagerTestTrait
         self::$em = EntityManager::create(['driver' => 'pdo_sqlite', 'memory' => true], $config);
     }
 
-    private static function destroyEm(): void
+    /**
+     * @afterClass
+     */
+    public static function destroyEm(): void
     {
         (new SchemaTool(self::$em))->dropDatabase();
 
@@ -87,7 +80,10 @@ trait EntityManagerTestTrait
         self::cleanEmCache();
     }
 
-    private static function prepareEm(): void
+    /**
+     * @before
+     */
+    public static function prepareEm(): void
     {
         if (!self::$em->isOpen()) {
             self::$em = EntityManager::create(self::$em->getConnection(), self::$em->getConfiguration(), self::$em->getEventManager());
@@ -106,13 +102,30 @@ trait EntityManagerTestTrait
         }
     }
 
-    private static function cleanEm(): void
+    /**
+     * @before
+     * @after
+     */
+    public static function cleanEm(): void
     {
         self::$em->clear();
 
         if (self::createSchema()) {
             (new SchemaTool(self::$em))->dropSchema(self::$em->getMetadataFactory()->getAllMetadata());
         }
+    }
+
+    abstract protected static function createSchema(): bool;
+
+    abstract protected static function getEntityMappings(): iterable;
+
+    abstract protected static function getEntityIdTypes(): iterable;
+
+    private static function getEmCacheDir(): string
+    {
+        static $dir;
+
+        return $dir ?? $dir = sys_get_temp_dir().'/msgphp_'.md5(static::class);
     }
 
     private static function cleanEmCache(): void
