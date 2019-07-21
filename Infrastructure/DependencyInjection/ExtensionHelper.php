@@ -153,7 +153,7 @@ final class ExtensionHelper
 
         if (FeatureDetection::isDoctrineOrmAvailable($container)) {
             $definition = ContainerHelper::registerAnonymous($container, ConsoleInfrastructure\Definition\DoctrineContextDefinition::class)
-                ->setArgument('$factory', $definition)
+                ->setArgument('$definition', $definition)
                 ->setArgument('$em', new Reference('msgphp.doctrine.entity_manager'))
                 ->setArgument('$class', $class)
             ;
