@@ -13,12 +13,12 @@ final class ProjectionSynchronization
 {
     private $typeRegistry;
     private $repository;
-    /** @var iterable<object, array> */
+    /** @var iterable<string, array> */
     private $documentProvider;
     private $logger;
 
     /**
-     * @param iterable<object, array> $documentProvider
+     * @param iterable<string, array> $documentProvider
      */
     public function __construct(ProjectionTypeRegistry $typeRegistry, ProjectionRepository $repository, iterable $documentProvider, LoggerInterface $logger = null)
     {
@@ -36,8 +36,8 @@ final class ProjectionSynchronization
         $grouped = [];
         $synchronized = 0;
 
-        foreach ($this->documentProvider as $object => $document) {
-            $grouped[$this->typeRegistry->lookup(\get_class($object))][] = $document;
+        foreach ($this->documentProvider as $type => $document) {
+            $grouped[$type][] = $document;
             ++$synchronized;
         }
         foreach ($grouped as $type => $documents) {

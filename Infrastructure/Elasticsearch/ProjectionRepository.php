@@ -15,18 +15,15 @@ final class ProjectionRepository implements BaseProjectionRepository
 {
     private $client;
     private $prefix;
-    /** @var array<string, string> */
-    private $lookup;
     private $bulkLimit;
 
     /**
      * @param array<string, string> $lookup
      */
-    public function __construct(Client $client, string $prefix, array $lookup = [], int $bulkLimit = 1000)
+    public function __construct(Client $client, string $prefix, int $bulkLimit = 1000)
     {
         $this->client = $client;
         $this->prefix = $prefix;
-        $this->lookup = $lookup;
         $this->bulkLimit = $bulkLimit;
     }
 
@@ -35,7 +32,7 @@ final class ProjectionRepository implements BaseProjectionRepository
         try {
             /** @var array $document */
             $document = $this->client->get([
-                'index' => $this->getType($type),
+                'index' => $this->prefix.$type,
                 'id' => $id,
             ]);
         } catch (Missing404Exception $e) {
@@ -48,7 +45,7 @@ final class ProjectionRepository implements BaseProjectionRepository
     public function save(string $type, array $document): void
     {
         $this->client->index([
-            'index' => $this->getType($type),
+            'index' => $this->prefix.$type,
             'id' => $document['id'] ?? null,
             'body' => $document,
         ]);
@@ -64,7 +61,7 @@ final class ProjectionRepository implements BaseProjectionRepository
 
             $params['body'][] = [
                 'index' => [
-                    '_index' => $this->getType($type),
+                    '_index' => $this->prefix.$type,
                     '_id' => $document['id'] ?? null,
                 ],
             ];
@@ -86,7 +83,7 @@ final class ProjectionRepository implements BaseProjectionRepository
     {
         try {
             $this->client->delete([
-                'index' => $this->getType($type),
+                'index' => $this->prefix.$type,
                 'id' => $id,
             ]);
 
@@ -94,10 +91,5 @@ final class ProjectionRepository implements BaseProjectionRepository
         } catch (Missing404Exception $e) {
             return false;
         }
-    }
-
-    private function getType(string $name): string
-    {
-        return $this->prefix.($this->lookup[$name] ?? $name);
     }
 }

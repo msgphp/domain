@@ -20,21 +20,17 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
     /** @var array<string, array> */
     private $mappings;
     private $settings;
-    /** @var array<string, string> */
-    private $lookup;
     private $logger;
 
     /**
-     * @param array<string, array>  $mappings
-     * @param array<string, string> $lookup
+     * @param array<string, array> $mappings
      */
-    public function __construct(Client $client, string $prefix, array $mappings, array $settings = [], array $lookup = [], LoggerInterface $logger = null)
+    public function __construct(Client $client, string $prefix, array $mappings, array $settings = [], LoggerInterface $logger = null)
     {
         $this->client = $client;
         $this->prefix = $prefix;
         $this->mappings = $mappings;
         $this->settings = $settings;
-        $this->lookup = $lookup;
         $this->logger = $logger;
     }
 
@@ -100,17 +96,5 @@ final class ProjectionTypeRegistry implements BaseProjectionTypeRegistry
                 $this->logger->info('Destroyed Elasticsearch index "'.$index.'".');
             }
         }
-    }
-
-    public function lookup(string $name): string
-    {
-        if (isset($this->mappings[$name])) {
-            return $name;
-        }
-        if (isset($this->lookup[$name])) {
-            return $this->lookup[$name];
-        }
-
-        throw new \LogicException('Cannot lookup type for "'.$name.'".');
     }
 }
