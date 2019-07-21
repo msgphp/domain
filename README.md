@@ -14,7 +14,6 @@ composer require msgphp/domain
 
 - [Domain-Driven-Design](https://msgphp.github.io/docs/ddd/identifiers/)
 - [Event sourcing](https://msgphp.github.io/docs/event-sourcing/event-handlers/)
-- [Message driven](https://msgphp.github.io/docs/message-driven/message-bus/)
 - [Projection model](https://msgphp.github.io/docs/projection/models/)
 - Try the Symfony [demo application](https://github.com/msgphp/symfony-demo-app)
 - Get support on [Symfony's Slack `#msgphp` channel](https://symfony.com/slack-invite) or [raise an issue](https://github.com/msgphp/msgphp/issues/new)
