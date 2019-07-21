@@ -9,17 +9,21 @@ namespace MsgPhp\Domain\Projection;
  */
 final class ProjectionDocumentProvider implements \IteratorAggregate
 {
-    private $transformer;
-    /** @var iterable<int, callable> */
+    /** @var iterable<int, callable():object> */
     private $dataProviders;
+    /** @var callable(object):array */
+    private $transformer;
 
     /**
-     * @param iterable<int, callable> $dataProviders
+     * @template T
+     *
+     * @param iterable<int, callable():T> $dataProviders
+     * @param callable(T): array          $transformer
      */
-    public function __construct(ProjectionDocumentTransformer $transformer, iterable $dataProviders)
+    public function __construct(iterable $dataProviders, callable $transformer)
     {
-        $this->transformer = $transformer;
         $this->dataProviders = $dataProviders;
+        $this->transformer = $transformer;
     }
 
     /**
@@ -29,7 +33,7 @@ final class ProjectionDocumentProvider implements \IteratorAggregate
     {
         foreach ($this->dataProviders as $dataProvider) {
             foreach ($dataProvider() as $object) {
-                yield $object => $this->transformer->transform($object);
+                yield $object => ($this->transformer)($object);
             }
         }
     }
