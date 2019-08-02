@@ -38,6 +38,7 @@ final class DomainCollection implements BaseDomainCollection
 
         /**
          * @psalm-suppress InvalidScalarArgument
+         *
          * @var BaseDomainCollection
          */
         return new self($value);
