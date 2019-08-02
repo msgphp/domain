@@ -32,17 +32,15 @@ final class DomainCollection implements BaseDomainCollection
 
     public static function fromValue(?iterable $value): BaseDomainCollection
     {
-        if ($value instanceof Collection) {
-            /** @var BaseDomainCollection */
-            return new self($value);
+        if (!$value instanceof Collection) {
+            $value = new ArrayCollection($value instanceof \Traversable ? iterator_to_array($value) : $value ?? []);
         }
 
-        if ($value instanceof \Traversable) {
-            $value = iterator_to_array($value);
-        }
-
-        /** @var BaseDomainCollection */
-        return new self(new ArrayCollection($value ?? []));
+        /**
+         * @psalm-suppress InvalidScalarArgument
+         * @var BaseDomainCollection
+         */
+        return new self($value);
     }
 
     public function getIterator(): \Traversable
