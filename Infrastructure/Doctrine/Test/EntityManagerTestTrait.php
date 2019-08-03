@@ -63,12 +63,29 @@ trait EntityManagerTestTrait
     }
 
     /**
+     * @beforeClass
      * @afterClass
      */
     public static function destroyEm(): void
     {
-        self::$em->close();
-        self::$em = null;
+        if (null !== self::$em) {
+            self::cleanEm();
+            self::$em->close();
+            self::$em = null;
+        }
+
+        if (is_dir($dir = sys_get_temp_dir().'/msgphp_'.md5(static::class))) {
+            /** @var \SplFileInfo $file */
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
+                if ($file->isDir()) {
+                    rmdir($file->getRealPath() ?: $file->getPath());
+                } else {
+                    unlink($file->getRealPath() ?: $file->getPath());
+                }
+            }
+
+            rmdir($dir);
+        }
     }
 
     /**
@@ -93,19 +110,6 @@ trait EntityManagerTestTrait
     {
         self::$em->clear();
 
-        if (is_dir($dir = sys_get_temp_dir().'/msgphp_'.md5(static::class))) {
-            /** @var \SplFileInfo $file */
-            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
-                if ($file->isDir()) {
-                    rmdir($file->getRealPath() ?: $file->getPath());
-                } else {
-                    unlink($file->getRealPath() ?: $file->getPath());
-                }
-            }
-
-            rmdir($dir);
-        }
-
         if (self::createSchema()) {
             (new SchemaTool(self::$em))->dropSchema(self::$em->getMetadataFactory()->getAllMetadata());
         }
@@ -120,8 +124,7 @@ trait EntityManagerTestTrait
     private static function createEntityDistMapping(string $source): string
     {
         $files = [];
-        $target = sys_get_temp_dir().'/msgphp_'.md5(static::class).'/mapping/'.md5($source);
-        mkdir($target, 0777, true);
+        mkdir($target = sys_get_temp_dir().'/msgphp_'.md5(static::class).'/mapping/'.md5($source), 0777, true);
 
         /** @var \SplFileInfo $file */
         foreach (new \DirectoryIterator($source) as $file) {
