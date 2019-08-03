@@ -28,6 +28,8 @@ trait EntityManagerTestTrait
      */
     public static function initEm(): void
     {
+        self::destroyEm();
+
         foreach (self::getEntityIdTypes() as $type => $class) {
             $type::setClass($class);
 
@@ -63,7 +65,6 @@ trait EntityManagerTestTrait
     }
 
     /**
-     * @beforeClass
      * @afterClass
      */
     public static function destroyEm(): void
@@ -97,13 +98,14 @@ trait EntityManagerTestTrait
             self::$em = EntityManager::create(self::$em->getConnection(), self::$em->getConfiguration(), self::$em->getEventManager());
         }
 
+        self::cleanEm();
+
         if (self::createSchema()) {
             (new SchemaTool(self::$em))->createSchema(self::$em->getMetadataFactory()->getAllMetadata());
         }
     }
 
     /**
-     * @before
      * @after
      */
     public static function cleanEm(): void
