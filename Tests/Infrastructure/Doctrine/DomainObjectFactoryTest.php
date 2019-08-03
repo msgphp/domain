@@ -38,7 +38,7 @@ final class DomainObjectFactoryTest extends TestCase
         $innerFactory->expects(self::once())
             ->method('create')
             ->with(Entities\TestChildEntity::class, ['foo' => 'bar', 'discriminator' => 'child'])
-            ->willReturn($obj = Entities\TestParentEntity::create())
+            ->willReturn($obj = Entities\TestChildEntity::create())
         ;
         $innerFactory->expects(self::once())
             ->method('getClass')
@@ -65,6 +65,30 @@ final class DomainObjectFactoryTest extends TestCase
         $factory = new DomainObjectFactory($innerFactory, self::$em);
 
         self::assertSame($obj, $factory->create(\stdClass::class));
+    }
+
+    public function testGetClass(): void
+    {
+        $innerFactory = $this->createMock(BaseDomainObjectFactory::class);
+        $innerFactory->expects(self::once())
+            ->method('getClass')
+            ->willReturnArgument(0)
+        ;
+        $factory = new DomainObjectFactory($innerFactory, self::$em);
+
+        self::assertSame(Entities\TestParentEntity::class, $factory->getClass(Entities\TestParentEntity::class));
+    }
+
+    public function testGetClassWithDiscriminator(): void
+    {
+        $innerFactory = $this->createMock(BaseDomainObjectFactory::class);
+        $innerFactory->expects(self::once())
+            ->method('getClass')
+            ->willReturnArgument(0)
+        ;
+        $factory = new DomainObjectFactory($innerFactory, self::$em);
+
+        self::assertSame(Entities\TestChildEntity::class, $factory->getClass(Entities\TestParentEntity::class, ['discriminator' => 'child']));
     }
 
     public function testReference(): void

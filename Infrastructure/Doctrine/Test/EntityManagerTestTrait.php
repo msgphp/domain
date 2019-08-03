@@ -13,13 +13,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\ORM\Tools\ToolsException;
 use MsgPhp\Domain\Infrastructure\Doctrine\MappingConfig;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
- *
- * @internal
  */
 trait EntityManagerTestTrait
 {
@@ -31,8 +28,6 @@ trait EntityManagerTestTrait
      */
     public static function initEm(): void
     {
-        self::cleanEmCache();
-
         foreach (self::getEntityIdTypes() as $type => $class) {
             $type::setClass($class);
 
@@ -61,7 +56,7 @@ trait EntityManagerTestTrait
 
         $config = new Configuration();
         $config->setMetadataDriverImpl($driver);
-        $config->setProxyDir(self::getEmCacheDir().'/proxy');
+        $config->setProxyDir(sys_get_temp_dir().'/msgphp_'.md5(static::class).'/proxy');
         $config->setProxyNamespace(static::class);
 
         self::$em = EntityManager::create(['driver' => 'pdo_sqlite', 'memory' => true], $config);
@@ -72,12 +67,8 @@ trait EntityManagerTestTrait
      */
     public static function destroyEm(): void
     {
-        (new SchemaTool(self::$em))->dropDatabase();
-
         self::$em->close();
         self::$em = null;
-
-        self::cleanEmCache();
     }
 
     /**
@@ -90,15 +81,7 @@ trait EntityManagerTestTrait
         }
 
         if (self::createSchema()) {
-            $schemaTool = new SchemaTool(self::$em);
-            $classes = self::$em->getMetadataFactory()->getAllMetadata();
-
-            try {
-                $schemaTool->createSchema($classes);
-            } catch (ToolsException $e) {
-                $schemaTool->dropSchema($classes);
-                $schemaTool->createSchema($classes);
-            }
+            (new SchemaTool(self::$em))->createSchema(self::$em->getMetadataFactory()->getAllMetadata());
         }
     }
 
@@ -109,6 +92,19 @@ trait EntityManagerTestTrait
     public static function cleanEm(): void
     {
         self::$em->clear();
+
+        if (is_dir($dir = sys_get_temp_dir().'/msgphp_'.md5(static::class))) {
+            /** @var \SplFileInfo $file */
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
+                if ($file->isDir()) {
+                    rmdir($file->getRealPath() ?: $file->getPath());
+                } else {
+                    unlink($file->getRealPath() ?: $file->getPath());
+                }
+            }
+
+            rmdir($dir);
+        }
 
         if (self::createSchema()) {
             (new SchemaTool(self::$em))->dropSchema(self::$em->getMetadataFactory()->getAllMetadata());
@@ -121,33 +117,10 @@ trait EntityManagerTestTrait
 
     abstract protected static function getEntityIdTypes(): iterable;
 
-    private static function getEmCacheDir(): string
-    {
-        static $dir;
-
-        return $dir ?? $dir = sys_get_temp_dir().'/msgphp_'.md5(static::class);
-    }
-
-    private static function cleanEmCache(): void
-    {
-        if (is_dir($dir = self::getEmCacheDir())) {
-            /** @var \SplFileInfo $file */
-            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
-                if ($file->isDir()) {
-                    rmdir($file->getRealPath() ?: $file->getPath());
-                } else {
-                    unlink($file->getRealPath() ?: $file->getPath());
-                }
-            }
-
-            rmdir($dir);
-        }
-    }
-
     private static function createEntityDistMapping(string $source): string
     {
         $files = [];
-        $target = self::getEmCacheDir().'/mapping/'.md5($source);
+        $target = sys_get_temp_dir().'/msgphp_'.md5(static::class).'/mapping/'.md5($source);
         mkdir($target, 0777, true);
 
         /** @var \SplFileInfo $file */
