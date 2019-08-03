@@ -6,19 +6,19 @@ namespace MsgPhp\Domain\Projection;
 
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
+ *
+ * @template T of object
  */
 final class ProjectionDocumentProvider implements \IteratorAggregate
 {
-    /** @var iterable<int, callable():object> */
+    /** @var iterable<int, callable():T> */
     private $dataProviders;
-    /** @var callable(object):array */
+    /** @var callable(T):array */
     private $transformer;
-    /** @var callable(object):string */
+    /** @var callable(T):string */
     private $typeResolver;
 
     /**
-     * @template T
-     *
      * @param iterable<int, callable():T> $dataProviders
      * @param callable(T): array          $transformer
      * @param callable(T): string         $typeResolver

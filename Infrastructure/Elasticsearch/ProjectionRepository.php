@@ -17,9 +17,6 @@ final class ProjectionRepository implements BaseProjectionRepository
     private $prefix;
     private $bulkLimit;
 
-    /**
-     * @param array<string, string> $lookup
-     */
     public function __construct(Client $client, string $prefix, int $bulkLimit = 1000)
     {
         $this->client = $client;
