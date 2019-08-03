@@ -20,8 +20,8 @@ final class ProjectionDocumentProvider implements \IteratorAggregate
 
     /**
      * @param iterable<int, callable():T> $dataProviders
-     * @param callable(T): array          $transformer
-     * @param callable(T): string         $typeResolver
+     * @param callable(T):array           $transformer
+     * @param callable(T):string          $typeResolver
      */
     public function __construct(iterable $dataProviders, callable $transformer, callable $typeResolver)
     {
