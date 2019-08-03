@@ -69,6 +69,7 @@ trait EntityManagerTestTrait
      */
     public static function destroyEm(): void
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (null !== self::$em) {
             self::cleanEm();
             self::$em->close();
