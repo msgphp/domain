@@ -158,9 +158,9 @@ final class ClassContextDefinition implements DomainContextDefinition
                     throw new \LogicException('No value provided for "'.$field.'".');
                 }
 
-                $this->generatedValues[] = [$element->label, (string) json_encode(1)]; // @todo use Dumper
                 if ($element->generate($io, $generated)) {
                     $context[$argument] = $element->normalize($generated);
+                    $this->generatedValues[] = [$element->label, (string) json_encode($generated)]; // @todo use Dumper
                 } else {
                     $context[$argument] = self::askRequiredValue($io, $element, $value);
                 }
