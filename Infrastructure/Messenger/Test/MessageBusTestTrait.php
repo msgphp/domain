@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MsgPhp\Domain\Infrastructure\Messenger\Test;
 
 use MsgPhp\Domain\Infrastructure\Messenger\DomainMessageBus;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Handler\HandlersLocator;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -63,31 +64,33 @@ trait MessageBusTestTrait
     /**
      * @param class-string $class
      */
-    private static function assertMessageIsDispatched(string $class, callable $assertion = null): void
+    private static function assertMessageIsDispatched(string $class): void
     {
-        if (!isset(self::$dispatchedMessages[$class])) {
-            throw new \LogicException('Message "'.$class.'" is not dispatched, but was expected to.');
-        }
+        if (is_subclass_of(self::class, TestCase::class)) {
+            self::assertArrayHasKey($class, self::$dispatchedMessages);
 
-        if (null === $assertion) {
             return;
         }
 
-        foreach (self::$dispatchedMessages[$class] as $i => $message) {
-            $assertion($message, $i);
+        if (!isset(self::$dispatchedMessages[$class])) {
+            throw new \LogicException('Message "'.$class.'" is not dispatched, but was expected to.');
         }
     }
 
     /**
      * @param class-string $class
      */
-    private static function assertMessageIsDispatchedOnce(string $class, callable $assertion = null): void
+    private static function assertMessageIsDispatchedOnce(string $class): void
     {
+        if (is_subclass_of(self::class, TestCase::class)) {
+            self::assertCount(1, self::$dispatchedMessages[$class] ?? []);
+
+            return;
+        }
+
         if (1 !== $count = \count(self::$dispatchedMessages[$class] ?? [])) {
             throw new \LogicException('Message "'.$class.'" is dispatched '.$count.' times, but was expected only once.');
         }
-
-        self::assertMessageIsDispatched($class, $assertion);
     }
 
     /**
@@ -95,6 +98,12 @@ trait MessageBusTestTrait
      */
     private static function assertMessageIsNotDispatched(string $class): void
     {
+        if (is_subclass_of(self::class, TestCase::class)) {
+            self::assertArrayNotHasKey($class, self::$dispatchedMessages);
+
+            return;
+        }
+
         if (isset(self::$dispatchedMessages[$class])) {
             throw new \LogicException('Message "'.$class.'" is dispatched, but was not expected to.');
         }
