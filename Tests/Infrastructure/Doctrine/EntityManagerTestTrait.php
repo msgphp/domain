@@ -11,6 +11,11 @@ trait EntityManagerTestTrait
 {
     use BaseEntityManagerTestTrait;
 
+    protected static function getClassMapping(): array
+    {
+        return [];
+    }
+
     protected static function createSchema(): bool
     {
         return true;

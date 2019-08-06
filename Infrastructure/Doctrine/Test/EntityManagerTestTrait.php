@@ -6,12 +6,15 @@ namespace MsgPhp\Domain\Infrastructure\Doctrine\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\ORM\Tools\ResolveTargetEntityListener;
 use Doctrine\ORM\Tools\SchemaTool;
 use MsgPhp\Domain\Infrastructure\Doctrine\MappingConfig;
 
@@ -45,10 +48,10 @@ trait EntityManagerTestTrait
             foreach ($paths as $ns => $path) {
                 switch ($type) {
                     case 'xml':
-                        $driver->addDriver(new XmlDriver($paths, '.orm.xml'), $ns);
+                        $driver->addDriver($xml = new XmlDriver(new SymfonyFileLocator([$path => $ns], '.orm.xml')), $ns);
                         break;
                     case 'annot':
-                        $driver->addDriver(new AnnotationDriver(new AnnotationReader(), $paths), $ns);
+                        $driver->addDriver(new AnnotationDriver(new AnnotationReader(), $path), $ns);
                         break;
                     default:
                         throw new \LogicException('Unknown driver type.');
@@ -62,6 +65,12 @@ trait EntityManagerTestTrait
         $config->setProxyNamespace(static::class);
 
         self::$em = EntityManager::create(['driver' => 'pdo_sqlite', 'memory' => true], $config);
+
+        $targets = new ResolveTargetEntityListener();
+        foreach (self::getClassMapping() as $class => $mappedClass) {
+            $targets->addResolveTargetEntity($class, $mappedClass, []);
+        }
+        self::$em->getEventManager()->addEventListener(Events::loadClassMetadata, $targets);
     }
 
     /**
@@ -80,9 +89,9 @@ trait EntityManagerTestTrait
             /** @var \SplFileInfo $file */
             foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST) as $file) {
                 if ($file->isDir()) {
-                    rmdir($file->getRealPath() ?: $file->getPath());
+                    rmdir($file->getRealPath() ?: $file->getPathname());
                 } else {
-                    unlink($file->getRealPath() ?: $file->getPath());
+                    unlink($file->getRealPath() ?: $file->getPathname());
                 }
             }
 
@@ -118,6 +127,8 @@ trait EntityManagerTestTrait
         }
     }
 
+    abstract protected static function getClassMapping(): array;
+
     abstract protected static function createSchema(): bool;
 
     abstract protected static function getEntityMappings(): iterable;
@@ -132,7 +143,7 @@ trait EntityManagerTestTrait
         /** @var \SplFileInfo $file */
         foreach (new \DirectoryIterator($source) as $file) {
             if ('xml' === $file->getExtension()) {
-                $files[] = $file->getPath();
+                $files[] = $file->getPathname();
             }
         }
 
