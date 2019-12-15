@@ -19,7 +19,10 @@ final class TreeBuilderHelper
     {
         $treeBuilder = new TreeBuilder($name, 'array', $builder = new NodeBuilder());
 
-        /** @var ArrayNodeDefinition */
+        /**
+         * @psalm-suppress RedundantCondition
+         * @var ArrayNodeDefinition
+         */
         return method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root($name, 'array', $builder);
     }
 }

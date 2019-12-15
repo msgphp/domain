@@ -79,7 +79,7 @@ final class DoctrineContextDefinition implements DomainContextDefinition
 
     private function getMetadata(): ClassMetadata
     {
-        if (!class_exists($this->class) || $this->em->getMetadataFactory()->isTransient($this->class)) {
+        if ($this->em->getMetadataFactory()->isTransient($this->class)) {
             throw InvalidClass::create($this->class);
         }
 

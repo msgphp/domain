@@ -34,6 +34,7 @@ final class ExtensionHelper
         ];
 
         foreach ($typeClassMapping as $idClass => $typeClass) {
+            /** @psalm-suppress DeprecatedConstant */
             $type = $idTypeMapping[$idClass] ?? DoctrineType::INTEGER;
 
             if (isset($uuidMapping[$type])) {
@@ -74,6 +75,7 @@ final class ExtensionHelper
     {
         foreach ($container->findTaggedServiceIds($tag = 'msgphp.domain.command_handler') as $id => $attr) {
             $definition = $container->getDefinition($id);
+            /** @psalm-suppress DocblockTypeContradiction */
             $param = (new \ReflectionMethod($definition->getClass() ?? (string) $id, '__invoke'))->getParameters()[0] ?? null;
 
             if (null === $param || null === $command = $param->getClass()) {

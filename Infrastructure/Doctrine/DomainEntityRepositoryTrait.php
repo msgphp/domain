@@ -22,14 +22,14 @@ use MsgPhp\Domain\GenericDomainCollection;
  */
 trait DomainEntityRepositoryTrait
 {
-    /** @var class-string<T> */
+    /** @var class-string */
     private $class;
     private $em;
     /** @var string|null */
     private $alias;
 
     /**
-     * @param class-string<T> $class
+     * @param class-string $class
      */
     public function __construct(string $class, EntityManagerInterface $em)
     {
@@ -176,6 +176,7 @@ trait DomainEntityRepositoryTrait
             $query->setMaxResults(0 === $limit ? null : $limit);
         }
 
+        /** @var DomainCollection<T2Key, T2> */
         return new GenericDomainCollection($query->getResult($hydrate));
     }
 

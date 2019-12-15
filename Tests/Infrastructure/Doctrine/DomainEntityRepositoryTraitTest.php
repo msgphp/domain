@@ -45,6 +45,7 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
 
         $parameters = $qb->getParameters();
 
+        /** @psalm-suppress DeprecatedConstant */
         self::assertSame(Type::INTEGER, $parameters->get(0)->getType());
         self::assertSame(\PDO::PARAM_STR, $parameters->get(1)->getType());
         self::assertSame(TestDomainIdType::NAME, $parameters->get(2)->getType());
@@ -72,6 +73,7 @@ final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCa
 
     protected static function createRepository(string $class): TestDomainEntityRepository
     {
+        /** @var TestDomainEntityRepository<T> */
         return new TestEntityRepository($class, self::$em);
     }
 

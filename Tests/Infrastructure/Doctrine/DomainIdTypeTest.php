@@ -90,11 +90,14 @@ final class DomainIdTypeTest extends TestCase
 
     public function testGetSQLDeclaration(): void
     {
+        /** @psalm-suppress DeprecatedConstant */
         TestOtherDomainIdType::setDataType(Type::STRING);
 
         self::assertSame('native_integer_type', $this->type->getSQLDeclaration([], $this->platform));
+        /** @psalm-suppress DeprecatedConstant */
         self::assertSame(Type::INTEGER, TestDomainIdType::getDataType());
         self::assertSame('native_string_type', $this->otherType->getSQLDeclaration([], $this->platform));
+        /** @psalm-suppress DeprecatedConstant */
         self::assertSame(Type::STRING, TestOtherDomainIdType::getDataType());
     }
 

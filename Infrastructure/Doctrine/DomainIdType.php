@@ -50,6 +50,7 @@ abstract class DomainIdType extends Type
 
     final public static function getDataType(): string
     {
+        /** @psalm-suppress DeprecatedConstant */
         return self::$mapping[static::class]['data_type'] ?? Type::INTEGER;
     }
 
@@ -72,7 +73,7 @@ abstract class DomainIdType extends Type
             $class = \get_class($value);
 
             foreach (self::$mapping as $type => $mapping) {
-                if ($class === $mapping['class'] ?? null) {
+                if ($class === ($mapping['class'] ?? null)) {
                     return $type::NAME;
                 }
             }
@@ -94,10 +95,11 @@ abstract class DomainIdType extends Type
     {
         if ($value instanceof DomainId) {
             $class = \get_class($value);
+            /** @psalm-suppress DeprecatedConstant */
             $type = Type::INTEGER;
 
             foreach (self::$mapping as $mapping) {
-                if ($class === $mapping['class'] ?? null) {
+                if ($class === ($mapping['class'] ?? null)) {
                     $type = $mapping['data_type'] ?? $type;
                     break;
                 }
@@ -128,7 +130,7 @@ abstract class DomainIdType extends Type
         try {
             return static::getInnerType()->convertToDatabaseValue($value, $platform);
         } catch (ConversionException $e) {
-            throw ConversionException::conversionFailed($value, $this->getName());
+            throw ConversionException::conversionFailed($value ?? '', $this->getName());
         }
     }
 
