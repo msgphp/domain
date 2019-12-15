@@ -17,7 +17,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
 {
     /** @var array<class-string, class-string> $classMapping */
     private $classMapping;
-    /** @var DomainObjectFactory|null */
+    /** @var null|DomainObjectFactory */
     private $factory;
 
     /**
@@ -61,6 +61,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         foreach ($context as $key => $value) {
             if (property_exists($class, $key)) {
                 $properties[$key] = $value;
+
                 continue;
             }
         }
@@ -101,6 +102,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
             $type = $metadata['type'];
             if ($given && !\is_object($value) && (class_exists($type) || interface_exists($type, false))) {
                 $arguments[] = ($this->factory ?? $this)->create($type, (array) $value);
+
                 continue;
             }
 

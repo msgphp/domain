@@ -10,6 +10,9 @@ use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use MsgPhp\Domain\Tests\Infrastructure\Doctrine\EntityManagerTestTrait;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class ScalarHydratorTest extends TestCase
 {
     use EntityManagerTestTrait;

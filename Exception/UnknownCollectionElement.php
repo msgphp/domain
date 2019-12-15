@@ -10,7 +10,7 @@ namespace MsgPhp\Domain\Exception;
 final class UnknownCollectionElement extends \OutOfBoundsException implements DomainException
 {
     /**
-     * @param string|int $key
+     * @param int|string $key
      */
     public static function createForKey($key): self
     {

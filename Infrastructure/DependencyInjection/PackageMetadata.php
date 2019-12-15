@@ -25,7 +25,7 @@ final class PackageMetadata
     /**
      * @return iterable<string, string>
      */
-    public function findPaths(string $baseDir = null): iterable
+    public function findPaths(?string $baseDir = null): iterable
     {
         $finder = new \AppendIterator();
         foreach ($this->dirs as $dir) {

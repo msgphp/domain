@@ -10,6 +10,9 @@ use MsgPhp\Domain\DomainCollection as BaseDomainCollection;
 use MsgPhp\Domain\Infrastructure\Doctrine\DomainCollection;
 use MsgPhp\Domain\Tests\DomainCollectionTestCase;
 
+/**
+ * @internal
+ */
 final class DomainCollectionTest extends DomainCollectionTestCase
 {
     public function testFromValueWithCollection(): void

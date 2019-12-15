@@ -20,10 +20,10 @@ final class SynchronizeProjectionsCommand extends Command
 
     /** @var ProjectionSynchronization */
     private $synchronization;
-    /** @var LoggerInterface|null */
+    /** @var null|LoggerInterface */
     private $logger;
 
-    public function __construct(ProjectionSynchronization $synchronization, LoggerInterface $logger = null)
+    public function __construct(ProjectionSynchronization $synchronization, ?LoggerInterface $logger = null)
     {
         $this->synchronization = $synchronization;
         $this->logger = $logger;

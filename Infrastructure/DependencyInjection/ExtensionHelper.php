@@ -87,6 +87,7 @@ final class ExtensionHelper
 
             if (!$enabled) {
                 $container->removeDefinition($id);
+
                 continue;
             }
 
@@ -113,6 +114,7 @@ final class ExtensionHelper
 
             if (!isset($classMapping[$entity])) {
                 $container->removeDefinition($repository);
+
                 continue;
             }
 
@@ -136,6 +138,7 @@ final class ExtensionHelper
 
                 if (empty($commands[$domainCommand])) {
                     $container->removeDefinition($consoleCommand);
+
                     continue;
                 }
 

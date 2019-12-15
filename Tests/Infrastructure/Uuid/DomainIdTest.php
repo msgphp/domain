@@ -11,6 +11,9 @@ use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+/**
+ * @internal
+ */
 final class DomainIdTest extends TestCase
 {
     public function testFromValue(): void

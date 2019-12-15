@@ -9,10 +9,10 @@ namespace MsgPhp\Domain;
  */
 trait DomainIdTrait
 {
-    /** @var string|null */
+    /** @var null|string */
     private $id;
 
-    public function __construct(string $id = null)
+    public function __construct(?string $id = null)
     {
         if ('' === $id) {
             throw new \LogicException('A domain ID cannot be empty.');

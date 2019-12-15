@@ -20,7 +20,7 @@ final class ProjectionSynchronization
     /**
      * @param iterable<string, array> $documentProvider
      */
-    public function __construct(ProjectionTypeRegistry $typeRegistry, ProjectionRepository $repository, iterable $documentProvider, LoggerInterface $logger = null)
+    public function __construct(ProjectionTypeRegistry $typeRegistry, ProjectionRepository $repository, iterable $documentProvider, ?LoggerInterface $logger = null)
     {
         $this->typeRegistry = $typeRegistry;
         $this->repository = $repository;

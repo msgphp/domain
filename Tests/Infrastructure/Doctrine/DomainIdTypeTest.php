@@ -13,6 +13,9 @@ use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainId;
 use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainIdType;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class DomainIdTypeTest extends TestCase
 {
     /** @var Type */

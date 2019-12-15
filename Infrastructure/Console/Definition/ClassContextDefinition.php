@@ -35,7 +35,7 @@ final class ClassContextDefinition implements DomainContextDefinition
     private $flags;
     /** @var ClassContextElementFactory */
     private $elementFactory;
-    /** @var array<string, array>|null */
+    /** @var null|array<string, array> */
     private $resolved;
     /** @var array<string, array{0:string,1:bool}> */
     private $fieldMapping = [];
@@ -46,7 +46,7 @@ final class ClassContextDefinition implements DomainContextDefinition
      * @param class-string                      $class
      * @param array<class-string, class-string> $classMapping
      */
-    public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ClassContextElementFactory $elementFactory = null)
+    public function __construct(string $class, string $method, array $classMapping = [], int $flags = 0, ?ClassContextElementFactory $elementFactory = null)
     {
         $this->class = $class;
         $this->method = $method;
@@ -117,7 +117,7 @@ final class ClassContextDefinition implements DomainContextDefinition
     /**
      * @param array<string, array{index:int,required:bool,default:mixed,type:string|class-string,element:ContextElement,value:mixed}>|null $resolved
      */
-    public function getContext(InputInterface $input, StyleInterface $io, array $values = [], array $resolved = null): array
+    public function getContext(InputInterface $input, StyleInterface $io, array $values = [], ?array $resolved = null): array
     {
         $context = $normalizers = [];
         $interactive = $input->isInteractive();
@@ -133,6 +133,7 @@ final class ClassContextDefinition implements DomainContextDefinition
 
             if (\array_key_exists($argument, $values)) {
                 $context[$argument] = $values[$argument];
+
                 continue;
             }
 
@@ -145,11 +146,13 @@ final class ClassContextDefinition implements DomainContextDefinition
             if (\is_array($value) && self::isObject($type) && ($required || $given)) {
                 /** @var class-string $type */
                 $context[$argument] = $this->getContext($input, $io, [], $this->resolveNested($type, $value, $element));
+
                 continue;
             }
 
             if (!$isEmpty) {
                 $context[$argument] = $element->normalize($value);
+
                 continue;
             }
 
@@ -164,6 +167,7 @@ final class ClassContextDefinition implements DomainContextDefinition
                 } else {
                     $context[$argument] = self::askRequiredValue($io, $element, $value);
                 }
+
                 continue;
             }
 

@@ -13,7 +13,7 @@ final class MappingConfig
 
     /** @var array<int, string> */
     public $mappingFiles;
-    /** @var string|null */
+    /** @var null|string */
     public $mappingDir;
     /** @var int */
     public $keyMaxLength = self::DEFAULT_KEY_MAX_LENGTH;

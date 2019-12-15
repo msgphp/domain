@@ -20,9 +20,9 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
 {
     public const NAME = 'class_mapping';
 
-    /** @var BaseNodeBuilder|null */
+    /** @var null|BaseNodeBuilder */
     private $builder;
-    /** @var NodeDefinition|null */
+    /** @var null|NodeDefinition */
     private $prototype;
     /** @var string */
     private $type = 'scalar';
@@ -161,7 +161,7 @@ final class ClassMappingNodeDefinition extends VariableNodeDefinition implements
     }
 
     /**
-     * @return NodeParentInterface|BaseNodeBuilder|NodeDefinition|ArrayNodeDefinition|VariableNodeDefinition|NodeBuilder|self|null
+     * @return null|ArrayNodeDefinition|BaseNodeBuilder|NodeBuilder|NodeDefinition|NodeParentInterface|self|VariableNodeDefinition
      */
     public function end()
     {

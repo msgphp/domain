@@ -20,7 +20,7 @@ final class ObjectMappingListener
     private $mappingConfig;
     /** @var array<class-string, class-string> */
     private $classMapping;
-    /** @var ClassMetadataFactory|null */
+    /** @var null|ClassMetadataFactory */
     private $metadataFactory;
     /** @var array<class-string, array>|null */
     private $mappings;
@@ -64,7 +64,7 @@ final class ObjectMappingListener
         $this->metadataFactory = null;
     }
 
-    private function processClassFields(ClassMetadataInfo $metadata, \ReflectionClass $class = null): void
+    private function processClassFields(ClassMetadataInfo $metadata, ?\ReflectionClass $class = null): void
     {
         $class = $class ?? $metadata->getReflectionClass();
 

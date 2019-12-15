@@ -8,6 +8,9 @@ use MsgPhp\Domain\Exception\InvalidClass;
 use MsgPhp\Domain\Factory\ClassMethodResolver;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class ClassMethodResolverTest extends TestCase
 {
     public function testResolve(): void
@@ -58,7 +61,7 @@ class TestClass
      *
      * @param mixed $fooBar_Baz
      */
-    public function __construct(string $fooBar, ?testclasswrongcase $foo_bar, $fooBar_Baz, iterable $it, \stdClass $_stdClass, int $foo = 1, self $bar = null, array $baz = [1])
+    public function __construct(string $fooBar, ?testclasswrongcase $foo_bar, $fooBar_Baz, iterable $it, \stdClass $_stdClass, int $foo = 1, ?self $bar = null, array $baz = [1])
     {
     }
 }

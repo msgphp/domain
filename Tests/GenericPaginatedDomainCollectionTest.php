@@ -7,6 +7,9 @@ namespace MsgPhp\Domain\Tests;
 use MsgPhp\Domain\DomainCollection;
 use MsgPhp\Domain\GenericPaginatedDomainCollection;
 
+/**
+ * @internal
+ */
 final class GenericPaginatedDomainCollectionTest extends DomainCollectionTestCase
 {
     public function testDefaultPagination(): void

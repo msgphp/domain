@@ -15,7 +15,7 @@ final class ProjectionDocumentTransformer
     private $format;
     private $context;
 
-    public function __construct(NormalizerInterface $normalizer, string $format = null, array $context = [])
+    public function __construct(NormalizerInterface $normalizer, ?string $format = null, array $context = [])
     {
         $this->normalizer = $normalizer;
         $this->format = $format;

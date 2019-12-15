@@ -7,6 +7,9 @@ namespace MsgPhp\Domain\Tests\Model;
 use MsgPhp\Domain\Model\LastUpdatedAtField;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class LastUpdatedAtFieldTest extends TestCase
 {
     public function testField(): void

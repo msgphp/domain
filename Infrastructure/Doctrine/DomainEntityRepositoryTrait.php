@@ -25,7 +25,7 @@ trait DomainEntityRepositoryTrait
     /** @var class-string */
     private $class;
     private $em;
-    /** @var string|null */
+    /** @var null|string */
     private $alias;
 
     /**
@@ -162,11 +162,11 @@ trait DomainEntityRepositoryTrait
      * @template T2Key of array-key
      * @template T2 of object
      *
-     * @param string|int $hydrate
+     * @param int|string $hydrate
      *
      * @return DomainCollection<T2Key, T2>
      */
-    private function createResultSet(Query $query, int $offset = null, int $limit = null, $hydrate = Query::HYDRATE_OBJECT): DomainCollection
+    private function createResultSet(Query $query, ?int $offset = null, ?int $limit = null, $hydrate = Query::HYDRATE_OBJECT): DomainCollection
     {
         if (null !== $offset || !$query->getFirstResult()) {
             $query->setFirstResult($offset ?? 0);
@@ -205,11 +205,13 @@ trait DomainEntityRepositoryTrait
 
             if (null === $value) {
                 $where->add($expr->isNull($fieldAlias));
+
                 continue;
             }
 
             if (true === $value || false === $value) {
                 $where->add($expr->eq($fieldAlias, $value ? 'TRUE' : 'FALSE'));
+
                 continue;
             }
 
@@ -230,7 +232,7 @@ trait DomainEntityRepositoryTrait
     /**
      * @param mixed $value
      */
-    private function addFieldParameter(QueryBuilder $qb, string $field, $value, string $type = null): string
+    private function addFieldParameter(QueryBuilder $qb, string $field, $value, ?string $type = null): string
     {
         $name = $base = str_replace('.', '_', $field);
         $counter = 0;

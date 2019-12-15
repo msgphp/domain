@@ -11,6 +11,9 @@ use MsgPhp\Domain\GenericDomainCollection;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class GenericDomainObjectFactoryTest extends TestCase
 {
     public function testCreate(): void
@@ -227,8 +230,10 @@ class TestPrivateObject
 
 class TestKnownObject
 {
-    /** @psalm-suppress UndefinedClass */
-    public function __construct(TestUnknownObject $arg = null)
+    /**
+     * @psalm-suppress UndefinedClass
+     */
+    public function __construct(?TestUnknownObject $arg = null)
     {
     }
 }

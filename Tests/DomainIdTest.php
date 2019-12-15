@@ -9,6 +9,9 @@ use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use MsgPhp\Domain\Tests\Fixtures\TestOtherDomainId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class DomainIdTest extends TestCase
 {
     public function testFromValue(): void

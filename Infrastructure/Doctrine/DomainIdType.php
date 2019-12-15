@@ -73,7 +73,7 @@ abstract class DomainIdType extends Type
             $class = \get_class($value);
 
             foreach (self::$mapping as $type => $mapping) {
-                if ($class === ($mapping['class'] ?? null)) {
+                if (($mapping['class'] ?? null) === $class) {
                     return $type::NAME;
                 }
             }
@@ -99,8 +99,9 @@ abstract class DomainIdType extends Type
             $type = Type::INTEGER;
 
             foreach (self::$mapping as $mapping) {
-                if ($class === ($mapping['class'] ?? null)) {
+                if (($mapping['class'] ?? null) === $class) {
                     $type = $mapping['data_type'] ?? $type;
+
                     break;
                 }
             }

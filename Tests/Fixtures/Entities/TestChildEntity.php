@@ -10,7 +10,7 @@ namespace MsgPhp\Domain\Tests\Fixtures\Entities;
 class TestChildEntity extends TestParentEntity
 {
     /**
-     * @var string|null
+     * @var null|string
      * @Doctrine\ORM\Mapping\Column(nullable=true)
      */
     public $childField;

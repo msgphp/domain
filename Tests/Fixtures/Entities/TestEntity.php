@@ -13,7 +13,7 @@ use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 class TestEntity extends BaseTestEntity
 {
     /**
-     * @var string|null
+     * @var null|string
      * @Doctrine\ORM\Mapping\Column(type="string", nullable=true)
      */
     public $strField;
@@ -23,7 +23,7 @@ class TestEntity extends BaseTestEntity
      */
     public $intField;
     /**
-     * @var float|null
+     * @var null|float
      * @Doctrine\ORM\Mapping\Column(type="float", nullable=true)
      */
     public $floatField;
@@ -33,7 +33,7 @@ class TestEntity extends BaseTestEntity
      */
     public $boolField;
     /**
-     * @var DomainId|null
+     * @var null|DomainId
      * @Doctrine\ORM\Mapping\Id()
      * @Doctrine\ORM\Mapping\GeneratedValue()
      * @Doctrine\ORM\Mapping\Column(type="domain_id")

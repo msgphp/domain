@@ -49,9 +49,11 @@ trait EntityManagerTestTrait
                 switch ($type) {
                     case 'xml':
                         $driver->addDriver($xml = new XmlDriver(new SymfonyFileLocator([$path => $ns], '.orm.xml')), $ns);
+
                         break;
                     case 'annot':
                         $driver->addDriver(new AnnotationDriver(new AnnotationReader(), $path), $ns);
+
                         break;
                     default:
                         throw new \LogicException('Unknown driver type.');

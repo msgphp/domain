@@ -67,7 +67,7 @@ final class ContainerHelper
         }
     }
 
-    public static function registerAnonymous(ContainerBuilder $container, string $class, bool $child = false, string &$id = null): Definition
+    public static function registerAnonymous(ContainerBuilder $container, string $class, bool $child = false, ?string &$id = null): Definition
     {
         $definition = $child ? new ChildDefinition($class) : new Definition($class);
         $definition->setPublic(false);
@@ -75,7 +75,7 @@ final class ContainerHelper
         return $container->setDefinition($id = $class.'.'.ContainerBuilder::hash(__METHOD__.++self::$counter), $definition);
     }
 
-    public static function tagCommandHandler(ContainerBuilder $container, string $handlerId, string $busId = null, string $handles = null): void
+    public static function tagCommandHandler(ContainerBuilder $container, string $handlerId, ?string $busId = null, ?string $handles = null): void
     {
         if (FeatureDetection::isMessengerAvailable($container)) {
             $container->getDefinition($handlerId)

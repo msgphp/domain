@@ -14,6 +14,9 @@ use MsgPhp\Domain\Tests\Fixtures\TestDomainEntityRepository;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainIdType;
 
+/**
+ * @internal
+ */
 final class DomainEntityRepositoryTraitTest extends DomainEntityRepositoryTestCase
 {
     use EntityManagerTestTrait;

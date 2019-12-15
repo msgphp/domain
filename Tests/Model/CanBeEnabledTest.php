@@ -9,6 +9,9 @@ use MsgPhp\Domain\Event\Enable;
 use MsgPhp\Domain\Model\CanBeEnabled;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class CanBeEnabledTest extends TestCase
 {
     public function testEnable(): void

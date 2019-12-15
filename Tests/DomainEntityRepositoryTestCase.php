@@ -411,6 +411,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
         foreach ($actual as $i => $entity) {
             if (!isset($expected[$i]) || !$this->equalsEntity($expected[$i], $entity)) {
                 $equals = false;
+
                 break;
             }
         }
@@ -440,6 +441,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
             if (\is_object($expectedValue) && \is_object($actualValue)) {
                 if (!$this->equalsEntity($expectedValue, $actualValue)) {
                     $equals = false;
+
                     break;
                 }
 
@@ -448,6 +450,7 @@ abstract class DomainEntityRepositoryTestCase extends TestCase
 
             if ($expectedValue !== $actualValue) {
                 $equals = false;
+
                 break;
             }
         }

@@ -15,9 +15,9 @@ final class ContextElement
     public $description;
     /** @var bool */
     private $hide = false;
-    /** @var callable|null */
+    /** @var null|callable */
     private $generator;
-    /** @var callable|null */
+    /** @var null|callable */
     private $normalizer;
 
     public function __construct(string $label, string $description = '')

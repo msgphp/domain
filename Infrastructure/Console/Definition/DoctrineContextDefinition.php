@@ -20,7 +20,7 @@ final class DoctrineContextDefinition implements DomainContextDefinition
     private $definition;
     private $em;
     private $class;
-    /** @var string|null */
+    /** @var null|string */
     private $discriminatorField;
 
     /**

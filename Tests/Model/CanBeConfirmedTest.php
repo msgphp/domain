@@ -8,6 +8,9 @@ use MsgPhp\Domain\Event\Confirm;
 use MsgPhp\Domain\Model\CanBeConfirmed;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class CanBeConfirmedTest extends TestCase
 {
     public function testConfirm(): void

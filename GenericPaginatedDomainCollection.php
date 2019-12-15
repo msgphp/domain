@@ -19,12 +19,12 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
     private $offset;
     /** @var float */
     private $limit;
-    /** @var float|null */
+    /** @var null|float */
     private $count;
-    /** @var float|null */
+    /** @var null|float */
     private $totalCount;
 
-    public function __construct(iterable $elements, float $offset = .0, float $limit = .0, float $count = null, float $totalCount = null)
+    public function __construct(iterable $elements, float $offset = .0, float $limit = .0, ?float $count = null, ?float $totalCount = null)
     {
         $this->collection = $elements instanceof DomainCollection ? $elements : GenericDomainCollection::fromValue($elements);
         $this->offset = $offset;

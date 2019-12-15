@@ -11,6 +11,9 @@ use MsgPhp\Domain\Tests\Fixtures\Entities;
 use MsgPhp\Domain\Tests\Fixtures\TestDomainId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class DomainObjectFactoryTest extends TestCase
 {
     use EntityManagerTestTrait;

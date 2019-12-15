@@ -21,6 +21,7 @@ final class TreeBuilderHelper
 
         /**
          * @psalm-suppress RedundantCondition
+         *
          * @var ArrayNodeDefinition
          */
         return method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root($name, 'array', $builder);

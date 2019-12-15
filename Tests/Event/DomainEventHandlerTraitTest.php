@@ -10,6 +10,9 @@ use MsgPhp\Domain\Event\DomainEventHandlerTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class DomainEventHandlerTraitTest extends TestCase
 {
     public function testHandleEvent(): void
@@ -51,7 +54,9 @@ class TestDomainEventHandler implements DomainEventHandler
         return true;
     }
 
-    /** @psalm-suppress UndefinedClass */
+    /**
+     * @psalm-suppress UndefinedClass
+     */
     private function onMsgPhp_Test_ActionEvent(\MsgPhp_Test_Action $event): bool
     {
         return false;

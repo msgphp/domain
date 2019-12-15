@@ -10,6 +10,9 @@ use MsgPhp\Domain\Exception\UnknownCollectionElement;
 use MsgPhp\Domain\GenericDomainCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @internal
+ */
 final class GenericDomainCollectionTest extends DomainCollectionTestCase
 {
     public function testLazyFromValue(): void
@@ -65,10 +68,10 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyContains(): void
     {
-        self::assertFalse(static::createLazyCollection([])->contains(1));
-        self::assertTrue(static::createLazyCollection([null], $visited)->contains(null));
+        self::assertFalse(self::createLazyCollection([])->contains(1));
+        self::assertTrue(self::createLazyCollection([null], $visited)->contains(null));
         self::assertSame([null], $visited);
-        self::assertTrue(($collection = static::createLazyCollection([1, '2'], $visited))->contains(1));
+        self::assertTrue(($collection = self::createLazyCollection([1, '2'], $visited))->contains(1));
         self::assertSame([1], $visited);
         self::assertFalse($collection->contains(2));
         self::assertSame([1, '2'], $visited);
@@ -92,8 +95,8 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyContainsKey(): void
     {
-        self::assertFalse(static::createLazyCollection([])->containsKey(1));
-        self::assertTrue(($collection = static::createLazyCollection([1, 'k' => 'v', '2' => null], $visited))->containsKey(2));
+        self::assertFalse(self::createLazyCollection([])->containsKey(1));
+        self::assertTrue(($collection = self::createLazyCollection([1, 'k' => 'v', '2' => null], $visited))->containsKey(2));
         self::assertSame([1, 'k' => 'v', '2' => null], $visited);
 
         $this->assertUnrewindableGenerator();
@@ -115,7 +118,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyFirst(): void
     {
-        self::assertSame(1, ($collection = static::createLazyCollection([1, 2], $visited))->first());
+        self::assertSame(1, ($collection = self::createLazyCollection([1, 2], $visited))->first());
         self::assertSame([1], $visited);
         self::assertSame(1, $collection->first());
         self::assertSame([1, 2], iterator_to_array($collection));
@@ -147,7 +150,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyLast(): void
     {
-        self::assertSame(2, ($collection = static::createLazyCollection([1, 2], $visited))->last());
+        self::assertSame(2, ($collection = self::createLazyCollection([1, 2], $visited))->last());
         self::assertSame([1, 2], $visited);
 
         $this->assertClosedGenerator();
@@ -177,7 +180,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
 
     public function testLazyGet(): void
     {
-        self::assertSame(1, ($collection = static::createLazyCollection([1, 2], $visited))->get(0));
+        self::assertSame(1, ($collection = self::createLazyCollection([1, 2], $visited))->get(0));
         self::assertSame([1], $visited);
         self::assertSame(1, $collection->get('0'));
         self::assertSame(2, $collection->get(1));
@@ -223,7 +226,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
             return true;
         }));
         self::assertSame([], iterator_to_array($filtered));
-        self::assertSame([1, 2 => 3], iterator_to_array(($collection = static::createLazyCollection([1, null, 3], $visited))->filter($filter = static function ($v): bool {
+        self::assertSame([1, 2 => 3], iterator_to_array(($collection = self::createLazyCollection([1, null, 3], $visited))->filter($filter = static function ($v): bool {
             return null !== $v;
         })));
         self::assertSame([1, null, 3], $visited);
@@ -252,7 +255,7 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
     {
         self::assertNotSame($collection = self::createLazyCollection([]), $slice = $collection->slice(0));
         self::assertSame([], iterator_to_array($slice));
-        self::assertSame([1 => 2], iterator_to_array(($collection = static::createLazyCollection([1, 2, 3, null, 5], $visited))->slice(1, 1)));
+        self::assertSame([1 => 2], iterator_to_array(($collection = self::createLazyCollection([1, 2, 3, null, 5], $visited))->slice(1, 1)));
         self::assertSame([1, 2, 3], $visited);
 
         $result = $collection->slice(0);
@@ -330,12 +333,12 @@ final class GenericDomainCollectionTest extends DomainCollectionTestCase
         return new GenericDomainCollection($elements);
     }
 
-    private static function createLazyCollection(array $elements, array &$visited = null): GenericDomainCollection
+    private static function createLazyCollection(array $elements, ?array &$visited = null): GenericDomainCollection
     {
         return new GenericDomainCollection(self::getGenerator($elements, $visited));
     }
 
-    private static function getGenerator(array $elements, array &$visited = null): \Generator
+    private static function getGenerator(array $elements, ?array &$visited = null): \Generator
     {
         $visited = [];
 

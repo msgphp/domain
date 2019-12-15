@@ -8,6 +8,9 @@ use MsgPhp\Domain\Infrastructure\Doctrine\DomainObjectMappings;
 use MsgPhp\Domain\Infrastructure\Doctrine\MappingConfig;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class DomainObjectMappingsTest extends TestCase
 {
     public function testMapping(): void

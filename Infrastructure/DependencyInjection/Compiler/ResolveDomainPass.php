@@ -31,6 +31,7 @@ final class ResolveDomainPass implements CompilerPassInterface
             foreach ($container->getDefinitions() as $id => $definition) {
                 if ($definition === $commandBus) {
                     $commandBusId = (string) $id;
+
                     break;
                 }
             }
