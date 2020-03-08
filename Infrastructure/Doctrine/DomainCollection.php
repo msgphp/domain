@@ -36,11 +36,6 @@ final class DomainCollection implements BaseDomainCollection
             $value = new ArrayCollection($value instanceof \Traversable ? iterator_to_array($value) : $value ?? []);
         }
 
-        /**
-         * @psalm-suppress InvalidScalarArgument
-         *
-         * @var BaseDomainCollection
-         */
         return new self($value);
     }
 

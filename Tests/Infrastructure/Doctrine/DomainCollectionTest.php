@@ -17,7 +17,6 @@ final class DomainCollectionTest extends DomainCollectionTestCase
 {
     public function testFromValueWithCollection(): void
     {
-        /** @psalm-suppress InvalidScalarArgument */
         self::assertEquals(new DomainCollection($collection = $this->createMock(Collection::class)), DomainCollection::fromValue($collection));
     }
 

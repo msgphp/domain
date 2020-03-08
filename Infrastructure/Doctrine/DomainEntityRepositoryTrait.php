@@ -22,14 +22,14 @@ use MsgPhp\Domain\GenericDomainCollection;
  */
 trait DomainEntityRepositoryTrait
 {
-    /** @var class-string */
+    /** @var class-string<T> */
     private $class;
     private $em;
     /** @var null|string */
     private $alias;
 
     /**
-     * @param class-string $class
+     * @param class-string<T> $class
      */
     public function __construct(string $class, EntityManagerInterface $em)
     {
@@ -43,8 +43,6 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @psalm-suppress MoreSpecificReturnType
-     *
      * @return DomainCollection<array-key, T>
      */
     private function doFindAll(int $offset = 0, int $limit = 0): DomainCollection
@@ -53,8 +51,6 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @psalm-suppress MoreSpecificReturnType
-     *
      * @return DomainCollection<array-key, T>
      */
     private function doFindAllByFields(array $fields, int $offset = 0, int $limit = 0): DomainCollection
@@ -69,8 +65,6 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @psalm-suppress MoreSpecificReturnType
-     *
      * @param mixed $id
      *
      * @return T
@@ -88,8 +82,6 @@ trait DomainEntityRepositoryTrait
     }
 
     /**
-     * @psalm-suppress MoreSpecificReturnType
-     *
      * @return T
      */
     private function doFindByFields(array $fields): object

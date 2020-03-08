@@ -20,7 +20,6 @@ final class TreeBuilderHelper
         $treeBuilder = new TreeBuilder($name, 'array', $builder = new NodeBuilder());
 
         /**
-         * @psalm-suppress RedundantCondition
          * @psalm-suppress UndefinedMethod
          *
          * @var ArrayNodeDefinition

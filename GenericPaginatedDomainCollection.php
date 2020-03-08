@@ -13,7 +13,7 @@ namespace MsgPhp\Domain;
  */
 final class GenericPaginatedDomainCollection implements PaginatedDomainCollection
 {
-    /** @var DomainCollection */
+    /** @var DomainCollection<TKey, T> */
     private $collection;
     /** @var float */
     private $offset;
@@ -24,6 +24,9 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
     /** @var null|float */
     private $totalCount;
 
+    /**
+     * @param iterable<TKey, T> $elements
+     */
     public function __construct(iterable $elements, float $offset = .0, float $limit = .0, ?float $count = null, ?float $totalCount = null)
     {
         $this->collection = $elements instanceof DomainCollection ? $elements : GenericDomainCollection::fromValue($elements);
@@ -35,7 +38,6 @@ final class GenericPaginatedDomainCollection implements PaginatedDomainCollectio
 
     public static function fromValue(?iterable $value): DomainCollection
     {
-        /** @var DomainCollection */
         return new self($value ?? []);
     }
 

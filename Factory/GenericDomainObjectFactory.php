@@ -41,7 +41,6 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
             return $class::fromValue(...$this->resolveArguments($class, 'fromValue', $context));
         }
 
-        /** @psalm-suppress DocblockTypeContradiction */
         if (!class_exists($class)) {
             throw InvalidClass::create($class);
         }

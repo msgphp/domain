@@ -28,6 +28,9 @@ final class MappingCacheWarmer implements CacheWarmerInterface
         return false;
     }
 
+    /**
+     * @param string $cacheDir
+     */
     public function warmUp($cacheDir): void
     {
         $filesystem = new Filesystem();

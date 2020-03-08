@@ -16,8 +16,12 @@ use MsgPhp\Domain\Exception\UnknownCollectionElement;
  */
 final class GenericDomainCollection implements DomainCollection
 {
+    /** @var iterable<TKey, T> */
     private $elements;
 
+    /**
+     * @param iterable<TKey, T> $elements
+     */
     public function __construct(iterable $elements)
     {
         $this->elements = $elements;
@@ -25,7 +29,6 @@ final class GenericDomainCollection implements DomainCollection
 
     public static function fromValue(?iterable $value): DomainCollection
     {
-        /** @var DomainCollection */
         return new self($value ?? []);
     }
 
@@ -181,11 +184,12 @@ final class GenericDomainCollection implements DomainCollection
     public function filter(callable $filter): DomainCollection
     {
         if ($this->elements instanceof DomainCollection) {
+            /** @var DomainCollection<TKey, T> */
             return $this->elements->filter($filter);
         }
 
         if ($this->elements instanceof \Traversable) {
-            return new self((function () use ($filter): iterable {
+            return new self((/** @return \Generator<TKey, T> */function () use ($filter): iterable {
                 foreach ($this->elements as $key => $element) {
                     if ($filter($element)) {
                         yield $key => $element;
@@ -200,11 +204,12 @@ final class GenericDomainCollection implements DomainCollection
     public function slice(int $offset, int $limit = 0): DomainCollection
     {
         if ($this->elements instanceof DomainCollection) {
+            /** @var DomainCollection<TKey, T> */
             return $this->elements->slice($offset, $limit);
         }
 
         if ($this->elements instanceof \Traversable) {
-            return new self((function () use ($offset, $limit): iterable {
+            return new self((/** @return \Generator<TKey, T> */function () use ($offset, $limit): iterable {
                 $i = -1;
                 foreach ($this->elements as $key => $element) {
                     if (++$i < $offset) {
@@ -223,14 +228,18 @@ final class GenericDomainCollection implements DomainCollection
         return new self(\array_slice($this->elements, $offset, $limit ?: null, true));
     }
 
+    /**
+     * @template T2
+     */
     public function map(callable $mapper): DomainCollection
     {
         if ($this->elements instanceof DomainCollection) {
+            /** @var DomainCollection<TKey, T2> */
             return $this->elements->map($mapper);
         }
 
         if ($this->elements instanceof \Traversable) {
-            return new self((function () use ($mapper): iterable {
+            return new self((/** @return \Generator<TKey, T2> */function () use ($mapper): iterable {
                 foreach ($this->elements as $key => $element) {
                     yield $key => $mapper($element);
                 }
