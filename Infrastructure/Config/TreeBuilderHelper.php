@@ -21,9 +21,12 @@ final class TreeBuilderHelper
 
         /**
          * @psalm-suppress RedundantCondition
+         * @psalm-suppress UndefinedMethod
          *
          * @var ArrayNodeDefinition
          */
-        return method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root($name, 'array', $builder);
+        return method_exists($treeBuilder, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root($name, 'array', $builder);
     }
 }

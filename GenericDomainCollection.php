@@ -89,8 +89,11 @@ final class GenericDomainCollection implements DomainCollection
         }
 
         if ($this->elements instanceof \Traversable) {
+            /** @psalm-suppress InvalidCast */
+            $key = \is_int($key) ? (string) $key : $key;
             foreach ($this->elements as $knownKey => $element) {
-                if ((string) $key === (string) $knownKey) {
+                /** @psalm-suppress InvalidCast */
+                if ($key === (\is_int($knownKey) ? (string) $knownKey : $knownKey)) {
                     return true;
                 }
             }
@@ -156,8 +159,11 @@ final class GenericDomainCollection implements DomainCollection
         }
 
         if ($this->elements instanceof \Traversable) {
+            /** @psalm-suppress InvalidCast */
+            $key = \is_int($key) ? (string) $key : $key;
             foreach ($this->elements as $knownKey => $element) {
-                if ((string) $key === (string) $knownKey) {
+                /** @psalm-suppress InvalidCast */
+                if ($key === (\is_int($knownKey) ? (string) $knownKey : $knownKey)) {
                     return $element;
                 }
             }
