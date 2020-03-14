@@ -11,11 +11,11 @@ final class InvalidClass extends \LogicException implements DomainException
 {
     public static function create(string $class): self
     {
-        return new self('Invalid class "'.$class.'" detected.');
+        return new self('Class "'.$class.'" is invalid.');
     }
 
     public static function createForMethod(string $class, string $method): self
     {
-        return new self('Invalid class "'.$class.'" detected for method "'.$method.'".');
+        return new self('Class "'.$class.'" is invalid for method "'.$method.'".');
     }
 }
