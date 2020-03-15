@@ -28,8 +28,14 @@ final class DomainUuid implements DomainId
 
     public static function fromValue($value): DomainId
     {
-        if (null === $value || $value instanceof UuidInterface) {
+        if ($value instanceof UuidInterface) {
             return new self($value);
+        }
+        if (null === $value) {
+            return new self(Uuid::fromString(Uuid::NIL));
+        }
+        if (\is_object($value) && method_exists($value, '__toString')) {
+            return new self(Uuid::fromString((string) $value));
         }
         if (\is_string($value)) {
             return new self(Uuid::fromString($value));

@@ -6,6 +6,7 @@ namespace MsgPhp\Domain\Tests;
 
 use MsgPhp\Domain\DomainId;
 use MsgPhp\Domain\GenericDomainId;
+use MsgPhp\Domain\Tests\Fixtures\StringableValue;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,6 +21,7 @@ final class GenericDomainIdTest extends TestCase
         self::assertSame((array) new GenericDomainId(null), (array) GenericDomainId::fromValue(null));
         self::assertSame((array) new GenericDomainId(''), (array) GenericDomainId::fromValue(null));
         self::assertSame((array) new GenericDomainId('foo'), (array) GenericDomainId::fromValue('foo'));
+        self::assertSame((array) new GenericDomainId('foo'), (array) GenericDomainId::fromValue(new StringableValue('foo')));
         self::assertSame((array) new GenericDomainId('1'), (array) GenericDomainId::fromValue(1));
         self::assertSame((array) new GenericDomainId(' '), (array) GenericDomainId::fromValue(' '));
     }
@@ -31,13 +33,12 @@ final class GenericDomainIdTest extends TestCase
         GenericDomainId::fromValue(true);
     }
 
-    public function testIsNil(): void
+    /**
+     * @dataProvider provideIds
+     */
+    public function testIsNil(DomainId $id, string $value): void
     {
-        self::assertTrue((new GenericDomainId())->isNil());
-        self::assertTrue((new GenericDomainId(null))->isNil());
-        self::assertTrue((new GenericDomainId(''))->isNil());
-        self::assertFalse((new GenericDomainId(' '))->isNil());
-        self::assertFalse((new GenericDomainId('foo'))->isNil());
+        self::assertSame('' === $value, $id->isNil());
     }
 
     public function testEquals(): void
@@ -83,6 +84,8 @@ final class GenericDomainIdTest extends TestCase
     {
         yield [new GenericDomainId(), ''];
         yield [new GenericDomainId(null), ''];
+        yield [new GenericDomainId(''), ''];
+        yield [new GenericDomainId('0'), '0'];
         yield [new GenericDomainId('foo'), 'foo'];
         yield [new GenericDomainId(' '), ' '];
     }

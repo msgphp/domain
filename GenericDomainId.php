@@ -27,7 +27,7 @@ final class GenericDomainId implements DomainId
         if (null === $value || \is_string($value)) {
             return new self($value);
         }
-        if (is_numeric($value)) {
+        if (is_numeric($value) || (\is_object($value) && method_exists($value, '__toString'))) {
             return new self((string) $value);
         }
 
