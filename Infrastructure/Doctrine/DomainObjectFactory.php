@@ -22,12 +22,26 @@ final class DomainObjectFactory implements BaseDomainObjectFactory
         $this->em = $em;
     }
 
+    /**
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
     public function create(string $class, array $context = []): object
     {
         /** @var T */
         return $this->factory->create($this->resolveDiscriminatorClass($class, $context), $context);
     }
 
+    /**
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
     public function reference(string $class, array $context = []): object
     {
         $class = $this->factory->getClass($class, $context);

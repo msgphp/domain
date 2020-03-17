@@ -87,11 +87,8 @@ final class GenericDomainCollection implements PaginatedDomainCollection
     public function containsKey($key): bool
     {
         if ($this->elements instanceof \Traversable) {
-            /** @psalm-suppress InvalidCast */
-            $key = \is_int($key) ? (string) $key : $key;
             foreach ($this->elements as $knownKey => $element) {
-                /** @psalm-suppress InvalidCast */
-                if ($key === (\is_int($knownKey) ? (string) $knownKey : $knownKey)) {
+                if ((string) $key === (string) $knownKey) {
                     return true;
                 }
             }
@@ -145,11 +142,8 @@ final class GenericDomainCollection implements PaginatedDomainCollection
     public function get($key)
     {
         if ($this->elements instanceof \Traversable) {
-            /** @psalm-suppress InvalidCast */
-            $key = \is_int($key) ? (string) $key : $key;
             foreach ($this->elements as $knownKey => $element) {
-                /** @psalm-suppress InvalidCast */
-                if ($key === (\is_int($knownKey) ? (string) $knownKey : $knownKey)) {
+                if ((string) $key === (string) $knownKey) {
                     return $element;
                 }
             }
@@ -164,6 +158,11 @@ final class GenericDomainCollection implements PaginatedDomainCollection
         throw UnknownCollectionElement::createForKey($key);
     }
 
+    /**
+     * @param callable(T):bool $filter
+     *
+     * @return self<TKey, T>
+     */
     public function filter(callable $filter): DomainCollection
     {
         if ($this->elements instanceof \Traversable) {
@@ -203,6 +202,10 @@ final class GenericDomainCollection implements PaginatedDomainCollection
 
     /**
      * @template T2
+     *
+     * @param callable(T):T2 $mapper
+     *
+     * @return self<TKey, T2>
      */
     public function map(callable $mapper): DomainCollection
     {

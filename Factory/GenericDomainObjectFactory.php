@@ -32,6 +32,13 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         $this->factory = $factory;
     }
 
+    /**
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
     public function create(string $class, array $context = []): object
     {
         $class = $this->getClass($class, $context);
@@ -48,6 +55,13 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
         return new $class(...$this->resolveArguments($class, '__construct', $context));
     }
 
+    /**
+     * @template T
+     *
+     * @param class-string<T> $class
+     *
+     * @return T
+     */
     public function reference(string $class, array $context = []): object
     {
         if (!class_exists(Instantiator::class)) {

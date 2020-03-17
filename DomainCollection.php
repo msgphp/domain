@@ -45,12 +45,12 @@ interface DomainCollection extends \Countable, \IteratorAggregate
     /**
      * @param callable(T):bool $filter
      *
-     * @return self<TKey, T>
+     * @return static<TKey, T>
      */
     public function filter(callable $filter): self;
 
     /**
-     * @return self<TKey, T>
+     * @return static<TKey, T>
      */
     public function slice(int $offset, int $limit = 0): self;
 
@@ -59,7 +59,7 @@ interface DomainCollection extends \Countable, \IteratorAggregate
      *
      * @param callable(T):T2 $mapper
      *
-     * @return self<TKey, T2>
+     * @return static<TKey, T2>
      */
     public function map(callable $mapper): self;
 }
