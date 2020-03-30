@@ -43,7 +43,7 @@ final class DoctrineContextDefinition implements DomainContextDefinition
                 $this->discriminatorField = ClassContextDefinition::getUniqueFieldName($definition, $metadata->discriminatorColumn['fieldName']),
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'The entity discriminator value'
+                'A discriminator value'
             ));
         }
 

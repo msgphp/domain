@@ -8,7 +8,6 @@ use MsgPhp\Domain\Factory\ClassMethodResolver;
 use MsgPhp\Domain\Infrastructure\Console\Context\ClassContextElementFactory;
 use MsgPhp\Domain\Infrastructure\Console\Context\ContextElement;
 use MsgPhp\Domain\Infrastructure\Console\Context\GenericClassContextElementFactory;
-use MsgPhp\Domain\Infrastructure\Uid\DomainUuid;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -244,14 +243,11 @@ final class ClassContextDefinition implements DomainContextDefinition
      */
     private function resolveNested(string $class, array $parentValue, ContextElement $parentElement): array
     {
-        $method = is_subclass_of($class, DomainUuid::class) ? 'fromString' : '__construct';
         $resolved = [];
 
-        foreach (ClassMethodResolver::resolve($class, $method) as $argument => $metadata) {
+        foreach (ClassMethodResolver::resolve($class, $method = '__construct') as $argument => $metadata) {
             if (\array_key_exists($argument, $parentValue)) {
                 $value = $parentValue[$argument];
-            } elseif (\array_key_exists($metadata['index'], $parentValue)) {
-                $value = $parentValue[$metadata['index']];
             } elseif ('bool' === $metadata['type']) {
                 $value = false;
             } elseif (self::isComplex($metadata['type'])) {

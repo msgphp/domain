@@ -65,9 +65,7 @@ final class GenericDomainObjectFactory implements DomainObjectFactory
      */
     public function reference(string $class, array $context = []): object
     {
-        if (!class_exists(Instantiator::class)) {
-            throw new \LogicException('Method "'.__METHOD__.'()" requires "symfony/var-exporter".');
-        }
+        \assert(class_exists(Instantiator::class), new \LogicException('Method "'.__METHOD__.'()" requires "symfony/var-exporter".'));
 
         $class = $this->getClass($class, $context);
         $properties = [];
