@@ -4,7 +4,7 @@ msgphp/* repositories are not actively developed/supported anymore.
 
 **Use in production on your own risks.**
 
-If you want to do some hotfixes - please do PR directly in target repository instead of this monorepository.
+If you want to do some hotfixes - please do PR directly in target repository instead of old monorepository.
 
 # Domain
 
